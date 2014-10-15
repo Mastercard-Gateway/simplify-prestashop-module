@@ -37,7 +37,7 @@
             <h1>Start accepting payments now.</h1>
             <h2>It’s that simple.</h2>
         </div>
-        <a href="https://www.simplify.com/commerce/login/merchantSignup" target="_blank" class="btn right"><span>Sign up for free</span></a>
+        <a href="https://www.simplify.com/commerce/partners/prestashop#/" target="_blank" class="btn right"><span>Sign up for free</span></a>
     </div>
     <div class="section">
         <div class="clearfix">
