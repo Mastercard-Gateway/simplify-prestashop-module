@@ -50,7 +50,7 @@ class SimplifyCommerce extends PaymentModule
 	{
 		$this->name = 'simplifycommerce';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.0.7';
+		$this->version = '1.0.8';
 		$this->author = 'MasterCard';
 		$this->need_instance = 0;
 
@@ -430,7 +430,7 @@ class SimplifyCommerce extends PaymentModule
 		}
 
 		if (Configuration::get('SIMPLIFY_MODE'))
-			Configuration::updateValue('SIMPLIFYCOMMERCE_CONFIGURATION_OK', true);
+			Configuration::updateValue('SIMPLIFYCOMMERCE_CONFIGURED', true);
 
 		if (version_compare(_PS_VERSION_, '1.5', '<'))
 			Tools::redirect(Link::getPageLink('order-confirmation.php', null, null).
