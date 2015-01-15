@@ -25,14 +25,16 @@
  * SUCH DAMAGE.
  */
 
+//Cached nodes so we can use it across the module
+var $simplifyPaymentForm, $simplifyPaymentErrors, $simplifySubmitButton, $simplifySpinner;
+
 /**
  * Function to handle the form submission
  */
 $(document).ready(function () {
 
-    var $paymentForm = $('#simplify-payment-form');
-    var $simplifyPaymentErrors = $('.simplify-payment-errors');
-    var $simplifySubmitButton = $('.simplify-submit-button');
+    $simplifyPaymentForm = $('#simplify-payment-form'), $simplifyPaymentErrors = $('.simplify-payment-errors'),
+        $simplifySubmitButton = $('.simplify-submit-button'), $simplifySpinner = $('#simplify-ajax-loader');
 
     if ($simplifyPaymentErrors.text().length > 0) {
         $simplifyPaymentErrors.show();
@@ -99,7 +101,7 @@ $(document).ready(function () {
                 showSaveCardDetailsLabel(true);
             });
         });
-        $paymentForm.append('<input id="deleteCustomerCard" type="hidden" name="deleteCustomerCard" value="true" />');
+        $simplifyPaymentForm.append('<input id="deleteCustomerCard" type="hidden" name="deleteCustomerCard" value="true" />');
     });
 
     /**
@@ -126,9 +128,9 @@ $(document).ready(function () {
      *  generate a new card token for new cards or
      *  charge an existing user's card.
      */
-    $paymentForm.submit(function () {
+    $simplifyPaymentForm.submit(function () {
 
-        $('#simplify-ajax-loader').show();
+        $simplifySpinner.show();
         $('.simplify-payment-errors').hide();
         $simplifySubmitButton.attr('disabled', 'disabled');
         /* Disable the submit button to prevent repeated clicks */
@@ -164,7 +166,7 @@ $(document).ready(function () {
             return false;
             /* Prevent the form from submitting with the default action */
         } else {
-            $paymentForm.append('<input type="hidden" name="chargeCustomerCard" value="true" />')
+            $simplifyPaymentForm.append('<input type="hidden" name="chargeCustomerCard" value="true" />')
                 .get(0).submit();
         }
     });
@@ -203,11 +205,11 @@ $(document).ready(function () {
             }
             // Re-enable the submit button
             $simplifySubmitButton.removeAttr('disabled');
-            $paymentForm.show();
-            $('#simplify-ajax-loader').hide();
+            $simplifyPaymentForm.show();
+            $simplifySpinner.hide();
         } else {
             // Insert the token into the form so it gets submitted to the server
-            $paymentForm
+            $simplifyPaymentForm
                 .append('<input type="hidden" name="simplifyToken" value="' + data['id'] + '" />')
                 .append('<input type="hidden" name="chargeCustomerCard" value="false" />')
                 .get(0).submit();
@@ -219,7 +221,7 @@ $(document).ready(function () {
      * @returns {boolean}
      */
     function isHostedPaymentsEnabled() {
-        return $("[name='hostedPayments']", $paymentForm).val() ? true : false;
+        return $("[name='hostedPayments']", $simplifyPaymentForm).val() ? true : false;
     }
 });
 
@@ -269,12 +271,11 @@ function urlParam(name, url) {
  * Show payment progress
  */
 function showPaymentProgress() {
-    var $ajaxSpinner = $('#simplify-ajax-loader');
-    $ajaxSpinner.show();
-    if ($ajaxSpinner[0]) {
+    $simplifySpinner.show();
+    if ($simplifySpinner[0]) {
         //let's use the html's default scrollIntoView method.
         //If its not good, we can be fancy
-        $ajaxSpinner[0].scrollIntoView();
+        $simplifySpinner[0].scrollIntoView();
     }
 }
 
@@ -284,19 +285,18 @@ function toggleHostedPaymentButton(enable) {
 }
 
 function processHostedPaymentForm(response, url) {
-    $('.simplify-payment-errors').hide();
-    var $paymentForm = $('#simplify-payment-form');
+    $simplifyPaymentErrors.hide();
     if (response && response.cardToken) {
         showPaymentProgress();
-        $paymentForm.append('<input type="hidden" name="simplifyToken" value="' + response.cardToken + '"/>');
+        $simplifyPaymentForm.append('<input type="hidden" name="simplifyToken" value="' + response.cardToken + '"/>');
         if (url && url.indexOf('saveCustomer') > -1) {
             $('#saveCustomer').click();
-            $paymentForm.append('<input type="hidden" name="saveCustomer" value="on"/>');
+            $simplifyPaymentForm.append('<input type="hidden" name="saveCustomer" value="on"/>');
         }
         if (url && url.indexOf('deleteCustomerCard') > -1) {
-            $paymentForm.append('<input id="deleteCustomerCard" type="hidden" name="deleteCustomerCard" value="true" />');
+            $simplifyPaymentForm.append('<input id="deleteCustomerCard" type="hidden" name="deleteCustomerCard" value="true" />');
         }
-        $paymentForm.submit();
+        $simplifyPaymentForm.submit();
     }
     else {
         if (response.error) {
