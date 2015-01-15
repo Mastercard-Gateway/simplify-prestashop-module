@@ -27,14 +27,20 @@
  *  @copyright 2014, MasterCard International Incorporated. All rights reserved.
  *  @license   See licence.txt
  *}
-<link href="{$module_dir|escape}css/style.css" rel="stylesheet" type="text/css" media="all" />
-<link href="//fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+<link href="{$module_dir|escape}css/style.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="{$module_dir|escape}css/spectrum.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="//fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet"/>
+<script type="text/javascript" src="{$module_dir|escape}js/spectrum.js"></script>
+
 <div class="simplify-module-wrapper">
     <div class="simplify-module-header">
         <a href="https://www.simplify.com/" target="_blank" class="left">
-            <img class="logo" src="//www.simplify.com/commerce/static/images/app-logo-pos.png" alt="Simplify Commerce Logo" width="150" height="64"></a>
+            <img class="logo" src="//www.simplify.com/commerce/static/images/app-logo-pos.png"
+                 alt="Simplify Commerce Logo" width="150" height="64"></a>
+
         <div class="header-title left">
             <h1>Start accepting payments now.</h1>
+
             <h2>It’s that simple.</h2>
         </div>
         <a href="https://www.simplify.com/commerce/partners/prestashop#/" target="_blank" class="btn right"><span>Sign up for free</span></a>
@@ -43,22 +49,31 @@
         <div class="clearfix">
             <div class="marketing left">
                 <div class="w-container features item">
-                    <img class="features item icon" src="//www.simplify.com/commerce/static/images/feature_signup.jpg" alt="feature_signup.jpg">
+                    <img class="features item icon" src="//www.simplify.com/commerce/static/images/feature_signup.jpg"
+                         alt="feature_signup.jpg">
+
                     <h1 class="features item h1">Easy sign up</h1>
+
                     <p>Click the "Sign up for free" button and become a Simplify merchant for free.</p>
                 </div>
             </div>
             <div class="marketing left">
                 <div class="w-container features item">
-                    <img class="features item icon" src="//www.simplify.com/commerce/static/images/feature_price.jpg" alt="feature_signup.jpg">
+                    <img class="features item icon" src="//www.simplify.com/commerce/static/images/feature_price.jpg"
+                         alt="feature_signup.jpg">
+
                     <h1 class="features item h1">Simple pricing</h1>
+
                     <p>No setup fees.<br>No monthly fees.<br>No minimum.</p>
                 </div>
             </div>
             <div class="marketing left">
                 <div class="w-container features item">
-                    <img class="features item icon" src="//www.simplify.com/commerce/static/images/feature_funding.jpg" alt="feature_signup.jpg">
+                    <img class="features item icon" src="//www.simplify.com/commerce/static/images/feature_funding.jpg"
+                         alt="feature_signup.jpg">
+
                     <h1 class="features item h1">Two-day funding</h1>
+
                     <p>Deposits are made into your account in two business days for most transactions.</p>
                 </div>
             </div>
@@ -67,11 +82,12 @@
     <div class="formContainer">
         <section class="technical-checks">
             <h2>Technical Checks</h2>
+
             <div class="{if $requirements['result']}conf">
                 {l s='Good news! Everything looks to be in order. Start accepting credit card payments now.' mod='simplifycommerce'}
-            {else}
+                {else}
                 {l s='Unfortunately, at least one issue is preventing you from using Simplify Commerce.Please fix the issue and reload this page.' mod='simplifycommerce'}
-            {/if}
+                {/if}
             </div>
 
             <table cellspacing="0" cellpadding="0" class="simplify-technical">
@@ -88,7 +104,8 @@
                             <td>
                                 {$requirement['name']|escape:'htmlall': 'UTF-8'}<br/>
                                 {if !$requirement['result'] && isset($requirement['resolution'])}
-                                    {Tools::safeOutput($requirement['resolution']|escape:'htmlall':'UTF-8',true)} <br/>
+                                    {Tools::safeOutput($requirement['resolution']|escape:'htmlall':'UTF-8',true)}
+                                    <br/>
                                 {/if}
                             </td>
                         </tr>
@@ -96,13 +113,14 @@
                 {/foreach}
             </table>
         </section>
-        <br />
+        <br/>
         {if (!is_backward)}
-            /* If 1.4 and no backward, then leave */
+        /* If 1.4 and no backward, then leave */
         {else}
-            <form action="{$request_uri|escape:'UTF-8'}" method="post">
+        <form action="{$request_uri|escape:'UTF-8'}" method="post">
             <section class="simplify-settings">
                 <h2>API Key Mode</h2>
+
                 <div class="half container">
                     <div class="keyModeContainer">
                         <input class="radioInput" type="radio" name="simplify_mode" value="0"
@@ -116,15 +134,26 @@
                                 {/if}
                                 /><span>Live Mode</span>
                     </div>
-                    <p><div class="bold">Test Mode</div> All transactions in test mode are test payments. You can test your installation using card numbers from our
-                    <a href="https://www.simplify.com/commerce/docs/tutorial/index#testing" target="_blank">list of test card numbers</a>.
+                    <p>
+
+                    <div class="bold">Test Mode</div>
+                    All transactions in test mode are test payments. You can test your installation using card numbers
+                    from our
+                    <a href="https://www.simplify.com/commerce/docs/tutorial/index#testing" target="_blank">list of test
+                        card numbers</a>.
                     You cannot process real payments in test mode, so all other card numbers will be declined.</p>
-                    <p><div class="bold">Live Mode</div> All transactions made in live mode are real payments and will be processed accordingly.</p>
+                    <p>
+
+                    <div class="bold">Live Mode</div>
+                    All transactions made in live mode are real payments and will be processed accordingly.</p>
                 </div>
                 <h2>Set Your API Keys</h2>
+
                 <div class="account-mode container">
-                    <p>If you have not already done so, you can create an account by clicking the 'Sign up for free' button in the top right corner.<br />
-                        Obtain both your private and public API Keys from: Account Settings -> API Keys and supply them below.</p>
+                    <p>If you have not already done so, you can create an account by clicking the 'Sign up for free'
+                        button in the top right corner.<br/>
+                        Obtain both your private and public API Keys from: Account Settings -> API Keys and supply them
+                        below.</p>
                 </div>
                 <div class="clearfix api-key-container">
                     <div class="clearfix api-key-title">
@@ -136,10 +165,14 @@
                             <div class="left api-key-key">Public Key</div>
                         </div>
                         <div class="api-key-box clearfix">
-                            <div class="left api-key-key api-key ng-binding"><input type="password" name="simplify_private_key_test"
-                                                                                    value="{$private_key_test|escape:'htmlall':'UTF-8'}"/></div>
-                            <div class="left api-key-key api-key ng-binding"><input type="text" name="simplify_public_key_test"
-                                                                                    value="{$public_key_test|escape:'htmlall':'UTF-8'}"/></div>
+                            <div class="left api-key-key api-key ng-binding"><input type="password"
+                                                                                    name="simplify_private_key_test"
+                                                                                    value="{$private_key_test|escape:'htmlall':'UTF-8'}"/>
+                            </div>
+                            <div class="left api-key-key api-key ng-binding"><input type="text"
+                                                                                    name="simplify_public_key_test"
+                                                                                    value="{$public_key_test|escape:'htmlall':'UTF-8'}"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -154,25 +187,32 @@
                             <div class="left api-key-key">Public Key</div>
                         </div>
                         <div class="api-key-box clearfix">
-                            <div class="left api-key-key api-key ng-binding"><input type="password" name="simplify_private_key_live"
-                                                                                    value="{$private_key_live|escape:'htmlall':'UTF-8'}"/></div>
-                            <div class="left api-key-key api-key ng-binding"><input type="text" name="simplify_public_key_live"
-                                                                                    value="{$public_key_live|escape:'htmlall':'UTF-8'}"/></div>
+                            <div class="left api-key-key api-key ng-binding"><input type="password"
+                                                                                    name="simplify_private_key_live"
+                                                                                    value="{$private_key_live|escape:'htmlall':'UTF-8'}"/>
+                            </div>
+                            <div class="left api-key-key api-key ng-binding"><input type="text"
+                                                                                    name="simplify_public_key_live"
+                                                                                    value="{$public_key_live|escape:'htmlall':'UTF-8'}"/>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="clearfix">
                     <div class="left half">
                         <h2>Save Customer Details</h2>
+
                         <div class="account-mode container">
-                            <p>Enable customers to save their card details securely on Simplify's servers for future transactions.</p>
+                            <p>Enable customers to save their card details securely on Simplify's servers for future
+                                transactions.</p>
+
                             <div class="saveCustomerDetailsContainer">
-                                <input class="radioInput" type="radio" name="simplify_save_csutomer_details" value="1"
+                                <input class="radioInput" type="radio" name="simplify_save_customer_details" value="1"
                                         {if $save_customer_details == 1}
                                             checked="checked"
                                         {/if}
                                         /><span>Yes</span>
-                                <input class="radioInput" type="radio" name="simplify_save_csutomer_details" value="0"
+                                <input class="radioInput" type="radio" name="simplify_save_customer_details" value="0"
                                         {if $save_customer_details == 0}
                                             checked="checked"
                                         {/if}
@@ -183,8 +223,8 @@
                     <div class="half container left">
                         {foreach $statuses_options as $status_options}
                             <h2>{$status_options['label']|escape:'htmlall': 'UTF-8'}</h2>
-
-                            <p>Choose the status for an order once the payment has been successfully processed by Simplify.</p>
+                            <p>Choose the status for an order once the payment has been successfully processed by
+                                Simplify.</p>
                             <div>
                                 <select name="{$status_options['name']|escape:'htmlall':'UTF-8'}">
                                     {foreach $statuses as $status}
@@ -201,19 +241,89 @@
                         </div>
                     </div>
                 </div>
-                <div class="clearfix"><input type="submit" class="settings-btn btn right" name="SubmitSimplify" value="Save Settings" /></div></div>
-                </section>
-            </form>
-        {/if}
+                <div class="clearfix">
+                    <div class="left">
+                        <h2>Payment Mode</h2>
+
+                        <div class="container">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <select id="simplify_payment_mode" name="simplify_payment_mode">
+                                            <option value="hosted_payments"
+                                                    {if $payment_mode == 'hosted_payment'}selected="selected"{/if}>
+                                                Hosted Payments
+                                            </option>
+                                            <option value="standard"
+                                                    {if $payment_mode == 'standard'}selected="selected"{/if}>Standard
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td id="modal-overlay-config">
+                                        <label for="modal-overlay-color" class="modal-overlay">Modal
+                                            Overlay:</label><input name="simplify_overlay_color" type="text"
+                                                                   id="modal-overlay-color" size="8"
+                                                                   value="{$overlay_color|escape:'htmlall':'UTF-8'}"/><input
+                                                id="colorSelector" type="text"
+                                                value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"><input type="submit" class="settings-btn btn right" name="SubmitSimplify"
+                                             value="Save Settings"/></div>
+    </div>
+    </section>
+    </form>
+    {/if}
 </div>
 <script type="text/javascript">
-    function updateSimplifySettings()
-    {
-        if ($('input:radio[name=simplify_mode]:checked').val() == 1)
-            $('fieldset.simplify-cc-numbers').hide();
-        else
-            $('fieldset.simplify-cc-numbers').show(1000);
-    }
-    $('input:radio[name=simplify_mode]').click(function() { updateSimplifySettings(); });
-    $(document).ready(function() { updateSimplifySettings(); });
+    $(document).ready(function () {
+        var $modalOverlayColor = $('#modal-overlay-color');
+        var $colorSelector = $("#colorSelector");
+        var $modalOverlayConfig = $('#modal-overlay-config');
+
+        //NOT SURE WHAT THIS METHOD INTENDED FOR
+        function updateSimplifySettings() {
+            if ($('input:radio[name=simplify_mode]:checked').val() == 1)
+                $('fieldset.simplify-cc-numbers').hide();
+            else
+                $('fieldset.simplify-cc-numbers').show(1000);
+        }
+
+        function enableOrDisableOverlaySetting() {
+            var disable = $(this).val() === 'standard';
+            $modalOverlayConfig.css('opacity', disable ? 0.6 : 1.0);
+            $colorSelector.spectrum(disable ? 'disable' : 'enable');
+            if (disable) {
+                $modalOverlayColor.attr('disabled', true);
+            }
+            else {
+                $modalOverlayColor.removeAttr('disabled');
+            }
+        }
+
+        $('#simplify_payment_mode').change(enableOrDisableOverlaySetting);
+
+        $('input:radio[name=simplify_mode]').click(updateSimplifySettings);
+
+        function changeColor(color) {
+            $modalOverlayColor.val(color.toHexString());
+        }
+
+        $colorSelector.spectrum({
+            preferredFormat: "hex",
+            showInput: true,
+            move: changeColor,
+            change: changeColor
+        });
+
+        $modalOverlayColor.change(function () {
+            $colorSelector.spectrum('set', $(this).val());
+        });
+
+        updateSimplifySettings();
+    });
 </script>

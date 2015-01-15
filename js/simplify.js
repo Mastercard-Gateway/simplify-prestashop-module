@@ -125,28 +125,34 @@ $(document).ready(function() {
 		$('.simplify-payment-errors').hide();
 		$('.simplify-submit-button').attr('disabled', 'disabled'); /* Disable the submit button to prevent repeated clicks */
 
-		// Fetch a card token for new card details otherwise submit form with existing card details
+        if (simplifyPublicKey.length == 0) {
+            console.error("Simplify API key is not setup properly!");
+            return false;
+        }
+
+        // Fetch a card token for new card details otherwise submit form with existing card details
 		if ($("#simplify-cc-details").is(':visible')) {
-			if (simplifyPublicKey.length == 0) {
-				return false;
-			}
-
-			SimplifyCommerce.generateToken({
-				key: simplifyPublicKey,
-				card: {
-					number: $(".simplify-card-number").val().trim().replace(/\s+/g, ''),
-					cvc: $(".simplify-card-cvc").val(),
-					expMonth: $("#simplify-cc-details select[name='Date_Month']").val(),
-					expYear: $("#simplify-cc-details select[name='Date_Year']").val().substring(2),
-					name: simplifyFirstname + ' ' + simplifyLastname,
-					addressCity: simplifyCity,
-					addressLine1: simplifyAddress1,
-					addressLine2: simplifyAddress2,
-					addressState: simplifyState,
-					addressZip: simplifyPostcode
-				}
-			}, simplifyResponseHandler);
-
+            if ($("[name='hostedPayments']",$(this)).val()) {
+                //we already created a card token, so continue processing
+                return true;
+            }
+            else {
+                SimplifyCommerce.generateToken({
+                    key: simplifyPublicKey,
+                    card: {
+                        number: $(".simplify-card-number").val().trim().replace(/\s+/g, ''),
+                        cvc: $(".simplify-card-cvc").val(),
+                        expMonth: $("#simplify-cc-details select[name='Date_Month']").val(),
+                        expYear: $("#simplify-cc-details select[name='Date_Year']").val().substring(2),
+                        name: simplifyFirstname + ' ' + simplifyLastname,
+                        addressCity: simplifyCity,
+                        addressLine1: simplifyAddress1,
+                        addressLine2: simplifyAddress2,
+                        addressState: simplifyState,
+                        addressZip: simplifyPostcode
+                    }
+                }, simplifyResponseHandler);
+            }
 			return false; /* Prevent the form from submitting with the default action */
 		} else {
 			$('#simplify-payment-form')
@@ -180,12 +186,48 @@ function showSaveCardDetailsLabel(isSaveCardeDetailsLabelVisible) {
 	}
 }
 
+
+/**
+ * Function to get url get parameter from window's location
+ * @param name
+ * @param url
+ * @returns {*}
+ */
+
+function urlParam(name, url) {
+    if (!url) {
+        url = window.location.href;
+    }
+    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(url);
+    if (!results) {
+        return undefined;
+    }
+    return results[1] || undefined;
+}
+
+/**
+ * Show payment progress
+ */
+function showPaymentProgress() {
+    var $ajaxSpinner = $('#simplify-ajax-loader');
+    $ajaxSpinner.show();
+    if ($ajaxSpinner[0]) {
+        //let's use the html's default scrollIntoView method.
+        //If its not good, we can be fancy
+        $ajaxSpinner[0].scrollIntoView();
+    }
+}
+
+
+
 /**
  * Function to handle the response from Simplify Commerce's tokenization call.
  */
 function simplifyResponseHandler(data) {
 	if (data.error) {
-		var errorMessages = {
+        console.error(data.error);
+
+        var errorMessages = {
 			'card.number': 'The credit card number you entered is invalid.',
 			'card.expYear': 'The expiry year on the credit card is invalid.'
 		};
@@ -205,6 +247,11 @@ function simplifyResponseHandler(data) {
 				.html(errorList)
 				.show();
 		}
+        else {
+            $('.simplify-payment-errors')
+                .html("Error occurred while processing payment, please contact support!")
+                .show();
+        }
 		// Re-enable the submit button
 		$('.simplify-submit-button').removeAttr('disabled');
 		$('#simplify-payment-form').show();
