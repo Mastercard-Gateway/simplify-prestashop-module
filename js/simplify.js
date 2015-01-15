@@ -28,102 +28,110 @@
 /**
  * Function to handle the form submission
  */
-$(document).ready(function() {
+$(document).ready(function () {
 
-	if ($('.simplify-payment-errors').text().length > 0) {
-		$('.simplify-payment-errors').show();
-	}
+    var $paymentForm = $('#simplify-payment-form');
+    var $simplifyPaymentErrors = $('.simplify-payment-errors');
+    var $simplifySubmitButton = $('.simplify-submit-button');
 
-	// Check that the Simplify API Keys are set 
-	if (window.simplifyPublicKey == undefined || window.simplifyPublicKey.length == 0) {
-		$('#simplify-no-keys-msg').show();
-		$('.simplify-submit-button').attr('disabled', 'disabled');
-		return;
-	}
+    if ($simplifyPaymentErrors.text().length > 0) {
+        $simplifyPaymentErrors.show();
+    }
 
-	// Display warning message that this is a test payment as test api keys are being used.
-	if (window.simplifyPublicKey.indexOf('sbpb_') !== -1) {
-		$('#simplify-test-mode-msg').show();
-	}
+    if (isHostedPaymentsEnabled()) {
+        $simplifySubmitButton.hide();
+    }
 
-	$(".simplify-card-cvc").restrictNumeric();
-	$('.simplify-card-number').formatCardNumber();
+    // Check that the Simplify API Keys are set
+    if (window.simplifyPublicKey == undefined || window.simplifyPublicKey.length == 0) {
+        $('#simplify-no-keys-msg').show();
+        $simplifySubmitButton.attr('disabled', 'disabled');
+        return;
+    }
 
-	/**
-	 *  Function to watch the form of payment being used and
-	 *  to show and hide the relevant form components.
-	 */
-	$("input[name='cc-type']").change(function() {
-		var ccDetails = $("#simplify-cc-details");
-		$('.card-type-container').removeClass('selected');
-		$(this).parents('.card-type-container').addClass('selected');
+    // Display warning message that this is a test payment as test api keys are being used.
+    if (window.simplifyPublicKey.indexOf('sbpb_') !== -1) {
+        $('#simplify-test-mode-msg').show();
+    }
 
-		if ($("input[name='cc-type']:checked").val() == 'new') {
-			if ($("#cc-deletion-msg").is(':visible')) {
-				showSaveCardDetailsLabel(true);
-			} else {
-				showSaveCardDetailsLabel(false);
-			}
+    $(".simplify-card-cvc").restrictNumeric();
+    $('.simplify-card-number').formatCardNumber();
 
-			ccDetails.fadeIn();
-		} else {
-			ccDetails.fadeOut();
-		}
-	});
+    /**
+     *  Function to watch the form of payment being used and
+     *  to show and hide the relevant form components.
+     */
+    $("input[name='cc-type']").change(function () {
+        var ccDetails = $("#simplify-cc-details");
+        $('.card-type-container').removeClass('selected');
+        $(this).parents('.card-type-container').addClass('selected');
 
-	/**
-	 *	Function to show the confirm deletion container when the
-	 *  trash icon is clicked.
-	 */
-	$('#trash-icon').click(function() {
-		$('#cc-confirm-deletion').slideDown();
-	});
+        if ($("input[name='cc-type']:checked").val() == 'new') {
+            if ($("#cc-deletion-msg").is(':visible')) {
+                showSaveCardDetailsLabel(true);
+            } else {
+                showSaveCardDetailsLabel(false);
+            }
 
-	/**
-	 *	Function to hide the credit card details option,
-	 *  select the 'new card' option and provide the user
-	 *  a control to undo the deletion.
-	 */
-	$('#confirm-cc-deletion').click(function() {
-		$("#old-card-container").fadeOut('fast', function() {
-			$("#new-card-container input[name='cc-type']").click();
-			$("#cc-deletion-msg").slideDown(function() {
-				showSaveCardDetailsLabel(true);
-			});
-		});
+            ccDetails.fadeIn();
+        } else {
+            ccDetails.fadeOut();
+        }
+    });
 
-		$('#simplify-payment-form').append('<input id="deleteCustomerCard" type="hidden" name="deleteCustomerCard" value="true" />');
-	});
+    /**
+     *    Function to show the confirm deletion container when the
+     *  trash icon is clicked.
+     */
+    $('#trash-icon').click(function () {
+        $('#cc-confirm-deletion').slideDown();
+    });
 
-	/**
-	 *	Function to hide the confirm deletion container.
-	 */
-	$('#cancel-cc-deletion').click(function() {
-		$('#cc-confirm-deletion').slideUp();
-	});
+    /**
+     *    Function to hide the credit card details option,
+     *  select the 'new card' option and provide the user
+     *  a control to undo the deletion.
+     */
+    $('#confirm-cc-deletion').click(function () {
+        $("#old-card-container").fadeOut('fast', function () {
+            $("#new-card-container input[name='cc-type']").click();
+            $("#cc-deletion-msg").slideDown(function () {
+                showSaveCardDetailsLabel(true);
+            });
+        });
+        $paymentForm.append('<input id="deleteCustomerCard" type="hidden" name="deleteCustomerCard" value="true" />');
+    });
 
-	/**
-	 *	Function to restore the save card details
-	 *  form option.
-	 */
-	$('#cc-undo-deletion-lnk').click(function() {
-		$("#cc-deletion-msg").hide();
-		$('#cc-confirm-deletion').hide();
-		$("#old-card-container").fadeIn('fast');
-		$('#deleteCustomerCard').remove();
-		showSaveCardDetailsLabel(false);
-	});
+    /**
+     *    Function to hide the confirm deletion container.
+     */
+    $('#cancel-cc-deletion').click(function () {
+        $('#cc-confirm-deletion').slideUp();
+    });
 
-	/**
-	 *  Function to handle the form submission and either
-	 *  generate a new card token for new cards or
-	 *  charge an existing user's card.
-	 */
-	$('#simplify-payment-form').submit(function() {
+    /**
+     *    Function to restore the save card details
+     *  form option.
+     */
+    $('#cc-undo-deletion-lnk').click(function () {
+        $("#cc-deletion-msg").hide();
+        $('#cc-confirm-deletion').hide();
+        $("#old-card-container").fadeIn('fast');
+        $('#deleteCustomerCard').remove();
+        showSaveCardDetailsLabel(false);
+    });
 
-		$('#simplify-ajax-loader').show();
-		$('.simplify-payment-errors').hide();
-		$('.simplify-submit-button').attr('disabled', 'disabled'); /* Disable the submit button to prevent repeated clicks */
+    /**
+     *  Function to handle the form submission and either
+     *  generate a new card token for new cards or
+     *  charge an existing user's card.
+     */
+    $paymentForm.submit(function () {
+
+        $('#simplify-ajax-loader').show();
+        $('.simplify-payment-errors').hide();
+        $simplifySubmitButton.attr('disabled', 'disabled');
+        /* Disable the submit button to prevent repeated clicks */
 
         if (simplifyPublicKey.length == 0) {
             console.error("Simplify API key is not setup properly!");
@@ -131,8 +139,8 @@ $(document).ready(function() {
         }
 
         // Fetch a card token for new card details otherwise submit form with existing card details
-		if ($("#simplify-cc-details").is(':visible')) {
-            if ($("[name='hostedPayments']",$(this)).val()) {
+        if ($("#simplify-cc-details").is(':visible')) {
+            if (isHostedPaymentsEnabled()) {
                 //we already created a card token, so continue processing
                 return true;
             }
@@ -153,37 +161,89 @@ $(document).ready(function() {
                     }
                 }, simplifyResponseHandler);
             }
-			return false; /* Prevent the form from submitting with the default action */
-		} else {
-			$('#simplify-payment-form')
-				.append('<input type="hidden" name="chargeCustomerCard" value="true" />')
-				.get(0).submit();
-		}
-	});
+            return false;
+            /* Prevent the form from submitting with the default action */
+        } else {
+            $paymentForm.append('<input type="hidden" name="chargeCustomerCard" value="true" />')
+                .get(0).submit();
+        }
+    });
 
+    /**
+     * Function to handle the response from Simplify Commerce's tokenization call.
+     */
+    function simplifyResponseHandler(data) {
+        if (data.error) {
+            console.error(data.error);
+
+            var errorMessages = {
+                'card.number': 'The credit card number you entered is invalid.',
+                'card.expYear': 'The expiry year on the credit card is invalid.'
+            };
+
+            // Show any validation errors
+            if (data.error.code == "validation") {
+                var fieldErrors = data.error.fieldErrors,
+                    fieldErrorsLength = fieldErrors.length,
+                    errorList = "";
+
+                for (var i = 0; i < fieldErrorsLength; i++) {
+                    errorList += "<div>" + errorMessages[fieldErrors[i].field] +
+                        " " + fieldErrors[i].message + ".</div>";
+                }
+                // Display the errors
+                $('.simplify-payment-errors')
+                    .html(errorList)
+                    .show();
+            }
+            else {
+                $('.simplify-payment-errors')
+                    .html("Error occurred while processing payment, please contact support!")
+                    .show();
+            }
+            // Re-enable the submit button
+            $simplifySubmitButton.removeAttr('disabled');
+            $paymentForm.show();
+            $('#simplify-ajax-loader').hide();
+        } else {
+            // Insert the token into the form so it gets submitted to the server
+            $paymentForm
+                .append('<input type="hidden" name="simplifyToken" value="' + data['id'] + '" />')
+                .append('<input type="hidden" name="chargeCustomerCard" value="false" />')
+                .get(0).submit();
+        }
+    }
+
+    /**
+     * Function checking if hosted payments is enabled
+     * @returns {boolean}
+     */
+    function isHostedPaymentsEnabled() {
+        return $("[name='hostedPayments']", $paymentForm).val() ? true : false;
+    }
 });
 
 /**
  * Function to retrieve a cardholder detail or empty string if it doesn't exist.
  */
 function getCardHolderDetail(detail) {
-	return (typeof cardholderDetails[detail] !== 'undefined') ? cardholderDetails[detail] : '';
+    return (typeof cardholderDetails[detail] !== 'undefined') ? cardholderDetails[detail] : '';
 }
 
 /**
  * Function to toggle the visibility of the the 'save card details' label
  */
 function showSaveCardDetailsLabel(isSaveCardeDetailsLabelVisible) {
-	var $saveCustomerLabel = $('#saveCustomerLabel'),
-		$updateCustomerLabel = $('#updateCustomerLabel');
+    var $saveCustomerLabel = $('#saveCustomerLabel'),
+        $updateCustomerLabel = $('#updateCustomerLabel');
 
-	if (isSaveCardeDetailsLabelVisible) {
-		$saveCustomerLabel.show();
-		$updateCustomerLabel.hide();
-	} else {
-		$updateCustomerLabel.show();
-		$saveCustomerLabel.hide();
-	}
+    if (isSaveCardeDetailsLabelVisible) {
+        $saveCustomerLabel.show();
+        $updateCustomerLabel.hide();
+    } else {
+        $updateCustomerLabel.show();
+        $saveCustomerLabel.hide();
+    }
 }
 
 
@@ -216,51 +276,4 @@ function showPaymentProgress() {
         //If its not good, we can be fancy
         $ajaxSpinner[0].scrollIntoView();
     }
-}
-
-
-
-/**
- * Function to handle the response from Simplify Commerce's tokenization call.
- */
-function simplifyResponseHandler(data) {
-	if (data.error) {
-        console.error(data.error);
-
-        var errorMessages = {
-			'card.number': 'The credit card number you entered is invalid.',
-			'card.expYear': 'The expiry year on the credit card is invalid.'
-		};
-
-		// Show any validation errors
-		if (data.error.code == "validation") {
-			var fieldErrors = data.error.fieldErrors,
-				fieldErrorsLength = fieldErrors.length,
-				errorList = "";
-
-			for (var i = 0; i < fieldErrorsLength; i++) {
-				errorList += "<div>" + errorMessages[fieldErrors[i].field] +
-					" " + fieldErrors[i].message + ".</div>";
-			}
-			// Display the errors
-			$('.simplify-payment-errors')
-				.html(errorList)
-				.show();
-		}
-        else {
-            $('.simplify-payment-errors')
-                .html("Error occurred while processing payment, please contact support!")
-                .show();
-        }
-		// Re-enable the submit button
-		$('.simplify-submit-button').removeAttr('disabled');
-		$('#simplify-payment-form').show();
-		$('#simplify-ajax-loader').hide();
-	} else {
-		// Insert the token into the form so it gets submitted to the server
-		$('#simplify-payment-form')
-			.append('<input type="hidden" name="simplifyToken" value="' + data['id'] + '" />')
-			.append('<input type="hidden" name="chargeCustomerCard" value="false" />')
-			.get(0).submit();
-	}
 }
