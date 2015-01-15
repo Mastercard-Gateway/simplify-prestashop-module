@@ -277,3 +277,31 @@ function showPaymentProgress() {
         $ajaxSpinner[0].scrollIntoView();
     }
 }
+
+function toggleHostedPaymentButton(enable) {
+    var $payNowBtn = $('#simplify-hosted-payment-button');
+    enable ? $payNowBtn.removeAttr('disabled').css('opacity', 1) : $payNowBtn.attr('disabled', true).css('opacity', 0.5);
+}
+
+function processHostedPaymentForm(response, url) {
+    $('.simplify-payment-errors').hide();
+    var $paymentForm = $('#simplify-payment-form');
+    if (response && response.cardToken) {
+        showPaymentProgress();
+        $paymentForm.append('<input type="hidden" name="simplifyToken" value="' + response.cardToken + '"/>');
+        if (url && url.indexOf('saveCustomer') > -1) {
+            $('#saveCustomer').click();
+            $paymentForm.append('<input type="hidden" name="saveCustomer" value="on"/>');
+        }
+        if (url && url.indexOf('deleteCustomerCard') > -1) {
+            $paymentForm.append('<input id="deleteCustomerCard" type="hidden" name="deleteCustomerCard" value="true" />');
+        }
+        $paymentForm.submit();
+    }
+    else {
+        if (response.error) {
+            console.error(response.error);
+        }
+        toggleHostedPaymentButton(true);
+    }
+}

@@ -109,44 +109,18 @@
         {if $payment_mode == 'hosted_payments'}
             <script type="text/javascript" src="https://www.simplify.com/commerce/simplify.pay.js"></script>
             <script type="text/javascript">
-                function toggleHostedPaymentButton(enable) {
-                    var $payNowBtn = $('#simplify-hosted-payment-button');
-                    enable ? $payNowBtn.removeAttr('disabled').css('opacity', 1) : $payNowBtn.attr('disabled', true).css('opacity', 0.5);
-                }
-
+                //Hosted payments options
                 var options = {
                     color: "{$overlay_color|escape:'htmlall':'UTF-8'}"
                 };
 
+                //if its non-HTTPS set the redirectUrl back to this page
                 if (!document.location.href.match(/^https:\/\//)) {
                     //redirect back to payment step
                     if (!window.location.origin) { //IE don't have window.location.origin :(
                         window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
                     }
                     options.redirectUrl = window.location.origin + window.location.pathname + '?controller=order?step=3';
-                }
-
-                function processHostedPaymentForm(response, url) {
-                    $('.simplify-payment-errors').hide();
-                    var $paymentForm = $('#simplify-payment-form');
-                    if (response && response.cardToken) {
-                        showPaymentProgress();
-                        $paymentForm.append('<input type="hidden" name="simplifyToken" value="' + response.cardToken + '"/>');
-                        if (url && url.indexOf('saveCustomer') > -1) {
-                            $('#saveCustomer').click();
-                            $paymentForm.append('<input type="hidden" name="saveCustomer" value="on"/>');
-                        }
-                        if (url && url.indexOf('deleteCustomerCard') > -1) {
-                            $paymentForm.append('<input id="deleteCustomerCard" type="hidden" name="deleteCustomerCard" value="true" />');
-                        }
-                        $paymentForm.submit();
-                    }
-                    else {
-                        if (response.error) {
-                            console.error(response.error);
-                        }
-                        toggleHostedPaymentButton(true);
-                    }
                 }
 
                 $(function () {
