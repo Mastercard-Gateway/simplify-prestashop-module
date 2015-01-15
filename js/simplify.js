@@ -40,7 +40,7 @@ $(document).ready(function () {
         $simplifyPaymentErrors.show();
     }
 
-    if (isHostedPaymentsEnabled()) {
+    if (isHostedPaymentsEnabled() && $("input[name='cc-type']").length == 0) {
         $simplifySubmitButton.hide();
     }
 
@@ -74,10 +74,15 @@ $(document).ready(function () {
             } else {
                 showSaveCardDetailsLabel(false);
             }
-
             ccDetails.fadeIn();
+            if (isHostedPaymentsEnabled()) {
+                $simplifySubmitButton.fadeOut();
+            }
         } else {
             ccDetails.fadeOut();
+            if (isHostedPaymentsEnabled()) {
+                $simplifySubmitButton.fadeIn();
+            }
         }
     });
 
