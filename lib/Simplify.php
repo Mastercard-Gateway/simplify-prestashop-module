@@ -57,7 +57,7 @@ class Simplify
 	/**
 	* @var string $user_agent User-agent string send with requests.
 	*/
-	public static $user_agent = 'PrestaShop'; //Append PrestaShop plugin version used from config.xml
+	public static $user_agent = 'PrestaShop';
 
 }
 
