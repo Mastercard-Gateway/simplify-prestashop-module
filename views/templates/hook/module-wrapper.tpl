@@ -39,7 +39,7 @@
                  alt="Simplify Commerce Logo" width="150" height="64"></a>
 
         <div class="header-title left">
-            <h1>Start accepting payments now.</h1>
+            <h1>{l s='Start accepting payments now.' mod='simplifycommerce'}</h1>
 
             <h2>It’s that simple.</h2>
         </div>
