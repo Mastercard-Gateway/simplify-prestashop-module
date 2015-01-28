@@ -268,6 +268,12 @@
                                                 value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td class="hp-notes" colspan="2">
+                                        To use hosted payments you must create a new API Key pair with the <b>'Enable hosted payments'</b> option selected.<br/>
+                                        For more information, please visit this <a target="_new" href="https://www.simplify.com/commerce/docs/tools/hosted-payments">link</a>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>

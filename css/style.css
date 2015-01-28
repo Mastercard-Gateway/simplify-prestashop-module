@@ -257,6 +257,11 @@
     height: 28px;
 }
 
+.hp-notes {
+    padding-top: 10px;
+    width: 445px;
+}
+
 /*************************
 *	Payment Form Styles  *
 **************************/
