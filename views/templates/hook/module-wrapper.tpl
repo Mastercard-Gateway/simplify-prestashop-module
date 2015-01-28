@@ -39,7 +39,7 @@
                  alt="Simplify Commerce Logo" width="150" height="64"></a>
 
         <div class="header-title left">
-            <h1>Start accepting payments now.</h1>
+            <h1>{l s='Start accepting payments now.' mod='simplifycommerce'}</h1>
 
             <h2>It’s that simple.</h2>
         </div>
@@ -284,17 +284,14 @@
         var $modalOverlayColor = $('#modal-overlay-color');
         var $colorSelector = $("#colorSelector");
         var $modalOverlayConfig = $('#modal-overlay-config');
+        var $simplifyPaymentMode = $('#simplify_payment_mode');
 
-        //NOT SURE WHAT THIS METHOD INTENDED FOR
         function updateSimplifySettings() {
-            if ($('input:radio[name=simplify_mode]:checked').val() == 1)
-                $('fieldset.simplify-cc-numbers').hide();
-            else
-                $('fieldset.simplify-cc-numbers').show(1000);
+            enableOrDisableOverlaySetting();
         }
 
         function enableOrDisableOverlaySetting() {
-            var disable = $(this).val() === 'standard';
+            var disable = $simplifyPaymentMode.val() === 'standard';
             $modalOverlayConfig.css('opacity', disable ? 0.6 : 1.0);
             $colorSelector.spectrum(disable ? 'disable' : 'enable');
             if (disable) {
@@ -305,7 +302,7 @@
             }
         }
 
-        $('#simplify_payment_mode').change(enableOrDisableOverlaySetting);
+        $simplifyPaymentMode.change(enableOrDisableOverlaySetting);
 
         $('input:radio[name=simplify_mode]').click(updateSimplifySettings);
 
