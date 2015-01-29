@@ -41,9 +41,9 @@
         <div class="header-title left">
             <h1>{l s='Start accepting payments now.' mod='simplifycommerce'}</h1>
 
-            <h2>It’s that simple.</h2>
+            <h2>{l s='It’s that simple.' mod='simplifycommerce'}</h2>
         </div>
-        <a href="https://www.simplify.com/commerce/partners/prestashop#/" target="_blank" class="btn right"><span>Sign up for free</span></a>
+        <a href="https://www.simplify.com/commerce/partners/prestashop#/" target="_blank" class="btn right"><span>{l s='Sign up for free' mod='simplifycommerce'}</span></a>
     </div>
     <div class="section">
         <div class="clearfix">
@@ -52,9 +52,9 @@
                     <img class="features item icon" src="//www.simplify.com/commerce/static/images/feature_signup.jpg"
                          alt="feature_signup.jpg">
 
-                    <h1 class="features item h1">Easy sign up</h1>
+                    <h1 class="features item h1">{l s='Easy sign up' mod='simplifycommerce'}</h1>
 
-                    <p>Click the "Sign up for free" button and become a Simplify merchant for free.</p>
+                    <p>{l s='Click the "Sign up for free" button and become a Simplify merchant for free.' mod='simplifycommerce'}</p>
                 </div>
             </div>
             <div class="marketing left">
@@ -62,7 +62,7 @@
                     <img class="features item icon" src="//www.simplify.com/commerce/static/images/feature_price.jpg"
                          alt="feature_signup.jpg">
 
-                    <h1 class="features item h1">Simple pricing</h1>
+                    <h1 class="features item h1">{l s='Simple pricing' mod='simplifycommerce'}</h1>
 
                     <p>No setup fees.<br>No monthly fees.<br>No minimum.</p>
                 </div>
@@ -72,16 +72,16 @@
                     <img class="features item icon" src="//www.simplify.com/commerce/static/images/feature_funding.jpg"
                          alt="feature_signup.jpg">
 
-                    <h1 class="features item h1">Two-day funding</h1>
+                    <h1 class="features item h1">{l s='Two-day funding' mod='simplifycommerce'}</h1>
 
-                    <p>Deposits are made into your account in two business days for most transactions.</p>
+                    <p>{l s='Deposits are made into your account in two business days for most transactions.' mod='simplifycommerce'}</p>
                 </div>
             </div>
         </div>
     </div>
     <div class="formContainer">
         <section class="technical-checks">
-            <h2>Technical Checks</h2>
+            <h2>{l s='Technical Checks' mod='simplifycommerce'}</h2>
 
             <div class="{if $requirements['result']}conf">
                 {l s='Good news! Everything looks to be in order. Start accepting credit card payments now.' mod='simplifycommerce'}
@@ -136,7 +136,7 @@
                     </div>
                     <p>
 
-                    <div class="bold">Test Mode</div>
+                    <div class="bold">{l s='Test Mode' mod='simplifycommerce'}</div>
                     All transactions in test mode are test payments. You can test your installation using card numbers
                     from our
                     <a href="https://www.simplify.com/commerce/docs/tutorial/index#testing" target="_blank">list of test
@@ -144,10 +144,10 @@
                     You cannot process real payments in test mode, so all other card numbers will be declined.</p>
                     <p>
 
-                    <div class="bold">Live Mode</div>
+                    <div class="bold">{l s='Live Mode' mod='simplifycommerce'}</div>
                     All transactions made in live mode are real payments and will be processed accordingly.</p>
                 </div>
-                <h2>Set Your API Keys</h2>
+                <h2>{l s='Set Your API Keys' mod='simplifycommerce'}</h2>
 
                 <div class="account-mode container">
                     <p>If you have not already done so, you can create an account by clicking the 'Sign up for free'
@@ -157,12 +157,12 @@
                 </div>
                 <div class="clearfix api-key-container">
                     <div class="clearfix api-key-title">
-                        <div class="left"><h4 class="ng-binding">Test</h4></div>
+                        <div class="left"><h4 class="ng-binding">{l s='Test' mod='simplifycommerce'}</h4></div>
                     </div>
                     <div class="api-keys">
                         <div class="api-key-header clearfix">
-                            <div class="left api-key-key">Private Key</div>
-                            <div class="left api-key-key">Public Key</div>
+                            <div class="left api-key-key">{l s='Private Key' mod='simplifycommerce'}</div>
+                            <div class="left api-key-key">{l s='Public Key' mod='simplifycommerce'}</div>
                         </div>
                         <div class="api-key-box clearfix">
                             <div class="left api-key-key api-key ng-binding"><input type="password"
@@ -179,12 +179,12 @@
 
                 <div class="clearfix api-key-container">
                     <div class="clearfix api-key-title">
-                        <div class="left"><h4 class="ng-binding">Live</h4></div>
+                        <div class="left"><h4 class="ng-binding">{l s='Live' mod='simplifycommerce'}</h4></div>
                     </div>
                     <div class="api-keys">
                         <div class="api-key-header clearfix">
-                            <div class="left api-key-key">Private Key</div>
-                            <div class="left api-key-key">Public Key</div>
+                            <div class="left api-key-key">{l s='Private Key' mod='simplifycommerce'}</div>
+                            <div class="left api-key-key">{l s='Public Key' mod='simplifycommerce'}</div>
                         </div>
                         <div class="api-key-box clearfix">
                             <div class="left api-key-key api-key ng-binding"><input type="password"
@@ -200,7 +200,7 @@
                 </div>
                 <div class="clearfix">
                     <div class="left half">
-                        <h2>Save Customer Details</h2>
+                        <h2>{l s='Save Customer Details' mod='simplifycommerce'}</h2>
 
                         <div class="account-mode container">
                             <p>Enable customers to save their card details securely on Simplify's servers for future
@@ -243,7 +243,7 @@
                 </div>
                 <div class="clearfix">
                     <div class="left">
-                        <h2>Payment Mode</h2>
+                        <h2>{l s='Payment Mode' mod='simplifycommerce'}</h2>
 
                         <div class="container">
                             <table>
@@ -266,6 +266,12 @@
                                                                    value="{$overlay_color|escape:'htmlall':'UTF-8'}"/><input
                                                 id="colorSelector" type="text"
                                                 value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="hp-notes" colspan="2">
+                                        To use hosted payments you must create a new API Key pair with the <b>'Enable hosted payments'</b> option selected.<br/>
+                                        For more information, please visit this <a target="_new" href="https://www.simplify.com/commerce/docs/tools/hosted-payments">link</a>
                                     </td>
                                 </tr>
                             </table>

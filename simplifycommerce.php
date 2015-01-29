@@ -576,6 +576,22 @@ class SimplifyCommerce extends PaymentModule
 	}
 
 	/**
+	 * Check key prefix
+	 * API keys are set.
+	 *
+	 * @return boolean Whether the API Keys are set or not.
+	 */
+	public function checkKeyPrefix()
+	{
+		if (Configuration::get('SIMPLIFY_MODE')) {
+			return strpos(Configuration::get('SIMPLIFY_PUBLIC_KEY_LIVE'), 'lvpb_') === 0;
+		}
+		else {
+			return strpos(Configuration::get('SIMPLIFY_PUBLIC_KEY_TEST'), 'sbpb_') === 0;
+		}
+	}
+
+	/**
 	 * Check technical requirements to make sure the Simplify Commerce's module will work properly
 	 *
 	 * @return array Requirements tests results
@@ -593,6 +609,10 @@ class SimplifyCommerce extends PaymentModule
 			Currency::exists('GBP', 0) || Currency::exists('EUR', 0) || Currency::exists('USD', 0) || Currency::exists('CAD', 0));
 		$tests['php52'] = array('name' => $this->l('Your server must run PHP 5.3 or greater'), 'result' => version_compare(PHP_VERSION, '5.3.0', '>='));
 		$tests['configuration'] = array('name' => $this->l('You must set your Simplify Commerce API Keys'), 'result' => $this->checkSettings());
+
+		if ($tests['configuration']['result']) {
+			$tests['keyprefix'] = array('name' => $this->l('Your API Keys appears to be invalid. Please make sure that you specified the right keys.'), 'result' => $this->checkKeyPrefix());
+		}
 
 		if (version_compare(_PS_VERSION_, '1.5', '<'))
 		{

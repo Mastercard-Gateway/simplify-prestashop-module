@@ -310,3 +310,14 @@ function processHostedPaymentForm(response, url) {
         toggleHostedPaymentButton(true);
     }
 }
+
+function initHostedPayments(options) {
+    var hostedPayments = SimplifyCommerce.hostedPayments(function (response) {
+        if (response && response.length > 0 && response[0].error) {
+            console.log('Error from cardToken response ', response[0].error);
+            return;
+        }
+        hostedPayments.closeOnCompletion();
+        processHostedPaymentForm(response);
+    }, options);
+}

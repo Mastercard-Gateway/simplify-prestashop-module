@@ -134,9 +134,7 @@
                         processHostedPaymentForm(response, url);
                     }
                     else {
-                        SimplifyCommerce.pay(function (response) {
-                            processHostedPaymentForm(response);
-                        }, options).closeOnCompletion();
+                        initHostedPayments(options);
 
                         $('#simplify-hosted-payment-button').click(function () {
                             toggleHostedPaymentButton(false);
@@ -149,10 +147,7 @@
                                     options.redirectUrl += '&deleteCustomerCard=true';
                                 }
                             }
-
-                            SimplifyCommerce.pay(function (response) {
-                                processHostedPaymentForm(response);
-                            }, options).closeOnCompletion();
+                            initHostedPayments(options);
                         });
                     }
                 });
