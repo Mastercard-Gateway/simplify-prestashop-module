@@ -59,7 +59,7 @@
             </div>
             <div class="marketing left">
                 <div class="w-container features item">
-                    <img class="features item icon" src="//www.simplify.com/commerce/static/images/feature_price.jpg"
+                    <img class="features item icon" src="{$module_dir|escape}img/feature_price.jpg"
                          alt="feature_signup.jpg">
 
                     <h1 class="features item h1">{l s='Simple pricing' mod='simplifycommerce'}</h1>
@@ -76,6 +76,19 @@
 
                     <p>{l s='Deposits are made into your account in two business days for most transactions.' mod='simplifycommerce'}</p>
                 </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="w-container admin-description-block">
+                <b>Simplify Commerce</b>, built my MasterCard, a global leader in the payment industry, makes it easy for small businesses to accept online payments. From our hosted ‘Pay Now’ solution that allows merchants to share links socially to our mobile point of sale to recurring payment solutions, we include must-have features key to businesses.
+                <ul>
+                    <li>{l s='Omni-channel payment solution for website, mobile and eCommerce store' mod='simplifycommerce'}</li>
+                    <li>{l s='Accepting major card brands' mod='simplifycommerce'}</li>
+                    <li>{l s='Quick two-day funding' mod='simplifycommerce'}</li>
+                    <li>{l s='Highest Level 1 PCI certification' mod='simplifycommerce'}</li>
+                    <li>{l s='Simple eInvoicing' mod='simplifycommerce'}</li>
+                    <li>{l s='Recurring billing for monthly subscriptions' mod='simplifycommerce'}</li>
+                </ul>
             </div>
         </div>
     </div>
