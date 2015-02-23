@@ -134,6 +134,10 @@
 	width: 390px;
 }
 
+.simplify-module-wrapper .admin-description-block {
+    padding: 0 20px 0 20px;
+}
+
 .simplify-module-wrapper .btn, 
 .simplify-module-wrapper .btn:visited {
 	background-color: #F60!important;
