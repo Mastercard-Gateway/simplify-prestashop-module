@@ -94,14 +94,14 @@
     </div>
     <div class="formContainer">
         <section class="technical-checks">
-            <h2>{l s='Technical Checks' mod='simplifycommerce'}</h2>
-
             <div class="{if $requirements['result']}conf">
-                {l s='Good news! Everything looks to be in order. Start accepting credit card payments now.' mod='simplifycommerce'}
+                <h3>{l s='Good news! Everything looks to be in order. Start accepting credit card payments now.' mod='simplifycommerce'}</h3>
                 {else}
-                {l s='Unfortunately, at least one issue is preventing you from using Simplify Commerce.Please fix the issue and reload this page.' mod='simplifycommerce'}
+                <h3>{l s='Unfortunately, at least one issue is preventing you from using Simplify Commerce. Please fix the issue and reload this page.' mod='simplifycommerce'}</h3>
                 {/if}
             </div>
+
+            <h2>{l s='Technical Checks' mod='simplifycommerce'}</h2>
 
             {if !$requirements['result']}
                 <table cellspacing="0" cellpadding="0" class="simplify-technical">
