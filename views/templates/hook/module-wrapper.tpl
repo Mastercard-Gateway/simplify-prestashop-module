@@ -96,7 +96,7 @@
         <section class="technical-checks">
             {if $requirements['result']}
             <div class="conf">
-                <h2>{l s='Good news! Everything looks to be in order, start accepting credit card payments now.' mod='simplifycommerce'}</h2>
+                <h3>{l s='Good news! Everything looks to be in order, start accepting credit card payments now.' mod='simplifycommerce'}</h3>
             </div>
             {else}
                 <h3>{l s='Unfortunately, at least one issue is preventing you from using Simplify Commerce. Please fix the issue and reload this page.' mod='simplifycommerce'}</h3>
