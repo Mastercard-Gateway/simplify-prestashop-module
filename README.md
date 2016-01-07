@@ -11,7 +11,7 @@ PrestaShop comes pre-bundled with Simplify Commerce module. Install it from the 
 
 ![Setup API Keys](docs/plugin_configuration.png "Plugin Configuration")
 
-You can manage your Simplify account (view deposits, perform refunds etc.) using the Simplify dashboard at https://www.simplify.com/commerce/.
+You can manage your Simplify account (view deposits, perform refunds, create invoices etc.) using the Simplify dashboard at https://www.simplify.com/commerce/.
 
 ## License
 This software is Open Source, released under the BSD 3-Clause license. See licence.txt for more info.
