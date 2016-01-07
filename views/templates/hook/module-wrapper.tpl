@@ -95,15 +95,15 @@
     <div class="formContainer">
         <section class="technical-checks">
             <div class="{if $requirements['result']}conf">
-                <h3>{l s='Good news! Everything looks to be in order. Start accepting credit card payments now.' mod='simplifycommerce'}</h3>
+                <h3>{l s='Good news! Everything looks to be in order, start accepting credit card payments now.' mod='simplifycommerce'}</h3>
                 {else}
                 <h3>{l s='Unfortunately, at least one issue is preventing you from using Simplify Commerce. Please fix the issue and reload this page.' mod='simplifycommerce'}</h3>
                 {/if}
             </div>
 
-            <h2>{l s='Technical Checks' mod='simplifycommerce'}</h2>
-
             {if !$requirements['result']}
+                <h2>{l s='Technical Checks' mod='simplifycommerce'}</h2>
+
                 <table cellspacing="0" cellpadding="0" class="simplify-technical">
                     {foreach from=$requirements key=k item=requirement}
                         {if $k != 'result'}
