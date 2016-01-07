@@ -39,8 +39,6 @@ if (!defined('_PS_VERSION_'))
  */
 class SimplifyCommerce extends PaymentModule
 {
-	public $limited_countries = array('us');
-	public $limited_currencies = array('USD');
 	protected $backward = false;
 	public $defaultPaymentMode = 'standard';
 	public $defaultModalOverlayColor = '#12B830';
@@ -195,10 +193,6 @@ class SimplifyCommerce extends PaymentModule
 
 		// If 1.4 and no backward then leave
 		if (!$this->backward)
-			return;
-
-		// If the currency is not supported, then leave
-		if (!in_array($this->context->currency->iso_code, $this->limited_currencies))
 			return;
 
 		include(dirname(__FILE__).'/lib/Simplify.php');
