@@ -1,5 +1,5 @@
 
-# Simplify Commerce payment module for PrestaShop
+# Simplify Commerce Payment module for PrestaShop
 
 This plugin adds Simplify Commerce as a payment option on your PrestaShop checkout page.
 
