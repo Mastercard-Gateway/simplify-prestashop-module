@@ -103,28 +103,30 @@
                 {/if}
             </div>
 
-            <table cellspacing="0" cellpadding="0" class="simplify-technical">
-                {foreach from=$requirements key=k item=requirement}
-                    {if $k != 'result'}
-                        <tr>
-                            <td>
-                                {if $requirement['result']}
-                                    <img src="../img/admin/ok.gif" alt=""/>
-                                {else}
-                                    <img src="../img/admin/forbbiden.gif" alt=""/>
-                                {/if}
-                            </td>
-                            <td>
-                                {$requirement['name']|escape:'htmlall': 'UTF-8'}<br/>
-                                {if !$requirement['result'] && isset($requirement['resolution'])}
-                                    {Tools::safeOutput($requirement['resolution']|escape:'htmlall':'UTF-8',true)}
-                                    <br/>
-                                {/if}
-                            </td>
-                        </tr>
-                    {/if}
-                {/foreach}
-            </table>
+            {if !$requirements['result']}
+                <table cellspacing="0" cellpadding="0" class="simplify-technical">
+                    {foreach from=$requirements key=k item=requirement}
+                        {if $k != 'result'}
+                            <tr>
+                                <td>
+                                    {if $requirement['result']}
+                                        <img src="../img/admin/ok.gif" alt=""/>
+                                    {else}
+                                        <img src="../img/admin/forbbiden.gif" alt=""/>
+                                    {/if}
+                                </td>
+                                <td>
+                                    {$requirement['name']|escape:'htmlall': 'UTF-8'}<br/>
+                                    {if !$requirement['result'] && isset($requirement['resolution'])}
+                                        {Tools::safeOutput($requirement['resolution']|escape:'htmlall':'UTF-8',true)}
+                                        <br/>
+                                    {/if}
+                                </td>
+                            </tr>
+                        {/if}
+                    {/foreach}
+                </table>
+            {/if}
         </section>
         <br/>
         {if (!is_backward)}

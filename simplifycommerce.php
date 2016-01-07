@@ -599,8 +599,6 @@ class SimplifyCommerce extends PaymentModule
 			$tests['ssl'] = array('name' => $this->l('SSL must be enabled on your store (before entering Live mode)'), 'result' =>
 				Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) && Tools::strtolower($_SERVER['HTTPS']) != 'off'));
 
-		$tests['currencies'] = array('name' => $this->l('The currency USD must be enabled on your store'), 'result' =>
-			Currency::exists('GBP', 0) || Currency::exists('EUR', 0) || Currency::exists('USD', 0) || Currency::exists('CAD', 0));
 		$tests['php52'] = array('name' => $this->l('Your server must run PHP 5.3 or greater'), 'result' => version_compare(PHP_VERSION, '5.3.0', '>='));
 		$tests['configuration'] = array('name' => $this->l('You must set your Simplify Commerce API Keys'), 'result' => $this->checkSettings());
 
