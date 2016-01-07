@@ -160,6 +160,7 @@
                         data-reference="{$hosted_payment_reference|escape:'htmlall':'UTF-8'}"
                         data-amount="{$hosted_payment_amount}"
                         data-operation="create.token"
+                        data-customer-name="{$firstname|escape:'htmlall':'UTF-8'} {$lastname|escape:'htmlall':'UTF-8'}"
                         data-color="{$overlay_color|escape:'htmlall':'UTF-8'}">
                     Pay Now
                 </button
