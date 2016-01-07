@@ -5,7 +5,7 @@ This plugin adds Simplify Commerce as a payment option on your PrestaShop checko
 
 ## Installation
 
-PrestaShop comes pre-bundled with Simplify Commerce module. Install it from the list of modules and setup API keys and you are good to go!
+PrestaShop comes pre-bundled with Simplify Commerce module. Install it from the list of modules, setup API keys and you are good to go!
 
 ![Install Module](docs/install_module.png "Install Simplify Commerce module")
 
