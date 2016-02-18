@@ -50,7 +50,7 @@ class SimplifyCommerce extends PaymentModule
 	{
 		$this->name = 'simplifycommerce';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.0.10';
+		$this->version = '1.0.11';
 		$this->author = 'MasterCard';
 		$this->need_instance = 0;
 
