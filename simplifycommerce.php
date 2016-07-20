@@ -450,7 +450,7 @@ class SimplifyCommerce extends PaymentModule
 				'?id_cart='.(int)$this->context->cart->id.'&id_module='.(int)$this->id.'&id_order='.
 				(int)$this->currentOrder.'&key='.$this->context->customer->secure_key, '');
 		else
-			Tools::redirect(Link::getPageLink('order-confirmation.php', null, null,
+			Tools::redirect($this->context->link->getPagelink('order-confirmation.php', null, null,
 				array('id_cart' => (int)$this->context->cart->id, 'id_module' => (int)$this->id,
 					'id_order' => (int)$this->currentOrder, 'key' => $this->context->customer->secure_key)));
 		exit;
