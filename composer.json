@@ -1,0 +1,19 @@
+{
+  "name": "simplifycommerce",
+  "description": "Payments made easy - Start securely accepting credit card payments instantly.",
+  "homepage": "https://github.com/PrestaShop/simplifycommerce",
+  "license": "BSD 3-Clause license",
+  "authors": [
+    {
+      "name": "MasterCard",
+      "email": "support@simplify.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4"
+  },
+  "config": {
+    "preferred-install": "dist"
+  },
+  "type": "prestashop-module"
+}

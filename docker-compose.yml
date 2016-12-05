@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  prestashop-simplify-commerce:
+    container_name: simplify-commerce-prestashop
+    build: .
+    volumes: ["./:/simplifycommerce"]
+    image: simplify-commerce/prestashop:latest
+    ports:
+        - "80:80"
+        - "3306:3306"
