@@ -27,7 +27,7 @@
 /**
  * @since 1.5.0
  */
-class Ps_CheckpaymentValidationModuleFrontController extends ModuleFrontController
+class SimplifyCommerceValidationModuleFrontController extends ModuleFrontController
 {
     public function postProcess()
     {

@@ -32,6 +32,11 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 
+function llog($mess)
+{
+	error_log('simp log: ' . $mess);
+}
+
 /**
  * This payment module enables the processing of
  * credit card transactions through the Simplify
@@ -47,7 +52,7 @@ class SimplifyCommerce extends PaymentModule
 	 * Simplify Commerce's module constuctor
 	 */
 	public function __construct()
-	{
+	{ llog("__construct");
 		$this->name = 'simplifycommerce';
 		$this->tab = 'payments_gateways';
 		$this->version = '1.1.0';
@@ -80,17 +85,17 @@ class SimplifyCommerce extends PaymentModule
 	}
 
 	public function getBaseLink()
-	{
+	{ llog("getBaseLink");
 		return __PS_BASE_URI__;
 	}
 
 	public function getLangLink()
-	{
+	{ llog("getLangLink");
 		return '';
 	}
 
 	public function hookHeader()
-	{
+	{ llog("hookHeader");
 		$this->context->controller->addCSS($this->_path.'css/style.css', 'all');
 
 		$this->context->controller->addJS('https://www.simplify.com/commerce/v1/simplify.js');
@@ -104,7 +109,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return boolean Install result
 	 */
 	public function install()
-	{
+	{ llog("install");
 		if (!$this->backward && version_compare(_PS_VERSION_, '1.5', '<'))
 		{
 			echo '<div class="error">'.Tools::safeOutput($this->backward_error).'</div>';
@@ -138,7 +143,10 @@ class SimplifyCommerce extends PaymentModule
 			}
 		}
 
-		return parent::install() && $this->registerHook('payment') && $this->registerHook('orderConfirmation') && $this->registerHook('header')
+		return parent::install()
+		&& $this->registerHook('paymentOptions')
+		&& $this->registerHook('orderConfirmation')
+		&& $this->registerHook('header')
 		&& Configuration::updateValue('SIMPLIFY_MODE', 0) && Configuration::updateValue('SIMPLIFY_SAVE_CUSTOMER_DETAILS', 1)
 		&& Configuration::updateValue('SIMPLIFY_PAYMENT_MODE', $this->defaultPaymentMode) && Configuration::updateValue('SIMPLIFY_OVERLAY_COLOR', $this->defaultModalOverlayColor)
 		&& Configuration::updateValue('SIMPLIFY_PAYMENT_ORDER_STATUS', (int)Configuration::get('PS_OS_PAYMENT')) && $this->createDatabaseTables();
@@ -150,7 +158,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return boolean Database tables installation result
 	 */
 	public function createDatabaseTables()
-	{
+	{ llog("createDatabaseTables");
 		return Db::getInstance()->Execute('
 			CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'simplify_customer` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 				`customer_id` varchar(32) NOT NULL, `simplify_customer_id` varchar(32) NOT NULL, `date_created` datetime NOT NULL, PRIMARY KEY (`id`), 
@@ -164,7 +172,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return boolean Uninstall result
 	 */
 	public function uninstall()
-	{
+	{ llog("uninstall");
 		$uninstall_code = parent::uninstall();
 		$delete_mode_table = Configuration::deleteByName('SIMPLIFY_MODE');
 		$delete_customer_table = Configuration::deleteByName('SIMPLIFY_SAVE_CUSTOMER_DETAILS');
@@ -187,8 +195,10 @@ class SimplifyCommerce extends PaymentModule
 	 *
 	 * @return string Simplify Commerce's payment form
 	 */
-	public function hookPayment()
-	{
+	public function hookPaymentOptions()
+	{ llog("hookPaymentOptions");
+		llog("Hi From Simplify");
+
 		if (!$this->active)
 			return false;
 
@@ -265,7 +275,14 @@ class SimplifyCommerce extends PaymentModule
 		$this->smarty->assign('payment_mode', Configuration::get('SIMPLIFY_PAYMENT_MODE'));
 		$this->smarty->assign('overlay_color', Configuration::get('SIMPLIFY_OVERLAY_COLOR') != null ? Configuration::get('SIMPLIFY_OVERLAY_COLOR') : $this->defaultModalOverlayColor);
 
-		return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
+		$newOption = new PaymentOption();
+		$newOption->setCallToActionText($this->trans('Pay by Simplify Commerce', array(), 'Modules.SimplifyCommerce.Admin'))
+			->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
+			->setAdditionalInformation($this->fetch('module:ps_checkpayment/views/templates/front/payment_infos.tpl'));
+
+
+		//return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
+		return [$newOption];
 	}
 
 	/**
@@ -275,7 +292,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return string Simplify Commerce's payment confirmation screen
 	 */
 	public function hookOrderConfirmation($params)
-	{
+	{ llog("hookOrderConfirmation");
 		if (!isset($params['objOrder']) || ($params['objOrder']->module != $this->name))
 			return false;
 
@@ -297,7 +314,7 @@ class SimplifyCommerce extends PaymentModule
 	 * from the generated card token.
 	 */
 	public function processPayment()
-	{
+	{ llog("processPayment");
 		if (!$this->active)
 			return false;
 
@@ -463,7 +480,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return string Simplify customer's id.
 	 */
 	private function getSimplifyCustomerID($customer_id)
-	{
+	{ llog("getSimplifyCustomerID");
 		$simplify_customer_id = null;
 
 		try {
@@ -487,7 +504,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return string Simplify customer's id.
 	 */
 	private function deleteCustomerFromDB()
-	{
+	{ llog("deleteCustomerFromDB");
 		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'simplify_customer WHERE customer_id = '.(int)$this->context->cookie->id_customer.';');
 	}
 
@@ -497,7 +514,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return string Simplify customer's id.
 	 */
 	private function createNewSimplifyCustomer($token)
-	{
+	{ llog("createNewSimplifyCustomer");
 		try
 		{
 			$customer = SimplifyCustomer::createCustomer(array(
@@ -527,7 +544,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return object Simple object containin the Simplify public & private key values.
 	 */
 	private function getSimplifyAPIKeys()
-	{
+	{ llog("getSimplifyAPIKeys");
 		$api_keys = new stdClass;
 		$api_keys->public_key = Configuration::get('SIMPLIFY_MODE') ?
 			Configuration::get('SIMPLIFY_PUBLIC_KEY_LIVE') : Configuration::get('SIMPLIFY_PUBLIC_KEY_TEST');
@@ -544,7 +561,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @param string $message Error message to log and to display to the user
 	 */
 	private function failPayment($message)
-	{
+	{ llog("failPayment");
 		if (class_exists('Logger'))
 			Logger::addLog($this->l('Simplify Commerce - Payment transaction failed').' '.$message, 1, null, 'Cart', (int)$this->context->cart->id, true);
 
@@ -563,7 +580,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return boolean Whether the API Keys are set or not.
 	 */
 	public function checkSettings()
-	{
+	{ llog("checkSettings");
 		if (Configuration::get('SIMPLIFY_MODE'))
 			return Configuration::get('SIMPLIFY_PUBLIC_KEY_LIVE') != '' && Configuration::get('SIMPLIFY_PRIVATE_KEY_LIVE') != '';
 		else
@@ -577,7 +594,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return boolean Whether the API Keys are set or not.
 	 */
 	public function checkKeyPrefix()
-	{
+	{ llog("checkKeyPrefix");
 		if (Configuration::get('SIMPLIFY_MODE')) {
 			return strpos(Configuration::get('SIMPLIFY_PUBLIC_KEY_LIVE'), 'lvpb_') === 0;
 		}
@@ -592,7 +609,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return array Requirements tests results
 	 */
 	public function checkRequirements()
-	{
+	{ llog("checkRequirements");
 		$tests = array('result' => true);
 		$tests['curl'] = array('name' => $this->l('PHP cURL extension must be enabled on your server'), 'result' => extension_loaded('curl'));
 
@@ -637,7 +654,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return string Simplify settings page
 	 */
 	public function getContent()
-	{
+	{ llog("getContent");
 		$html = '';
 		// Update Simplify settings
 		if (Tools::isSubmit('SubmitSimplify'))
