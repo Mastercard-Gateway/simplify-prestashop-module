@@ -27,6 +27,7 @@
  *  @copyright 2014, MasterCard International Incorporated. All rights reserved. 
  *  @license   See licence.txt
  *}
+<div>
 <script>
     var simplifyPublicKey = "{$simplify_public_key|escape:'htmlall':'UTF-8'}",
             simplifyFirstname = "{$firstname|escape:'htmlall':'UTF-8'}", simplifyLastname = "{$lastname|escape:'htmlall':'UTF-8'}", simplifyCity = "{$city|escape:'htmlall':'UTF-8'}", simplifyAddress1 = "{$address1|escape:'htmlall':'UTF-8'}", simplifyAddress2 = "{$address2|escape:'htmlall':'UTF-8'}", simplifyState = "{$state|escape:'htmlall':'UTF-8'}", simplifyPostcode = "{$postcode|escape:'htmlall':'UTF-8'}";
