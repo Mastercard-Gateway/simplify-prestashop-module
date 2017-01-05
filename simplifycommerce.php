@@ -29,6 +29,8 @@
  * @license   See licence.txt
  */
 
+use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
+
 if (!defined('_PS_VERSION_'))
 	exit;
 
@@ -94,15 +96,25 @@ class SimplifyCommerce extends PaymentModule
 		return '';
 	}
 
-	public function hookHeader()
-	{ llog("hookHeader");
+	public function hookDisplayHeader(){
+		$this->llog("hookDisplayHeader");
 		$this->context->controller->addCSS($this->_path.'css/style.css', 'all');
 
-		$this->context->controller->addJS('https://www.simplify.com/commerce/v1/simplify.js');
+		//$this->context->controller->addJS('//www.simplify.com/commerce/v1/simplify.js');
+//		$this->context->controller->addJS('//www.simplify.com/commerce/v1/simplify.js');
+		$this->context->controller->addJS($this->_path.'js/simplify-lib.js');
 		$this->context->controller->addJS($this->_path.'js/simplify.js');
 		$this->context->controller->addJS($this->_path.'js/simplify.form.js');
 	}
 
+//	public function hookHeader()
+//	{ $this->llog("hookHeader");
+//		$this->context->controller->addCSS($this->_path.'css/style.css', 'all');
+//
+//		$this->context->controller->addJS('https://www.simplify.com/commerce/v1/simplify.js');
+//		$this->context->controller->addJS($this->_path.'js/simplify.js');
+//		$this->context->controller->addJS($this->_path.'js/simplify.form.js');
+//	}
 	/**
 	 * Simplify Commerce's module installation
 	 *
@@ -146,7 +158,7 @@ class SimplifyCommerce extends PaymentModule
 		return parent::install()
 		&& $this->registerHook('paymentOptions')
 		&& $this->registerHook('orderConfirmation')
-		&& $this->registerHook('header')
+		&& $this->registerHook('displayHeader')
 		&& Configuration::updateValue('SIMPLIFY_MODE', 0) && Configuration::updateValue('SIMPLIFY_SAVE_CUSTOMER_DETAILS', 1)
 		&& Configuration::updateValue('SIMPLIFY_PAYMENT_MODE', $this->defaultPaymentMode) && Configuration::updateValue('SIMPLIFY_OVERLAY_COLOR', $this->defaultModalOverlayColor)
 		&& Configuration::updateValue('SIMPLIFY_PAYMENT_ORDER_STATUS', (int)Configuration::get('PS_OS_PAYMENT')) && $this->createDatabaseTables();
@@ -275,14 +287,20 @@ class SimplifyCommerce extends PaymentModule
 		$this->smarty->assign('payment_mode', Configuration::get('SIMPLIFY_PAYMENT_MODE'));
 		$this->smarty->assign('overlay_color', Configuration::get('SIMPLIFY_OVERLAY_COLOR') != null ? Configuration::get('SIMPLIFY_OVERLAY_COLOR') : $this->defaultModalOverlayColor);
 
-		$newOption = new PaymentOption();
-		$newOption->setCallToActionText($this->trans('Pay by Simplify Commerce', array(), 'Modules.SimplifyCommerce.Admin'))
+		$this->smarty->assign('module_dir', $this->_path);
+
+		$option = $this->getPaymentOption();
+
+		return [$option];
+	}
+
+	public function getPaymentOption()
+	{
+		$option = new PaymentOption();
+		$option->setCallToActionText($this->trans('Pay by Credit Card', array(), 'Modules.SimplifyCommerce.Admin'))
 			->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
-			->setAdditionalInformation($this->fetch('module:ps_checkpayment/views/templates/front/payment_infos.tpl'));
-
-
-		//return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
-		return [$newOption];
+			->setForm($this->fetch('module:simplifycommerce/views/templates/front/payment.tpl'));
+		return $option;
 	}
 
 	/**
