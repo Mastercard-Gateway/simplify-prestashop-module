@@ -211,10 +211,6 @@
     <input type="hidden" name="hostedPayments" value="true"/>
 {/if}
 <div>
-    <button type="submit"
-            class="right button btn btn-default standard-checkout button-medium simplify-submit-button">
-        <span>Submit Payment <i class="icon-chevron-right"></i></span>
-    </button>
 </div>
 </form>
 </div>
