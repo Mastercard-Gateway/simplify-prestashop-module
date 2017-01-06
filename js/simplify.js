@@ -34,7 +34,8 @@ var $simplifyPaymentForm, $simplifyPaymentErrors, $simplifySubmitButton, $simpli
 $(document).ready(function () {
 
     $simplifyPaymentForm = $('#simplify-payment-form'), $simplifyPaymentErrors = $('.simplify-payment-errors'),
-        $simplifySubmitButton = $('.simplify-submit-button'), $simplifySpinner = $('#simplify-ajax-loader');
+        $simplifySubmitButton = $('#payment-confirmation button'), $simplifySpinner = $('#simplify-ajax-loader');
+
 
     if ($simplifyPaymentErrors.text().length > 0) {
         $simplifyPaymentErrors.show();
@@ -133,7 +134,8 @@ $(document).ready(function () {
      *  generate a new card token for new cards or
      *  charge an existing user's card.
      */
-    $simplifyPaymentForm.submit(function () {
+    $simplifyPaymentForm[0].onsubmit = function () {
+        console.log("submitting simplify form");
 
         $simplifySpinner.show();
         $('.simplify-payment-errors').hide();
@@ -171,10 +173,10 @@ $(document).ready(function () {
             return false;
             /* Prevent the form from submitting with the default action */
         } else {
-            $simplifyPaymentForm.append('<input type="hidden" name="chargeCustomerCard" value="true" />')
-                .get(0).submit();
+            $simplifyPaymentForm.append('<input type="hidden" name="chargeCustomerCard" value="true" />');
+            return true;
         }
-    });
+    };
 
     /**
      * Function to handle the response from Simplify Commerce's tokenization call.

@@ -37,4 +37,4 @@ if (!defined('_PS_VERSION_'))
 	exit;
 
 $simplify = new SimplifyCommerce();
-$simplify->processPayment();
+$simplify->processPayment();
