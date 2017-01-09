@@ -444,7 +444,6 @@ class SimplifyCommerce extends PaymentModule
 			$this->failPayment('The transaction was '.$payment_status);
 
 		// Log the transaction
-		$order_status = (int)Configuration::get('SIMPLIFY_PAYMENT_ORDER_STATUS');
 		$message = $this->l('Simplify Commerce Transaction Details:').'\n\n'.
 		$this->l('Payment ID:').' '.$simplify_payment->id.'\n'.
 		$this->l('Payment Status:').' '.$simplify_payment->paymentStatus.'\n'.
@@ -459,8 +458,19 @@ class SimplifyCommerce extends PaymentModule
 		$this->l('Card Type:').' '.$simplify_payment->card->type.'\n';
 
 		// Create the PrestaShop order in database
-		$this->validateOrder((int)$this->context->cart->id, (int)$order_status, $charge,
-			$this->displayName, $message, array(), null, false, $this->context->customer->secure_key);
+
+
+		$this->validateOrder(
+			(int)$this->context->cart->id,
+			(int)Configuration::get('SIMPLIFY_PAYMENT_ORDER_STATUS'),
+			$charge,
+			$this->displayName,
+			$message,
+			array(),
+			null,
+			false,
+			$this->context->customer->secure_key
+		);
 
 		if (version_compare(_PS_VERSION_, '1.5', '>='))
 		{
