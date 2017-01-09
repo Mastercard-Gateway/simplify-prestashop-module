@@ -1,4 +1,4 @@
-FROM prestashop/prestashop
+FROM prestashop/prestashop:1.7.0.3
 
 MAINTAINER "Simplify Commerce"
 
