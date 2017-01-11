@@ -31,6 +31,7 @@ class SimplifyCommerceValidationModuleFrontController extends ModuleFrontControl
 {
     public function postProcess()
     {
+        error_log("SimplifyCommerceValidationModuleFrontController::postProcess()");
         $cart = $this->context->cart;
 
         if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 || $cart->id_address_invoice == 0 || !$this->module->active) {

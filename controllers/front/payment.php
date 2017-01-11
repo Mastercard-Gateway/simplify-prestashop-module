@@ -37,10 +37,13 @@ class SimplifyCommercePaymentModuleFrontController extends ModuleFrontController
      */
     public function initContent()
     {
+        error_log("SimplifyCommercePaymentModuleFrontController::initContent()");
+
         parent::initContent();
 
         $cart = $this->context->cart;
         if (!$this->module->checkCurrency($cart)) {
+            error_log("currency check failed, redirecting");
             Tools::redirect('index.php?controller=order');
         }
 
@@ -57,6 +60,7 @@ class SimplifyCommercePaymentModuleFrontController extends ModuleFrontController
 //            'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->module->name.'/'
 //        ));
 //
+        error_log("Setting template to payment_execution.");
         $this->setTemplate('payment_execution.tpl');
 
 
