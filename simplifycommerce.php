@@ -100,6 +100,16 @@ class SimplifyCommerce extends PaymentModule
 //		$this->context->controller->addJS($this->_path.'js/simplify-lib.js');
 		$this->context->controller->addJS($this->_path.'js/simplify.js');
 		$this->context->controller->addJS($this->_path.'js/simplify.form.js');
+
+
+		$this->context->controller->registerJavascript(
+			'remote-simplify-hp-head',
+			'https://www.simplify.com/commerce/simplify.pay.js',
+			['server' => 'remote', 'position' => 'bottom', 'priority' => 20]
+		);
+
+//		$this->registerJavascript('remote-bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', ['server' => 'remote', 'position' => 'bottom', 'priority' => 20]);
+//		$this->registerStylesheet('remote-bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', ['server' => 'remote', 'priority' => 20]);
 	}
 
 //	public function hookHeader()

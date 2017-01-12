@@ -109,7 +109,7 @@
         <div class="simplify-payment-errors">{if isset($smarty.get.simplify_error)}{$smarty.get.simplify_error|escape:html:'UTF-8'}{/if}</div>
         <a name="simplify_error" class="hidden"></a>
         {if $payment_mode == 'hosted_payments'}
-            <script type="text/javascript" src="https://www.simplify.com/commerce/simplify.pay.js"></script>
+            <script>var SIMPLIFY_COMMERCE_HP_OVERLAY_COLOR = "{$overlay_color|escape:'htmlall':'UTF-8'}";</script>
             <div>
                 <button id="simplify-hosted-payment-button"
                         data-sc-key="{$simplify_public_key|escape:'htmlall':'UTF-8'}"

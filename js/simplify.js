@@ -141,13 +141,14 @@ $(document).ready(function () {
      *  charge an existing user's card.
      */
     $simplifyPaymentForm[0].onsubmit = function () {
-        console.log("submitting simplify form");
-        //if (isHostedPaymentsEnabled()) {
-        //    console.log("$simplifyPaymentForm hosted payments enabled, clicking button");
-        //    $("#simplify-hosted-payment-button").click();
-        //    console.log("$simplifyPaymentForm hosted payments enabled, done clicking button");
-        //    return false;
-        //}
+        console.log(" $simplifyPaymentForm[0].onsubmit()");
+
+        if (isHostedPaymentsEnabled() && ! getUrlToken()) {
+            console.log("$simplifyPaymentForm hosted payments enabled, clicking button");
+            $("#simplify-hosted-payment-button").click();
+            console.log("$simplifyPaymentForm hosted payments enabled, done clicking button");
+            return false;
+        }
 
         console.log("$simplifyPaymentForm showing spinner, hiding errors, disabling the $simplifySubmitButton")
         $simplifySpinner.show();
@@ -364,10 +365,28 @@ function initHostedPayments(options) {
     }, options);
 }
 
+function getUrlToken(){
+    var url = window.location.href;
+    return urlParam('cardToken', url);
+}
+
+function appendToRedirectUrl(current, append){
+    if(current){
+        if(current.indexOf("?" == -1)){
+            current += "?" + append;
+        } else {
+            current += "&" + append;
+        }
+    }
+    return current;
+}
+
 function thereShouldBeAbetterNameForThis(){
     //Hosted payments options
+    console.log("thereShouldBeAbetterNameForThis()");
+    console.log("color " + SIMPLIFY_COMMERCE_HP_OVERLAY_COLOR);
     var options = {
-        color: "{$overlay_color|escape:'htmlall':'UTF-8'}"
+        color: SIMPLIFY_COMMERCE_HP_OVERLAY_COLOR
     };
 
 //if its non-HTTPS set the redirectUrl back to this page
@@ -389,7 +408,7 @@ function thereShouldBeAbetterNameForThis(){
 
         $(document).ready(function () {
             var url = window.location.href;
-            var cardToken = urlParam('cardToken', url);
+            var cardToken = getUrlToken();
 
             if (cardToken) {
                 console.log("has card token " + cardToken);
@@ -406,17 +425,22 @@ function thereShouldBeAbetterNameForThis(){
                 initHostedPayments(options);
 
                 $('#simplify-hosted-payment-button').click(function () {
+                    console.log("simplify-hosted-payment-button click");
                     toggleHostedPaymentButton(false);
 
                     if (options.redirectUrl) {
+                        console.log("simplify-hosted-payment-button click has redirect");
                         if ($('#saveCustomer').is(':checked')) {
-                            options.redirectUrl += '&saveCustomer=true';
+                            options.redirectUrl = appendToRedirectUrl(options.redirectUrl, "saveCustomer=true");
+                            console.log("simplify-hosted-payment-button adding saveCustomer to url");
                         }
                         if ($("#cc-deletion-msg").is(':visible')) {
-                            options.redirectUrl += '&deleteCustomerCard=true';
+                            options.redirectUrl = appendToRedirectUrl(options.redirectUrl, "deleteCustomerCard=true");
+                            console.log("simplify-hosted-payment-button adding deleteCustomerCard to url");
                         }
                     }
                     initHostedPayments(options);
+                    console.log("#simplify-hosted-payment-button done with click method.")
                 });
             }
         });
