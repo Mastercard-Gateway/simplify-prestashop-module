@@ -1,11 +1,25 @@
 version: '2'
 
 services:
-  prestashop-simplify-commerce:
-    container_name: simplify-commerce-prestashop
-    build: .
-    volumes: ["./:/simplifycommerce"]
-    image: simplify-commerce/prestashop:latest
-    ports:
-        - "80:80"
-        - "3306:3306"
+    prestashop:
+#        image: ted/presta
+
+        build:
+            context: .
+        volumes:
+          - php:/usr/local/etc/php
+          - mysqldata:/var/lib/mysql
+        ports:
+             - "9100:80"
+             - "3306:3306"
+
+
+  # ted-presta:
+  #   image: ted/presta:1
+  #   ports:
+  #       - "9100:80"
+  #       - "3306:3306"
+
+volumes:
+    mysqldata:
+    php:
