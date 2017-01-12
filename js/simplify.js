@@ -33,16 +33,18 @@ var $simplifyPaymentForm, $simplifyPaymentErrors, $simplifySubmitButton, $simpli
  */
 $(document).ready(function () {
 
+    console.log("simplify.js document.ready()");
     $simplifyPaymentForm = $('#simplify-payment-form'), $simplifyPaymentErrors = $('.simplify-payment-errors'),
         $simplifySubmitButton = $('#payment-confirmation button'), $simplifySpinner = $('#simplify-ajax-loader');
 
 
+    console.log("simplify.js after variables defined");
     if ($simplifyPaymentErrors.text().length > 0) {
         $simplifyPaymentErrors.show();
     }
 
     if (isHostedPaymentsEnabled() && $("input[name='cc-type']").length == 0) {
-        $simplifySubmitButton.hide();
+        //$simplifySubmitButton.hide();
     }
 
     // Check that the Simplify API Keys are set
@@ -65,11 +67,13 @@ $(document).ready(function () {
      *  to show and hide the relevant form components.
      */
     $("input[name='cc-type']").change(function () {
+        console.log("input[name='cc-type'] change");
         var ccDetails = $("#simplify-cc-details");
         $('.card-type-container').removeClass('selected');
         $(this).parents('.card-type-container').addClass('selected');
 
         if ($("input[name='cc-type']:checked").val() == 'new') {
+            console.log("input[name='cc-type'] is checked and new");
             if ($("#cc-deletion-msg").is(':visible')) {
                 showSaveCardDetailsLabel(true);
             } else {
@@ -77,14 +81,16 @@ $(document).ready(function () {
             }
             ccDetails.fadeIn();
             if (isHostedPaymentsEnabled()) {
-                $simplifySubmitButton.fadeOut();
+                //$simplifySubmitButton.fadeOut();
             }
         } else {
+            console.log("input[name='cc-type'] is not checked");
             ccDetails.fadeOut();
             if (isHostedPaymentsEnabled()) {
-                $simplifySubmitButton.fadeIn();
+                //$simplifySubmitButton.fadeIn();
             }
         }
+        console.log("input[name='cc-type'] done");
     });
 
     /**
@@ -136,7 +142,14 @@ $(document).ready(function () {
      */
     $simplifyPaymentForm[0].onsubmit = function () {
         console.log("submitting simplify form");
+        //if (isHostedPaymentsEnabled()) {
+        //    console.log("$simplifyPaymentForm hosted payments enabled, clicking button");
+        //    $("#simplify-hosted-payment-button").click();
+        //    console.log("$simplifyPaymentForm hosted payments enabled, done clicking button");
+        //    return false;
+        //}
 
+        console.log("$simplifyPaymentForm showing spinner, hiding errors, disabling the $simplifySubmitButton")
         $simplifySpinner.show();
         $('.simplify-payment-errors').hide();
         $simplifySubmitButton.attr('disabled', 'disabled');
@@ -149,11 +162,14 @@ $(document).ready(function () {
 
         // Fetch a card token for new card details otherwise submit form with existing card details
         if ($("#simplify-cc-details").is(':visible')) {
+            console.log("$simplifyPaymentForm cc is visible")
             if (isHostedPaymentsEnabled()) {
+                console.log("$simplifyPaymentForm hosted payments is enabled, //we already created a card token, so continue processing");
                 //we already created a card token, so continue processing
                 return true;
             }
             else {
+                console.log("$simplifyPaymentForm generating token");
                 SimplifyCommerce.generateToken({
                     key: simplifyPublicKey,
                     card: {
@@ -170,10 +186,13 @@ $(document).ready(function () {
                     }
                 }, simplifyResponseHandler);
             }
+            console.log("$simplifyPaymentForm return false after generateToken");
             return false;
             /* Prevent the form from submitting with the default action */
         } else {
+            console.log("$simplifyPaymentForm cc details is not visible, setting chargeCustomerCard input field to true");
             $simplifyPaymentForm.append('<input type="hidden" name="chargeCustomerCard" value="true" />');
+            console.log("$simplifyPaymentForm return true");
             return true;
         }
     };
@@ -183,6 +202,7 @@ $(document).ready(function () {
      */
     function simplifyResponseHandler(data) {
         if (data.error) {
+            console.log("simplifyResponseHandler has errors");
             console.error(data.error);
 
             var errorMessages = {
@@ -210,16 +230,19 @@ $(document).ready(function () {
                     .html("Error occurred while processing payment, please contact support!")
                     .show();
             }
+            console.log("simplifyResponseHandler re-enable submit button, stoping spiner, showing form");
             // Re-enable the submit button
             $simplifySubmitButton.removeAttr('disabled');
             $simplifyPaymentForm.show();
             $simplifySpinner.hide();
         } else {
+            console.log("simplifyResponseHandler no errors, appending fields simplifyToken and chargeCustomerCard, and submitting");
             // Insert the token into the form so it gets submitted to the server
             $simplifyPaymentForm
                 .append('<input type="hidden" name="simplifyToken" value="' + data['id'] + '" />')
                 .append('<input type="hidden" name="chargeCustomerCard" value="false" />')
                 .get(0).submit();
+            console.log("simplifyResponseHandler done submitting with no errors");
         }
     }
 
@@ -243,6 +266,7 @@ function getCardHolderDetail(detail) {
  * Function to toggle the visibility of the the 'save card details' label
  */
 function showSaveCardDetailsLabel(isSaveCardeDetailsLabelVisible) {
+    console.log("isSaveCardeDetailsLabelVisible " + isSaveCardeDetailsLabelVisible);
     var $saveCustomerLabel = $('#saveCustomerLabel'),
         $updateCustomerLabel = $('#updateCustomerLabel');
 
@@ -287,38 +311,52 @@ function showPaymentProgress() {
 }
 
 function toggleHostedPaymentButton(enable) {
+    console.log("toggleHostedPaymentButton to " + enable);
     var $payNowBtn = $('#simplify-hosted-payment-button');
     enable ? $payNowBtn.removeAttr('disabled').css('opacity', 1) : $payNowBtn.attr('disabled', true).css('opacity', 0.5);
 }
 
 function processHostedPaymentForm(response, url) {
+    console.log("processHostedPaymentForm response and url:");
+    console.log(response);
+    console.log(url);
     $simplifyPaymentErrors.hide();
     if (response && response.cardToken) {
+        console.log("processHostedPaymentForm has card token"  + response.cardToken );
         showPaymentProgress();
         $simplifyPaymentForm.append('<input type="hidden" name="simplifyToken" value="' + response.cardToken + '"/>');
         if (url && url.indexOf('saveCustomer') > -1) {
+            console.log("processHostedPaymentForm has saveCustomer")
             $('#saveCustomer').click();
             $simplifyPaymentForm.append('<input type="hidden" name="saveCustomer" value="on"/>');
         }
         if (url && url.indexOf('deleteCustomerCard') > -1) {
+            console.log("processHostedPaymentForm has deleteCustomerCard")
             $simplifyPaymentForm.append('<input id="deleteCustomerCard" type="hidden" name="deleteCustomerCard" value="true" />');
         }
+        console.log("processHostedPaymentForm before form submit" );
         $simplifyPaymentForm.submit();
+        console.log("processHostedPaymentForm after form submit" );
     }
     else {
+        console.log("processHostedPaymentForm does not have card token");
         if (response.error) {
+            console.log("processHostedPaymentForm response has error");
             console.error(response.error);
         }
         toggleHostedPaymentButton(true);
     }
+    console.log("processHostedPaymentForm done");
 }
 
 function initHostedPayments(options) {
+    console.log("initHostedPayments");
     var hostedPayments = SimplifyCommerce.hostedPayments(function (response) {
         if (response && response.length > 0 && response[0].error) {
             console.log('Error from cardToken response ', response[0].error);
             return;
         }
+        console.log("SimplifyCommerce.hostedPayments callback");
         hostedPayments.closeOnCompletion();
         processHostedPaymentForm(response);
     }, options);

@@ -97,7 +97,7 @@ class SimplifyCommerce extends PaymentModule
 
 		//$this->context->controller->addJS('//www.simplify.com/commerce/v1/simplify.js');
 //		$this->context->controller->addJS('//www.simplify.com/commerce/v1/simplify.js');
-		$this->context->controller->addJS($this->_path.'js/simplify-lib.js');
+//		$this->context->controller->addJS($this->_path.'js/simplify-lib.js');
 		$this->context->controller->addJS($this->_path.'js/simplify.js');
 		$this->context->controller->addJS($this->_path.'js/simplify.form.js');
 	}
@@ -206,6 +206,9 @@ class SimplifyCommerce extends PaymentModule
 	public function hookPaymentOptions()
 	{ $this->llog("hookPaymentOptions 2");
 
+		error_log($this->context->link->getModuleLink('simplifycommerce','payment', array(), true));
+		error_log($this->context->link->getModuleLink('index','', array(), true));
+		error_log($this->context->link->getPageLink('index'));
 
 		if (!$this->active)
 			return false;
@@ -324,6 +327,14 @@ class SimplifyCommerce extends PaymentModule
 	public function llog($mess){
 		error_log("Simp log: " . $mess);
 	}
+
+	public function dumpthis(){
+//		ob_start();
+		var_dump($this);
+//		$result = ob_get_clean();
+//		error_log($result);
+
+	}
 	/**
 	 * Process a payment with Simplify Commerce.
 	 * Depeding on the customer's input, we can delete/update
@@ -418,7 +429,7 @@ class SimplifyCommerce extends PaymentModule
 			}
 		}
 
-		$charge = $this->context->cart->getOrderTotal();
+		$charge = (float)$this->context->cart->getOrderTotal();
 
 		$this->llog("processPayment charging order total is" . $charge);
 
@@ -439,6 +450,8 @@ class SimplifyCommerce extends PaymentModule
 			else
 			{
 				$this->llog("processPayment going to create payment with token");
+				$this->llog("processPayment the token is " . $token);
+
 				$simplify_payment = SimplifyPayment::createPayment(array(
 					'amount' => $amount,
 					'token' => $token, // Token returned by Simplify Card Tokenization
@@ -518,14 +531,19 @@ class SimplifyCommerce extends PaymentModule
 		if (Configuration::get('SIMPLIFY_MODE'))
 			Configuration::updateValue('SIMPLIFYCOMMERCE_CONFIGURED', true);
 
-		if (version_compare(_PS_VERSION_, '1.5', '<'))
+		$this->llog("processPayment before redirect");
+		if (version_compare(_PS_VERSION_, '1.5', '<')){
+			$this->llog("processPayment redirect < 1.5");
 			Tools::redirect(Link::getPageLink('order-confirmation.php', null, null).
 				'?id_cart='.(int)$this->context->cart->id.'&id_module='.(int)$this->id.'&id_order='.
 				(int)$this->currentOrder.'&key='.$this->context->customer->secure_key, '');
-		else
+		}
+		else{
+			$this->llog("processPayment redirect > 1.5");
 			Tools::redirect($this->context->link->getPagelink('order-confirmation.php', null, null,
 				array('id_cart' => (int)$this->context->cart->id, 'id_module' => (int)$this->id,
 					'id_order' => (int)$this->currentOrder, 'key' => $this->context->customer->secure_key)));
+		}
 		exit;
 	}
 

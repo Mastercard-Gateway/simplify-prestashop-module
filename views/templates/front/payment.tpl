@@ -51,6 +51,7 @@
 <form action="{$module_dir|escape}payment.php" method="POST" id="simplify-payment-form">
 {if isset($show_saved_card_details)}
     <div id="old-card-container" class='card-type-container selected clearfix'>
+        <div class="simplify-payment-errors">{if isset($smarty.get.simplify_error)}{$smarty.get.simplify_error|escape:html:'UTF-8'}{/if}</div>
         <div class="first card-detail left">
             <div class='card-detail-label'>&nbsp;</div>
             <input class="left" type="radio" name='cc-type' value='old' checked='checked'/>
@@ -121,37 +122,53 @@
                     if (!window.location.origin) { //IE don't have window.location.origin :(
                         window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
                     }
-                    options.redirectUrl = window.location.origin + window.location.pathname + '?controller=order?step=3';
+                    options.redirectUrl = window.location.origin + window.location.pathname;
+                    console.log("Redirect url is " + options.redirectUrl);
                 }
 
-                $(function () {
-                    var url = window.location.href;
-                    var cardToken = urlParam('cardToken', url);
-                    if (cardToken) {
-                        toggleHostedPaymentButton(false);
-                        var response = {
-                            cardToken: cardToken
-                        };
-                        processHostedPaymentForm(response, url);
+                function helper(){
+                    if(typeof $ === "undefined"){
+                        console.log("Waiting for jquery");
+                        setTimeout(helper, 10);
+                        return;
                     }
-                    else {
-                        initHostedPayments(options);
 
-                        $('#simplify-hosted-payment-button').click(function () {
+                    $(document).ready(function () {
+                        var url = window.location.href;
+                        var cardToken = urlParam('cardToken', url);
+
+                        if (cardToken) {
+                            console.log("has card token " + cardToken);
+
+                            // on our way back from hosted payments
                             toggleHostedPaymentButton(false);
-
-                            if (options.redirectUrl) {
-                                if ($('#saveCustomer').is(':checked')) {
-                                    options.redirectUrl += '&saveCustomer=true';
-                                }
-                                if ($("#cc-deletion-msg").is(':visible')) {
-                                    options.redirectUrl += '&deleteCustomerCard=true';
-                                }
-                            }
+                            var response = {
+                                cardToken: cardToken
+                            };
+                            processHostedPaymentForm(response, url);
+                        }
+                        else {
+                            console.log("does not have card token");
                             initHostedPayments(options);
-                        });
-                    }
-                });
+
+                            $('#simplify-hosted-payment-button').click(function () {
+                                toggleHostedPaymentButton(false);
+
+                                if (options.redirectUrl) {
+                                    if ($('#saveCustomer').is(':checked')) {
+                                        options.redirectUrl += '&saveCustomer=true';
+                                    }
+                                    if ($("#cc-deletion-msg").is(':visible')) {
+                                        options.redirectUrl += '&deleteCustomerCard=true';
+                                    }
+                                }
+                                initHostedPayments(options);
+                            });
+                        }
+                    });
+                }
+                helper();
+
             </script>
             <div>
                 <button id="simplify-hosted-payment-button"
