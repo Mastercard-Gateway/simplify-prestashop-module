@@ -253,6 +253,8 @@ $(document).ready(function () {
     function isHostedPaymentsEnabled() {
         return $("[name='hostedPayments']", $simplifyPaymentForm).val() ? true : false;
     }
+
+    thereShouldBeAbetterNameForThis();
 });
 
 /**
@@ -360,4 +362,64 @@ function initHostedPayments(options) {
         hostedPayments.closeOnCompletion();
         processHostedPaymentForm(response);
     }, options);
+}
+
+function thereShouldBeAbetterNameForThis(){
+    //Hosted payments options
+    var options = {
+        color: "{$overlay_color|escape:'htmlall':'UTF-8'}"
+    };
+
+//if its non-HTTPS set the redirectUrl back to this page
+    if (!document.location.href.match(/^https:\/\//)) {
+        //redirect back to payment step
+        if (!window.location.origin) { //IE don't have window.location.origin :(
+            window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+        }
+        options.redirectUrl = window.location.origin + window.location.pathname;
+        console.log("Redirect url is " + options.redirectUrl);
+    }
+
+    function helper(){
+        if(typeof $ === "undefined"){
+            console.log("Waiting for jquery");
+            setTimeout(helper, 10);
+            return;
+        }
+
+        $(document).ready(function () {
+            var url = window.location.href;
+            var cardToken = urlParam('cardToken', url);
+
+            if (cardToken) {
+                console.log("has card token " + cardToken);
+
+                // on our way back from hosted payments
+                toggleHostedPaymentButton(false);
+                var response = {
+                    cardToken: cardToken
+                };
+                processHostedPaymentForm(response, url);
+            }
+            else {
+                console.log("does not have card token");
+                initHostedPayments(options);
+
+                $('#simplify-hosted-payment-button').click(function () {
+                    toggleHostedPaymentButton(false);
+
+                    if (options.redirectUrl) {
+                        if ($('#saveCustomer').is(':checked')) {
+                            options.redirectUrl += '&saveCustomer=true';
+                        }
+                        if ($("#cc-deletion-msg").is(':visible')) {
+                            options.redirectUrl += '&deleteCustomerCard=true';
+                        }
+                    }
+                    initHostedPayments(options);
+                });
+            }
+        });
+    }
+    helper();
 }
