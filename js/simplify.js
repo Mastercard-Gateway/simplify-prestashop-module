@@ -399,50 +399,43 @@ function thereShouldBeAbetterNameForThis(){
         console.log("Redirect url is " + options.redirectUrl);
     }
 
-    function helper(){
-        if(typeof $ === "undefined"){
-            console.log("Waiting for jquery");
-            setTimeout(helper, 10);
-            return;
+
+    $(document).ready(function () {
+        var url = window.location.href;
+        var cardToken = getUrlToken();
+
+        if (cardToken) {
+            console.log("url has card token " + cardToken);
+            clickSimplifyPaymentOption();
+
+            // on our way back from hosted payments
+            var response = {
+                cardToken: cardToken
+            };
+            processHostedPaymentForm(response, url);
         }
+        else {
+            console.log("does not have card token");
+            initHostedPayments(options);
 
-        $(document).ready(function () {
-            var url = window.location.href;
-            var cardToken = getUrlToken();
+            $('#simplify-hosted-payment-button').click(function () {
+                console.log("simplify-hosted-payment-button click");
 
-            if (cardToken) {
-                console.log("url has card token " + cardToken);
-                clickSimplifyPaymentOption();
-
-                // on our way back from hosted payments
-                var response = {
-                    cardToken: cardToken
-                };
-                processHostedPaymentForm(response, url);
-            }
-            else {
-                console.log("does not have card token");
-                initHostedPayments(options);
-
-                $('#simplify-hosted-payment-button').click(function () {
-                    console.log("simplify-hosted-payment-button click");
-
-                    if (options.redirectUrl) {
-                        console.log("simplify-hosted-payment-button click has redirect");
-                        if ($('#saveCustomer').is(':checked')) {
-                            options.redirectUrl = appendToRedirectUrl(options.redirectUrl, "saveCustomer=true");
-                            console.log("simplify-hosted-payment-button adding saveCustomer to url");
-                        }
-                        if ($("#cc-deletion-msg").is(':visible')) {
-                            options.redirectUrl = appendToRedirectUrl(options.redirectUrl, "deleteCustomerCard=true");
-                            console.log("simplify-hosted-payment-button adding deleteCustomerCard to url");
-                        }
+                if (options.redirectUrl) {
+                    console.log("simplify-hosted-payment-button click has redirect");
+                    if ($('#saveCustomer').is(':checked')) {
+                        options.redirectUrl = appendToRedirectUrl(options.redirectUrl, "saveCustomer=true");
+                        console.log("simplify-hosted-payment-button adding saveCustomer to url");
                     }
-                    initHostedPayments(options);
-                    console.log("#simplify-hosted-payment-button done with click method.")
-                });
-            }
-        });
-    }
-    helper();
+                    if ($("#cc-deletion-msg").is(':visible')) {
+                        options.redirectUrl = appendToRedirectUrl(options.redirectUrl, "deleteCustomerCard=true");
+                        console.log("simplify-hosted-payment-button adding deleteCustomerCard to url");
+                    }
+                }
+                initHostedPayments(options);
+                console.log("#simplify-hosted-payment-button done with click method.")
+            });
+        }
+    });
+
 }
