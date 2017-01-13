@@ -110,7 +110,7 @@
         <a name="simplify_error" class="hidden"></a>
         {if $payment_mode == 'hosted_payments'}
             <script>var SIMPLIFY_COMMERCE_HP_OVERLAY_COLOR = "{$overlay_color|escape:'htmlall':'UTF-8'}";</script>
-            <div>
+            <div style="display:none">
                 <button id="simplify-hosted-payment-button"
                         data-sc-key="{$simplify_public_key|escape:'htmlall':'UTF-8'}"
                         data-name="{$hosted_payment_name|escape:'htmlall':'UTF-8'}"

@@ -38,6 +38,8 @@ $(document).ready(function () {
         $simplifySubmitButton = $('#payment-confirmation button'), $simplifySpinner = $('#simplify-ajax-loader');
 
 
+
+
     console.log("simplify.js after variables defined");
     if ($simplifyPaymentErrors.text().length > 0) {
         $simplifyPaymentErrors.show();
@@ -313,12 +315,6 @@ function showPaymentProgress() {
     }
 }
 
-function toggleHostedPaymentButton(enable) {
-    console.log("toggleHostedPaymentButton to " + enable);
-    var $payNowBtn = $('#simplify-hosted-payment-button');
-    enable ? $payNowBtn.removeAttr('disabled').css('opacity', 1) : $payNowBtn.attr('disabled', true).css('opacity', 0.5);
-}
-
 function processHostedPaymentForm(response, url) {
     console.log("processHostedPaymentForm response and url:");
     console.log(response);
@@ -347,7 +343,6 @@ function processHostedPaymentForm(response, url) {
             console.log("processHostedPaymentForm response has error");
             console.error(response.error);
         }
-        toggleHostedPaymentButton(true);
     }
     console.log("processHostedPaymentForm done");
 }
@@ -381,6 +376,14 @@ function appendToRedirectUrl(current, append){
     return current;
 }
 
+function clickSimplifyPaymentOption(){
+    console.log("clickSimplifyPaymentOption");
+    var id = $simplifyPaymentForm.parents(".js-payment-option-form").attr("id");
+    var match = id && id.match("pay-with-payment-option-([0-9]+)-form");
+    var number = match && match[1];
+    $("#payment-option-" + number).click();
+}
+
 function thereShouldBeAbetterNameForThis(){
     //Hosted payments options
     console.log("thereShouldBeAbetterNameForThis()");
@@ -411,10 +414,10 @@ function thereShouldBeAbetterNameForThis(){
             var cardToken = getUrlToken();
 
             if (cardToken) {
-                console.log("has card token " + cardToken);
+                console.log("url has card token " + cardToken);
+                clickSimplifyPaymentOption();
 
                 // on our way back from hosted payments
-                toggleHostedPaymentButton(false);
                 var response = {
                     cardToken: cardToken
                 };
@@ -426,7 +429,6 @@ function thereShouldBeAbetterNameForThis(){
 
                 $('#simplify-hosted-payment-button').click(function () {
                     console.log("simplify-hosted-payment-button click");
-                    toggleHostedPaymentButton(false);
 
                     if (options.redirectUrl) {
                         console.log("simplify-hosted-payment-button click has redirect");
