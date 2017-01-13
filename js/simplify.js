@@ -387,10 +387,7 @@ function clickSimplifyPaymentOption(){
 function thereShouldBeAbetterNameForThis(){
     //Hosted payments options
     console.log("thereShouldBeAbetterNameForThis()");
-    console.log("color " + SIMPLIFY_COMMERCE_HP_OVERLAY_COLOR);
-    var options = {
-        color: SIMPLIFY_COMMERCE_HP_OVERLAY_COLOR
-    };
+    var options = {};
 
 //if its non-HTTPS set the redirectUrl back to this page
     if (!document.location.href.match(/^https:\/\//)) {
