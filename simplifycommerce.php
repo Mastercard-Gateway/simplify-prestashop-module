@@ -102,11 +102,24 @@ class SimplifyCommerce extends PaymentModule
 		$this->context->controller->addJS($this->_path.'js/simplify.form.js');
 
 
-		$this->context->controller->registerJavascript(
-			'remote-simplify-hp-head',
-			'https://www.simplify.com/commerce/simplify.pay.js',
-			['server' => 'remote', 'position' => 'bottom', 'priority' => 20]
-		);
+		$mode = Configuration::get('SIMPLIFY_PAYMENT_MODE');
+		$this->llog("The mode is " . $mode);
+		if($mode == "standard"){
+
+			$this->llog("hookDisplayHeader standard mode");
+			$this->context->controller->registerJavascript(
+				'remote-simplifypayments-js',
+				'https://www.simplify.com/commerce/v1/simplify.js',
+				['server' => 'remote', 'position' => 'bottom', 'priority' => 20]
+			);
+		} else {
+			$this->llog("hookDisplayHeader hosted_payments mode");
+			$this->context->controller->registerJavascript(
+				'remote-simplifypayments-hp',
+				'https://www.simplify.com/commerce/simplify.pay.js',
+				['server' => 'remote', 'position' => 'bottom', 'priority' => 20]
+			);
+		}
 
 //		$this->registerJavascript('remote-bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', ['server' => 'remote', 'position' => 'bottom', 'priority' => 20]);
 //		$this->registerStylesheet('remote-bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', ['server' => 'remote', 'priority' => 20]);
@@ -753,6 +766,8 @@ class SimplifyCommerce extends PaymentModule
 				'SIMPLIFY_OVERLAY_COLOR' => Tools::getValue('simplify_overlay_color'),
 				'SIMPLIFY_PAYMENT_MODE' => Tools::getValue('simplify_payment_mode')
 			);
+
+			$this->llog(print_r($configuration_values, true));
 
 			$ok = true;
 
