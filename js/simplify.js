@@ -413,8 +413,7 @@ function thereShouldBeAbetterNameForThis(){
                 cardToken: cardToken
             };
             processHostedPaymentForm(response, url);
-        }
-        else {
+        } else if(simplifyPaymentMode == "hosted_payments") {
             console.log("does not have card token");
             initHostedPayments(options);
 
@@ -435,6 +434,8 @@ function thereShouldBeAbetterNameForThis(){
                 initHostedPayments(options);
                 console.log("#simplify-hosted-payment-button done with click method.")
             });
+        } else {
+            console.log(" $(document).ready() hosted payments is not enabled.");
         }
     });
 

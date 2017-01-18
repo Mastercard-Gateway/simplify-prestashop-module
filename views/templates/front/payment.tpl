@@ -30,7 +30,18 @@
 <div>
 <script>
     var simplifyPublicKey = "{$simplify_public_key|escape:'htmlall':'UTF-8'}",
-            simplifyFirstname = "{$firstname|escape:'htmlall':'UTF-8'}", simplifyLastname = "{$lastname|escape:'htmlall':'UTF-8'}", simplifyCity = "{$city|escape:'htmlall':'UTF-8'}", simplifyAddress1 = "{$address1|escape:'htmlall':'UTF-8'}", simplifyAddress2 = "{$address2|escape:'htmlall':'UTF-8'}", simplifyState = "{$state|escape:'htmlall':'UTF-8'}", simplifyPostcode = "{$postcode|escape:'htmlall':'UTF-8'}";
+        simplifyFirstname = "{$firstname|escape:'htmlall':'UTF-8'}",
+        simplifyLastname = "{$lastname|escape:'htmlall':'UTF-8'}",
+        simplifyCity = "{$city|escape:'htmlall':'UTF-8'}",
+        simplifyAddress1 = "{$address1|escape:'htmlall':'UTF-8'}",
+        simplifyAddress2 = "{$address2|escape:'htmlall':'UTF-8'}",
+        simplifyState = "{$state|escape:'htmlall':'UTF-8'}",
+        simplifyPostcode = "{$postcode|escape:'htmlall':'UTF-8'}";
+    {if $payment_mode == 'hosted_payments'}
+    var simplifyPaymentMode = "hosted_payments";
+    {else}
+    var simplifyPaymentMode = "standard";
+    {/if}
 </script>
 <div class="simplifyFormContainer box">
 <div class="clearfix">
