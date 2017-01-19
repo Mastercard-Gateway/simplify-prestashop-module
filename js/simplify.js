@@ -427,12 +427,15 @@ function thereShouldBeAbetterNameForThis(){
 
 
     $(document).ready(function () {
+        $('input[name="payment-option"]:checked').change(); // bug where presta shop doesn't show the form that is selected when we come back to this page
+        $("input[name='cc-type']:checked").change();
+
         var url = window.location.href;
         var cardToken = getUrlToken();
 
         if (cardToken) {
             console.log("url has card token " + cardToken);
-            clickSimplifyPaymentOption();
+            clickSimplifyPaymentOption(); // on our way back from the hosted payment form, there's a bug where our form doesn't show, so show it.
 
             // on our way back from hosted payments
             var response = {
