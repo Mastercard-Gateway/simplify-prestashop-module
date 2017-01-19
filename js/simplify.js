@@ -37,16 +37,9 @@ $(document).ready(function () {
     $simplifyPaymentForm = $('#simplify-payment-form'), $simplifyPaymentErrors = $('.simplify-payment-errors'),
         $simplifySubmitButton = $('#payment-confirmation button'), $simplifySpinner = $('#simplify-ajax-loader');
 
-
-
-
     console.log("simplify.js after variables defined");
     if ($simplifyPaymentErrors.text().length > 0) {
         $simplifyPaymentErrors.show();
-    }
-
-    if (isHostedPaymentsEnabled() && $("input[name='cc-type']").length == 0) {
-        //$simplifySubmitButton.hide();
     }
 
     // Check that the Simplify API Keys are set
