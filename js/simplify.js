@@ -135,9 +135,19 @@ $(document).ready(function () {
     }
 
     function haveToken(){
-        return getUrlToken()|| $("input[name=simplifyToken]").val();
+        var  t = !! getUrlToken();
+        console.log("haveToken url token: ", t);
+        var inputToken = !! $("input[name=simplifyToken]",  $simplifyPaymentForm).val();
+        console.log("haveToken input token: ", inputToken);
+        var ret = t || inputToken;
+        return ret;
     }
 
+    function isTakingNewCard(){
+        var val = !! $("input[name='cc-type'][value='new']", $simplifyPaymentForm).is(":checked");
+        console.log("isTakingNewCard()", val);
+        return val;
+    }
 
     /**
      *  Function to handle the form submission and either
@@ -151,7 +161,7 @@ $(document).ready(function () {
             return false;
         }
 
-        if (isHostedPaymentsEnabled() && ! haveToken()) {
+        if (isHostedPaymentsEnabled() && ! haveToken() && isTakingNewCard()) {
             console.log("$simplifyPaymentForm hosted payments enabled, have no token, clicking button");
             $("#simplify-hosted-payment-button").click();
             setPrestaSubmitButtonEnabled(false);
@@ -171,7 +181,7 @@ $(document).ready(function () {
         }
 
         // Fetch a card token for new card details otherwise submit form with existing card details
-        if ($("#simplify-cc-details").is(':visible')) {
+        if (isTakingNewCard()) {
             console.log("$simplifyPaymentForm cc is visible")
             if (isHostedPaymentsEnabled()) {
                 console.log("$simplifyPaymentForm hosted payments is enabled, //we already created a card token, so continue processing");
@@ -261,7 +271,7 @@ $(document).ready(function () {
      * @returns {boolean}
      */
     function isHostedPaymentsEnabled() {
-        return $("[name='hostedPayments']", $simplifyPaymentForm).val() ? true : false;
+        return !! $("[name='hostedPayments']", $simplifyPaymentForm).val();
     }
 
     thereShouldBeAbetterNameForThis();
