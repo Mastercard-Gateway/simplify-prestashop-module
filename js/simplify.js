@@ -150,6 +150,9 @@ $(document).ready(function () {
         return false;
     }
 
+    function haveToken(){
+        return getUrlToken()|| $("input[name=simplifyToken]").val();
+    }
     /**
      *  Function to handle the form submission and either
      *  generate a new card token for new cards or
@@ -162,8 +165,8 @@ $(document).ready(function () {
             return false;
         }
 
-        if (isHostedPaymentsEnabled() && ! getUrlToken()) {
-            console.log("$simplifyPaymentForm hosted payments enabled, clicking button");
+        if (isHostedPaymentsEnabled() && ! haveToken()) {
+            console.log("$simplifyPaymentForm hosted payments enabled, have no token, clicking button");
             $("#simplify-hosted-payment-button").click();
             console.log("$simplifyPaymentForm hosted payments enabled, done clicking button");
             return false;
@@ -366,7 +369,9 @@ function processHostedPaymentForm(response, url) {
 
 function initHostedPayments(options) {
     console.log("initHostedPayments");
+    console.log("The options", options);
     var hostedPayments = SimplifyCommerce.hostedPayments(function (response) {
+        console.log("SimplifyCommerce.hostedPayments response " , response);
         if (response && response.length > 0 && response[0].error) {
             console.log('Error from cardToken response ', response[0].error);
             return;
