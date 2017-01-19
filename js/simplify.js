@@ -45,7 +45,7 @@ $(document).ready(function () {
     // Check that the Simplify API Keys are set
     if (window.simplifyPublicKey == undefined || window.simplifyPublicKey.length == 0) {
         $('#simplify-no-keys-msg').show();
-        $simplifySubmitButton.attr('disabled', 'disabled');
+        setPrestaSubmitButtonEnabled(false);
         return;
     }
 
@@ -137,6 +137,8 @@ $(document).ready(function () {
     function haveToken(){
         return getUrlToken()|| $("input[name=simplifyToken]").val();
     }
+
+
     /**
      *  Function to handle the form submission and either
      *  generate a new card token for new cards or
@@ -152,6 +154,7 @@ $(document).ready(function () {
         if (isHostedPaymentsEnabled() && ! haveToken()) {
             console.log("$simplifyPaymentForm hosted payments enabled, have no token, clicking button");
             $("#simplify-hosted-payment-button").click();
+            setPrestaSubmitButtonEnabled(false);
             console.log("$simplifyPaymentForm hosted payments enabled, done clicking button");
             return false;
         }
@@ -159,7 +162,7 @@ $(document).ready(function () {
         console.log("$simplifyPaymentForm showing spinner, hiding errors, disabling the $simplifySubmitButton")
         $simplifySpinner.show();
         $('.simplify-payment-errors').hide();
-        $simplifySubmitButton.attr('disabled', 'disabled');
+        setPrestaSubmitButtonEnabled(false);
         /* Disable the submit button to prevent repeated clicks */
 
         if (simplifyPublicKey.length == 0) {
@@ -239,7 +242,7 @@ $(document).ready(function () {
             }
             console.log("simplifyResponseHandler re-enable submit button, stoping spiner, showing form");
             // Re-enable the submit button
-            $simplifySubmitButton.removeAttr('disabled');
+            setPrestaSubmitButtonEnabled(true);
             $simplifyPaymentForm.show();
             $simplifySpinner.hide();
         } else {
@@ -288,6 +291,14 @@ function showSaveCardDetailsLabel(isSaveCardeDetailsLabelVisible) {
     }
 }
 
+function setPrestaSubmitButtonEnabled(enabled){
+    console.log("setPrestaSubmitButtonEnabled: ", enabled);
+    if(enabled){
+        $simplifySubmitButton.removeAttr('disabled');
+    } else {
+        $simplifySubmitButton.attr('disabled', 'disabled');
+    }
+}
 
 /**
  * Function to get url get parameter from window's location
@@ -326,6 +337,7 @@ function processHostedPaymentForm(response, url) {
     $simplifyPaymentErrors.hide();
     if (response && response.cardToken) {
         console.log("processHostedPaymentForm has card token"  + response.cardToken );
+        setPrestaSubmitButtonEnabled(false);
         showPaymentProgress();
         $simplifyPaymentForm.append('<input type="hidden" name="simplifyToken" value="' + response.cardToken + '"/>');
         if (url && url.indexOf('saveCustomer') > -1) {
@@ -347,6 +359,7 @@ function processHostedPaymentForm(response, url) {
             console.log("processHostedPaymentForm response has error");
             console.error(response.error);
         }
+        setPrestaSubmitButtonEnabled(true);
     }
     console.log("processHostedPaymentForm done");
 }
