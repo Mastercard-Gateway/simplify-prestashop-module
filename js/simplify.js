@@ -137,6 +137,19 @@ $(document).ready(function () {
         showSaveCardDetailsLabel(false);
     });
 
+
+    var lastSubmitTime = 0;
+    // prevent double submit bug in versions <= 1.7.0.4
+    function preventDoubleSubmit(){
+        var now = new Date().getTime();
+        if(now - lastSubmitTime < 100){
+            console.log("preventDoubleSubmit - prevented");
+            return true;
+        }
+        lastSubmitTime = now;
+        return false;
+    }
+
     /**
      *  Function to handle the form submission and either
      *  generate a new card token for new cards or
@@ -144,6 +157,10 @@ $(document).ready(function () {
      */
     $simplifyPaymentForm[0].onsubmit = function () {
         console.log(" $simplifyPaymentForm[0].onsubmit()");
+
+        if(preventDoubleSubmit()){
+            return false;
+        }
 
         if (isHostedPaymentsEnabled() && ! getUrlToken()) {
             console.log("$simplifyPaymentForm hosted payments enabled, clicking button");
@@ -367,11 +384,8 @@ function getUrlToken(){
 
 function appendToRedirectUrl(current, append){
     if(current){
-        if(current.indexOf("?" == -1)){
-            current += "?" + append;
-        } else {
-            current += "&" + append;
-        }
+        var c =  current.indexOf("?") == -1 ? "?" : "&";
+        current += c + append;
     }
     return current;
 }
