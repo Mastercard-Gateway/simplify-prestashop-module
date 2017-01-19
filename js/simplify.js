@@ -76,21 +76,12 @@ $(document).ready(function () {
 
         if ($("input[name='cc-type']:checked").val() == 'new') {
             console.log("input[name='cc-type'] is checked and new");
-            if ($("#cc-deletion-msg").is(':visible')) {
-                showSaveCardDetailsLabel(true);
-            } else {
-                showSaveCardDetailsLabel(false);
-            }
+            var show = !! $("#cc-deletion-msg").is(':visible');
+            showSaveCardDetailsLabel(show);
             ccDetails.fadeIn();
-            if (isHostedPaymentsEnabled()) {
-                //$simplifySubmitButton.fadeOut();
-            }
         } else {
             console.log("input[name='cc-type'] is not checked");
             ccDetails.fadeOut();
-            if (isHostedPaymentsEnabled()) {
-                //$simplifySubmitButton.fadeIn();
-            }
         }
         console.log("input[name='cc-type'] done");
     });
