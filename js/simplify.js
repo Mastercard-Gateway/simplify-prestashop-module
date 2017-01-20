@@ -145,10 +145,16 @@ $(document).ready(function () {
 
     function isTakingNewCard(){
         var val = !! $("input[name='cc-type'][value='new']", $simplifyPaymentForm).is(":checked");
+        val = val || !hasExistingCard(); // if don't have existing card then force charging new card.
         console.log("isTakingNewCard()", val);
         return val;
     }
 
+    function hasExistingCard(){
+        var val = (typeof simplifyHasSavedCard != "undefined") && simplifyHasSavedCard;
+        console.log("hasExistingCard() ", val );
+        return val;
+    }
     /**
      *  Function to handle the form submission and either
      *  generate a new card token for new cards or
@@ -182,7 +188,7 @@ $(document).ready(function () {
 
         // Fetch a card token for new card details otherwise submit form with existing card details
         if (isTakingNewCard()) {
-            console.log("$simplifyPaymentForm cc is visible")
+            console.log("$simplifyPaymentForm cc is visible");
             if (isHostedPaymentsEnabled()) {
                 console.log("$simplifyPaymentForm hosted payments is enabled, //we already created a card token, so continue processing");
                 //we already created a card token, so continue processing
@@ -209,10 +215,13 @@ $(document).ready(function () {
             console.log("$simplifyPaymentForm return false after generateToken");
             return false;
             /* Prevent the form from submitting with the default action */
-        } else {
+        } else if(hasExistingCard()) {
             console.log("$simplifyPaymentForm cc details is not visible, setting chargeCustomerCard input field to true");
             $simplifyPaymentForm.append('<input type="hidden" name="chargeCustomerCard" value="true" />');
             console.log("$simplifyPaymentForm return true");
+            return true;
+        } else {
+            console.log("does not have existing card on file");
             return true;
         }
     };

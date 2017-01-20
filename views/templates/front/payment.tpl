@@ -105,6 +105,7 @@
 {/if}
 <div id="new-card-container" class='card-type-container clearfix'>
     {if isset($show_saved_card_details)}
+        <script>var simplifyHasSavedCard = true;</script>
         <div class="clearfix">
             <div class="first card-detail left">
                 <input class="left" type="radio" name='cc-type' value='new'
