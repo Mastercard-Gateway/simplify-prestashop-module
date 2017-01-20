@@ -117,7 +117,13 @@
         </div>
     {/if}
     <!-- DO NOT REMOVE THIS INLINE STYLE. It needs to be there for showing 'New Card' section displayed -->
-    <div id="simplify-cc-details" {if isset($show_saved_card_details)} style="display: {if isset($smarty.get.simplify_error)}block;{else}none;{/if}"{/if} {if isset($show_saved_card_details)} class="indent"{/if}>
+    <div
+            id="simplify-cc-details"
+            {if isset($show_saved_card_details)}
+                style="display: {if isset($smarty.get.simplify_error)}block;{else}none;{/if}"
+            {/if}
+            {if isset($show_saved_card_details)} class="indent"{/if}
+    >
         <div class="simplify-payment-errors">{if isset($smarty.get.simplify_error)}{$smarty.get.simplify_error|escape:html:'UTF-8'}{/if}</div>
         <a name="simplify_error" class="hidden"></a>
         {if $payment_mode == 'hosted_payments'}
