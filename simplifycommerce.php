@@ -321,7 +321,9 @@ class SimplifyCommerce extends PaymentModule
 		$option = new PaymentOption();
 		$option->setCallToActionText($this->trans('Pay by Credit Card', array(), 'Modules.SimplifyCommerce.Admin'))
 			->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
-			->setForm($this->fetch('module:simplifycommerce/views/templates/front/payment.tpl'));
+			->setForm($this->fetch('module:simplifycommerce/views/templates/front/payment.tpl'))
+			->setAdditionalInformation($this->fetch('module:simplifycommerce/views/templates/hook/additional_info.php'));
+
 		return $option;
 	}
 

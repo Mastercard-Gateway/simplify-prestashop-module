@@ -2,5 +2,5 @@
 .idea/
 *.ipr
 *.iml
-sync.sh
-exclude.txt
+node_modules/
+errorShots/

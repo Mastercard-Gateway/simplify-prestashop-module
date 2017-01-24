@@ -496,8 +496,7 @@ i.simplifyFormContainer mg.enable {
 }
 
 .simplifyFormContainer.box {
-	padding: 14px 18px 13px;
-	margin: 0 0 30px 0;
+	margin-left: 2.875rem;
 }
 
 #trash-icon {
@@ -638,4 +637,9 @@ i.simplifyFormContainer mg.enable {
 
 .simplifyFormContainer .underline {
 	text-decoration: underline;
+}
+
+#simplify-cc-details {
+	padding-left: 2.5rem;
+	padding-top: 2.5rem;
 }

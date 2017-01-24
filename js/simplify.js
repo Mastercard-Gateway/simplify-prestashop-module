@@ -331,10 +331,9 @@ function urlParam(name, url) {
         url = window.location.href;
     }
     var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(url);
-    if (!results) {
-        return undefined;
-    }
-    return results[1] || undefined;
+    var res = (results && results[1]) || undefined;
+    console.log("urlParam: ", name, " value: ", res);
+    return res;
 }
 
 /**
@@ -442,9 +441,14 @@ function thereShouldBeAbetterNameForThis(){
         var url = window.location.href;
         var cardToken = getUrlToken();
 
+        if(cardToken || urlParam("simplify_error") ){
+            // On our way back from the hosted payment form, or payment error.
+            // There's a bug where our form doesn't show, so show it.
+            clickSimplifyPaymentOption();
+        }
+
         if (cardToken) {
             console.log("url has card token " + cardToken);
-            clickSimplifyPaymentOption(); // on our way back from the hosted payment form, there's a bug where our form doesn't show, so show it.
 
             // on our way back from hosted payments
             var response = {

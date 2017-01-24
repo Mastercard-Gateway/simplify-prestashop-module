@@ -45,9 +45,6 @@
 </script>
 <div class="simplifyFormContainer box">
 <div class="clearfix">
-    <h3 class="left pay-by-credit-card">Pay by Credit Card</h3>
-    <img alt="Secure Icon" class="secure-icon secure-icon-img" src="{$module_dir|escape}img/secure-icon.png"/>
-
     <div class="error-msg">
         <span id="simplify-test-mode-msg" class="test-msg">( TEST PAYMENT )</span>
         <span id="simplify-no-keys-msg" class="msg-container hidden">Payment Form not configured correctly. Please contact support.</span>
@@ -59,10 +56,10 @@
     <img src="{$module_dir|escape}img/ajax-loader.gif" alt="Loader Icon"/>
 </div>
 
+<div class="simplify-payment-errors">{if isset($smarty.get.simplify_error)}{$smarty.get.simplify_error|escape:html:'UTF-8'}{/if}</div>
 <form action="{$module_dir|escape}payment.php" method="POST" id="simplify-payment-form">
 {if isset($show_saved_card_details)}
     <div id="old-card-container" class='card-type-container selected clearfix'>
-        <div class="simplify-payment-errors">{if isset($smarty.get.simplify_error)}{$smarty.get.simplify_error|escape:html:'UTF-8'}{/if}</div>
         <div class="first card-detail left">
             <div class='card-detail-label'>&nbsp;</div>
             <input class="left" type="radio" name='cc-type' value='old' checked='checked'/>
@@ -122,9 +119,7 @@
             {if isset($show_saved_card_details)}
                 style="display: {if isset($smarty.get.simplify_error)}block;{else}none;{/if}"
             {/if}
-            {if isset($show_saved_card_details)} class="indent"{/if}
     >
-        <div class="simplify-payment-errors">{if isset($smarty.get.simplify_error)}{$smarty.get.simplify_error|escape:html:'UTF-8'}{/if}</div>
         <a name="simplify_error" class="hidden"></a>
         {if $payment_mode == 'hosted_payments'}
             <div style="display:none">
@@ -138,7 +133,7 @@
                         data-customer-name="{$firstname|escape:'htmlall':'UTF-8'} {$lastname|escape:'htmlall':'UTF-8'}"
                         data-color="{$overlay_color|escape:'htmlall':'UTF-8'}">
                     Pay Now
-                </button
+                </button>
             </div>
         {else}
             <label>Card Number</label>
