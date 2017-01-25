@@ -28,10 +28,10 @@
  *  @license   See licence.txt
  *}
 
+{if $payment_mode == 'hosted_payments'}
 <section>
-  {if $payment_mode == 'hosted_payments'}
   <p>
      {l s='You will be redirected to a secure payment form.' mod='simplifycommerce'}
   </p>
-  {/if}
 </section>
+ {/if}

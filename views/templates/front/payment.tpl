@@ -62,11 +62,11 @@
     <div id="old-card-container" class='card-type-container selected clearfix'>
         <div class="first card-detail left">
             <div class='card-detail-label'>&nbsp;</div>
-            <input class="left" type="radio" name='cc-type' value='old' checked='checked'/>
+            <input id="simp-saved-cc-radio" class="left" type="radio" name='cc-type' value='old' checked='checked'/>
         </div>
         <div class="card-detail left">
             <div class='card-detail-label'>Card Type</div>
-            <div class='card-detail-text'>{$customer_details->card->type|escape:'htmlall': 'UTF-8'}</div>
+            <label for="simp-saved-cc-radio" class='card-detail-text'>{$customer_details->card->type|escape:'htmlall': 'UTF-8'}</label>
         </div>
         <div class="card-detail left">
             <div class='card-detail-label'>Card Number</div>
@@ -105,11 +105,11 @@
         <script>var simplifyHasSavedCard = true;</script>
         <div class="clearfix">
             <div class="first card-detail left">
-                <input class="left" type="radio" name='cc-type' value='new'
+                <input id="simp-new-cc-radio" class="left" type="radio" name='cc-type' value='new'
                        {if isset($smarty.get.simplify_error)}checked='checked'{/if} />
             </div>
             <div class="card-detail left">
-                <div class='card-detail-text'>New Credit Card</div>
+                <label for="simp-new-cc-radio" class='card-detail-text'>New Credit Card</label>
             </div>
         </div>
     {/if}
@@ -162,8 +162,8 @@
         {if isset($show_save_customer_details_checkbox)}
             <div class="clear">
                 <input type="checkbox" id="saveCustomer" name="saveCustomer">
-                <span id="saveCustomerLabel">Save your credit card details for next time?</span>
-                <span id="updateCustomerLabel">Update your saved card details?</span>
+                <label class="save" for="saveCustomer" id="saveCustomerLabel">Save your credit card details for next time?</label>
+                <label class="save" for="saveCustomer" id="updateCustomerLabel">Update your saved card details?</label>
             </div>
         {/if}
 

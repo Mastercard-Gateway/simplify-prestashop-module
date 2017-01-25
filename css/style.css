@@ -280,6 +280,10 @@
 	text-transform: uppercase; 
 }
 
+body#checkout section.checkout-step .payment-options  #simplify-cc-details label.save {
+	display: inline;
+}
+
 #simplify-payment-form label.lowercase { 
 	text-transform: none; 
 }
