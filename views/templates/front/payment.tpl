@@ -113,7 +113,6 @@
             </div>
         </div>
     {/if}
-    <!-- DO NOT REMOVE THIS INLINE STYLE. It needs to be there for showing 'New Card' section displayed -->
     <div
             id="simplify-cc-details"
             {if isset($show_saved_card_details)}
@@ -160,12 +159,11 @@
                 </div>
             </div>
         {/if}
-        <br/>
         {if isset($show_save_customer_details_checkbox)}
             <div class="clearfix save-customer">
                 <input type="checkbox" id="saveCustomer" name="saveCustomer">
-                <span id="saveCustomerLabel">Save your credit card details securely?</span>
-                <span id="updateCustomerLabel">Update your credit card details securely?</span>
+                <span id="saveCustomerLabel">Save your credit card details for next time?</span>
+                <span id="updateCustomerLabel">Update your saved credit card details?</span>
             </div>
         {/if}
 
