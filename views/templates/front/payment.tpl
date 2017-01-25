@@ -43,7 +43,7 @@
     var simplifyPaymentMode = "standard";
     {/if}
 </script>
-<div class="simplifyFormContainer box">
+<div class="simplifyFormContainer box {if !isset($show_saved_card_details)} no-saved {/if}">
 <div class="clearfix">
     <div class="error-msg">
         <span id="simplify-test-mode-msg" class="test-msg">( TEST PAYMENT )</span>
@@ -100,7 +100,7 @@
                                                                        class='underline'>Undo <img
                     alt="Secure Icon" class="secure-icon" src="{$module_dir|escape}img/undo.png"/></span></div>
 {/if}
-<div id="new-card-container" class='card-type-container clearfix'>
+<div id="new-card-container" class='card-type-container clearfix {if !isset($show_saved_card_details)} no-saved {/if}'>
     {if isset($show_saved_card_details)}
         <script>var simplifyHasSavedCard = true;</script>
         <div class="clearfix">
@@ -160,7 +160,7 @@
             </div>
         {/if}
         {if isset($show_save_customer_details_checkbox)}
-            <div class="clearfix save-customer">
+            <div class="clearfix">
                 <input type="checkbox" id="saveCustomer" name="saveCustomer">
                 <span id="saveCustomerLabel">Save your credit card details for next time?</span>
                 <span id="updateCustomerLabel">Update your saved credit card details?</span>
