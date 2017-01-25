@@ -121,7 +121,7 @@
     >
         <a name="simplify_error" class="hidden"></a>
         {if $payment_mode == 'hosted_payments'}
-            <div style="display:none">
+            <div style="display:none">{* the order button clicks this hidden button *}
                 <button id="simplify-hosted-payment-button"
                         data-sc-key="{$simplify_public_key|escape:'htmlall':'UTF-8'}"
                         data-name="{$hosted_payment_name|escape:'htmlall':'UTF-8'}"
@@ -160,10 +160,10 @@
             </div>
         {/if}
         {if isset($show_save_customer_details_checkbox)}
-            <div class="clearfix">
+            <div class="clear">
                 <input type="checkbox" id="saveCustomer" name="saveCustomer">
                 <span id="saveCustomerLabel">Save your credit card details for next time?</span>
-                <span id="updateCustomerLabel">Update your saved credit card details?</span>
+                <span id="updateCustomerLabel">Update your saved card details?</span>
             </div>
         {/if}
 

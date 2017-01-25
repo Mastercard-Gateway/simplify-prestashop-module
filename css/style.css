@@ -647,7 +647,9 @@ i.simplifyFormContainer mg.enable {
 #new-card-container.no-saved {
 	padding: 0;
 }
-
+#new-card-container .clear {
+	clear: both;
+}
 .simplifyFormContainer.box.no-saved {
 	margin-left: 2.475rem;
 }
