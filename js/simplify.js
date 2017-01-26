@@ -423,6 +423,9 @@ function thereShouldBeAbetterNameForThis(){
     console.log("thereShouldBeAbetterNameForThis()");
     var options = {};
 
+    // if we have an old card then show update instead of save in the label
+    showSaveCardDetailsLabel(! $("#old-card-container").is(":visible"));
+
 //if its non-HTTPS set the redirectUrl back to this page
     if (!document.location.href.match(/^https:\/\//)) {
         //redirect back to payment step
