@@ -36,6 +36,8 @@
     border: none;
 }
 
+
+
 .simplify-module-wrapper .simplify-settings h2{
 	font-size: 16px;
 	font-weight: 600;
@@ -274,6 +276,7 @@
 body#checkout section.checkout-step .payment-options  #simplify-cc-details label.save {
 	display: inline;
 	text-transform: none;
+	margin-left: 5px;
 }
 
 #simplify-payment-form label.lowercase { 
