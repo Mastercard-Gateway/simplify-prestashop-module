@@ -164,9 +164,12 @@ class SimplifyCommerce extends PaymentModule
 		&& $this->registerHook('paymentOptions')
 		&& $this->registerHook('orderConfirmation')
 		&& $this->registerHook('displayHeader')
-		&& Configuration::updateValue('SIMPLIFY_MODE', 0) && Configuration::updateValue('SIMPLIFY_SAVE_CUSTOMER_DETAILS', 1)
-		&& Configuration::updateValue('SIMPLIFY_PAYMENT_MODE', $this->defaultPaymentMode) && Configuration::updateValue('SIMPLIFY_OVERLAY_COLOR', $this->defaultModalOverlayColor)
-		&& Configuration::updateValue('SIMPLIFY_PAYMENT_ORDER_STATUS', (int)Configuration::get('PS_OS_PAYMENT')) && $this->createDatabaseTables();
+		&& Configuration::updateValue('SIMPLIFY_MODE', 0)
+		&& Configuration::updateValue('SIMPLIFY_SAVE_CUSTOMER_DETAILS', 1)
+		&& Configuration::updateValue('SIMPLIFY_PAYMENT_MODE', $this->defaultPaymentMode)
+		&& Configuration::updateValue('SIMPLIFY_OVERLAY_COLOR', $this->defaultModalOverlayColor)
+		&& Configuration::updateValue('SIMPLIFY_PAYMENT_ORDER_STATUS', (int)Configuration::get('PS_OS_PAYMENT'))
+		&& $this->createDatabaseTables();
 	}
 
 	/**
