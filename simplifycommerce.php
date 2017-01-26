@@ -42,7 +42,7 @@ if (!defined('_PS_VERSION_'))
 class SimplifyCommerce extends PaymentModule
 {
 	protected $backward = false;
-	public $defaultPaymentMode = 'standard';
+	public $defaultPaymentMode = 'hosted_payments';
 	public $defaultModalOverlayColor = '#12B830';
 
 	/**
@@ -703,6 +703,8 @@ class SimplifyCommerce extends PaymentModule
 		if (Configuration::get('SIMPLIFY_MODE'))
 			$tests['ssl'] = array('name' => $this->l('SSL must be enabled on your store (before entering Live mode)'), 'result' =>
 				Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) && Tools::strtolower($_SERVER['HTTPS']) != 'off'));
+
+		$this->llog("PHP_VERSION: " . PHP_VERSION);
 
 		$tests['php52'] = array('name' => $this->l('Your server must run PHP 5.3 or greater'), 'result' => version_compare(PHP_VERSION, '5.3.0', '>='));
 		$tests['configuration'] = array('name' => $this->l('You must set your Simplify Commerce API Keys'), 'result' => $this->checkSettings());
