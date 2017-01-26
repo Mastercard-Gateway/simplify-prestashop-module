@@ -95,9 +95,6 @@ class SimplifyCommerce extends PaymentModule
 		$this->llog("hookDisplayHeader");
 		$this->context->controller->addCSS($this->_path.'css/style.css', 'all');
 
-		//$this->context->controller->addJS('//www.simplify.com/commerce/v1/simplify.js');
-//		$this->context->controller->addJS('//www.simplify.com/commerce/v1/simplify.js');
-//		$this->context->controller->addJS($this->_path.'js/simplify-lib.js');
 		$this->context->controller->addJS($this->_path.'js/simplify.js');
 		$this->context->controller->addJS($this->_path.'js/simplify.form.js');
 
@@ -121,18 +118,7 @@ class SimplifyCommerce extends PaymentModule
 			);
 		}
 
-//		$this->registerJavascript('remote-bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', ['server' => 'remote', 'position' => 'bottom', 'priority' => 20]);
-//		$this->registerStylesheet('remote-bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', ['server' => 'remote', 'priority' => 20]);
 	}
-
-//	public function hookHeader()
-//	{ $this->llog("hookHeader");
-//		$this->context->controller->addCSS($this->_path.'css/style.css', 'all');
-//
-//		$this->context->controller->addJS('https://www.simplify.com/commerce/v1/simplify.js');
-//		$this->context->controller->addJS($this->_path.'js/simplify.js');
-//		$this->context->controller->addJS($this->_path.'js/simplify.form.js');
-//	}
 
 	/**
 	 * Simplify Commerce's module installation
