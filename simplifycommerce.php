@@ -127,49 +127,17 @@ class SimplifyCommerce extends PaymentModule
 	 */
 	public function install()
 	{ $this->llog("install");
-		if (!$this->backward && version_compare(_PS_VERSION_, '1.5', '<'))
-		{
-			echo '<div class="error">'.Tools::safeOutput($this->backward_error).'</div>';
-			return false;
-		}
-
-		/* For 1.4.3 and less compatibility */
-		$update_config = array(
-			'PS_OS_CHEQUE' => 1,
-			'PS_OS_PAYMENT' => 2,
-			'PS_OS_PREPARATION' => 3,
-			'PS_OS_SHIPPING' => 4,
-			'PS_OS_DELIVERED' => 5,
-			'PS_OS_CANCELED' => 6,
-			'PS_OS_REFUND' => 7,
-			'PS_OS_ERROR' => 8,
-			'PS_OS_OUTOFSTOCK' => 9,
-			'PS_OS_BANKWIRE' => 10,
-			'PS_OS_PAYPAL' => 11,
-			'PS_OS_WS_PAYMENT' => 12
-		);
-
-		foreach ($update_config as $u => $v)
-		{
-			if (!Configuration::get($u) || (int)Configuration::get($u) < 1)
-			{
-				if (defined('_'.$u.'_') && (int)constant('_'.$u.'_') > 0)
-					Configuration::updateValue($u, constant('_'.$u.'_'));
-				else
-					Configuration::updateValue($u, $v);
-			}
-		}
 
 		return parent::install()
-		&& $this->registerHook('paymentOptions')
-		&& $this->registerHook('orderConfirmation')
-		&& $this->registerHook('displayHeader')
-		&& Configuration::updateValue('SIMPLIFY_MODE', 0)
-		&& Configuration::updateValue('SIMPLIFY_SAVE_CUSTOMER_DETAILS', 1)
-		&& Configuration::updateValue('SIMPLIFY_PAYMENT_MODE', $this->defaultPaymentMode)
-		&& Configuration::updateValue('SIMPLIFY_OVERLAY_COLOR', $this->defaultModalOverlayColor)
-		&& Configuration::updateValue('SIMPLIFY_PAYMENT_ORDER_STATUS', (int)Configuration::get('PS_OS_PAYMENT'))
-		&& $this->createDatabaseTables();
+			&& $this->registerHook('paymentOptions')
+			&& $this->registerHook('orderConfirmation')
+			&& $this->registerHook('displayHeader')
+			&& Configuration::updateValue('SIMPLIFY_MODE', 0)
+			&& Configuration::updateValue('SIMPLIFY_SAVE_CUSTOMER_DETAILS', 1)
+			&& Configuration::updateValue('SIMPLIFY_PAYMENT_MODE', $this->defaultPaymentMode)
+			&& Configuration::updateValue('SIMPLIFY_OVERLAY_COLOR', $this->defaultModalOverlayColor)
+			&& Configuration::updateValue('SIMPLIFY_PAYMENT_ORDER_STATUS', (int)Configuration::get('PS_OS_PAYMENT'))
+			&& $this->createDatabaseTables();
 	}
 
 	/**
@@ -217,10 +185,6 @@ class SimplifyCommerce extends PaymentModule
 	 */
 	public function hookPaymentOptions()
 	{ $this->llog("hookPaymentOptions 2");
-
-		error_log($this->context->link->getModuleLink('simplifycommerce','payment', array(), true));
-		error_log($this->context->link->getModuleLink('index','', array(), true));
-		error_log($this->context->link->getPageLink('index'));
 
 		if (!$this->active)
 			return false;
@@ -359,10 +323,6 @@ class SimplifyCommerce extends PaymentModule
 	{ $this->llog("processPayment 2");
 		if (!$this->active)
 			return false;
-
-		// If 1.4 and no backward, then leave
-		if (!$this->backward)
-			return;
 
 		// Extract POST paramaters from the request
 		$simplify_token_post = Tools::getValue('simplifyToken');
@@ -711,20 +671,6 @@ class SimplifyCommerce extends PaymentModule
 
 		if ($tests['configuration']['result']) {
 			$tests['keyprefix'] = array('name' => $this->l('Your API Keys appears to be invalid. Please make sure that you specified the right keys.'), 'result' => $this->checkKeyPrefix());
-		}
-
-		if (version_compare(_PS_VERSION_, '1.5', '<'))
-		{
-			$tests['backward'] = array('name' => $this->l('You are using the backward compatibility module'), 'result' =>
-				$this->backward, 'resolution' => $this->backward_error);
-			$tmp = Module::getInstanceByName('mobile_theme');
-
-			if ($tmp && isset($tmp->version) && !version_compare($tmp->version, '0.3.8', '>='))
-				$tests['mobile_version'] = array('name' => $this->l('You are currently using the default mobile template,
-				the minimum version required is v0.3.8').
-					' (v'.$tmp->version.' '.$this->l('detected').
-						' - <a target="_blank" href="http://addons.prestashop.com/en/mobile-iphone/6165-prestashop-mobile-template.html">'.
-						$this->l('Please Upgrade').'</a>)', 'result' => version_compare($tmp->version, '0.3.8', '>='));
 		}
 
 		foreach ($tests as $k => $test)
