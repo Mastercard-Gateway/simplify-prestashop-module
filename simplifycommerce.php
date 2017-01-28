@@ -161,21 +161,17 @@ class SimplifyCommerce extends PaymentModule
 	 */
 	public function uninstall()
 	{ $this->llog("uninstall");
-		$uninstall_code = parent::uninstall();
-		$delete_mode_table = Configuration::deleteByName('SIMPLIFY_MODE');
-		$delete_customer_table = Configuration::deleteByName('SIMPLIFY_SAVE_CUSTOMER_DETAILS');
-		$delete_public_test_table = Configuration::deleteByName('SIMPLIFY_PUBLIC_KEY_TEST');
-		$delete_public_live_table = Configuration::deleteByName('SIMPLIFY_PUBLIC_KEY_LIVE');
-		$delete_private_test_table = Configuration::deleteByName('SIMPLIFY_PRIVATE_KEY_TEST');
-		$delete_private_live_table = Configuration::deleteByName('SIMPLIFY_PRIVATE_KEY_LIVE');
-		$delete_status_table = Configuration::deleteByName('SIMPLIFY_PAYMENT_ORDER_STATUS');
-		$delete_payment_mode = Configuration::deleteByName('SIMPLIFY_PAYMENT_MODE');
-		$delete_overlay_color = Configuration::deleteByName('SIMPLIFY_OVERLAY_COLOR');
-		$delete_drop_table = Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'simplify_customer`');
-
-		return $uninstall_code && $delete_mode_table && $delete_customer_table && $delete_public_test_table
-				&& $delete_public_live_table && $delete_private_test_table && $delete_private_live_table
-				&& $delete_status_table && $delete_payment_mode && $delete_overlay_color && $delete_drop_table;
+		return parent::uninstall()
+			&& Configuration::deleteByName('SIMPLIFY_MODE')
+			&& Configuration::deleteByName('SIMPLIFY_SAVE_CUSTOMER_DETAILS')
+			&& Configuration::deleteByName('SIMPLIFY_PUBLIC_KEY_TEST')
+			&& Configuration::deleteByName('SIMPLIFY_PUBLIC_KEY_LIVE')
+			&& Configuration::deleteByName('SIMPLIFY_PRIVATE_KEY_TEST')
+			&& Configuration::deleteByName('SIMPLIFY_PRIVATE_KEY_LIVE')
+			&& Configuration::deleteByName('SIMPLIFY_PAYMENT_ORDER_STATUS')
+			&& Configuration::deleteByName('SIMPLIFY_PAYMENT_MODE')
+			&& Configuration::deleteByName('SIMPLIFY_OVERLAY_COLOR')
+			&& Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'simplify_customer`');
 	}
 
 	/**
