@@ -49,7 +49,7 @@ class SimplifyCommerce extends PaymentModule
 	 * Simplify Commerce's module constuctor
 	 */
 	public function __construct()
-	{ $this->llog("__construct");
+	{ $this->llog("SimplifyCommerce::__construct");
 		$this->name = 'simplifycommerce';
 		$this->tab = 'payments_gateways';
 		$this->version = '1.2.0';
@@ -57,29 +57,39 @@ class SimplifyCommerce extends PaymentModule
 		$this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
 		$this->need_instance = 0;
 
+		$this->currencies = true;
+		$this->currencies_mode = 'checkbox';
+
 		parent::__construct();
 
 		$this->displayName = $this->l('Simplify Commerce');
 		$this->description = $this->l('Payments made easy - Start securely accepting credit card payments instantly.');
 		$this->confirmUninstall = $this->l('Warning: Are you sure you want to uninstall this module?');
 
-		if (version_compare(_PS_VERSION_, '1.5', '<'))
-		{
-			$this->backward_error = $this->l('In order to work properly in PrestaShop v1.4, 
-				the Simplify Commerce module requires the backward compatibility module at least v0.3.').'<br />'.
-				$this->l('You can download this module for free here: http://addons.prestashop.com/en/modules-prestashop/6222-backwardcompatibility.html');
+		$this->ps_versions_compliancy = array('min' => '1.7.0.0', 'max' => _PS_VERSION_);
 
-			if (file_exists(_PS_MODULE_DIR_.'backwardcompatibility/backward_compatibility/backward.php'))
-			{
-				include(_PS_MODULE_DIR_.'backwardcompatibility/backward_compatibility/backward.php');
-				$this->backward = true;
-			}
-			else
-				$this->warning = $this->backward_error;
+		if (!count(Currency::checkPaymentCurrencies($this->id))) {
+			$this->warning = $this->trans('No currency has been set for this module.', array(), 'Modules.CheckPayment.Admin');
 		}
-		else
-			$this->backward = true;
+
 	}
+
+	public function checkCurrency($cart)
+	{ $this->llog("checkCurrency");
+
+		$currency_order = new Currency((int)($cart->id_currency));
+		$currencies_module = $this->getCurrency((int)$cart->id_currency);
+
+		if (is_array($currencies_module)) {
+			foreach ($currencies_module as $currency_module) {
+				if ($currency_order->id == $currency_module['id_currency']) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 
 	public function getBaseLink()
 	{ $this->llog("getBaseLink");
@@ -126,7 +136,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return boolean Install result
 	 */
 	public function install()
-	{ $this->llog("install");
+	{ $this->llog("SimplifyCommerce::install");
 
 		return parent::install()
 			&& $this->registerHook('paymentOptions')
@@ -179,15 +189,15 @@ class SimplifyCommerce extends PaymentModule
 	 *
 	 * @return string Simplify Commerce's payment form
 	 */
-	public function hookPaymentOptions()
+	public function hookPaymentOptions($params)
 	{ $this->llog("hookPaymentOptions 2");
 
 		if (!$this->active)
 			return false;
 
-		// If 1.4 and no backward then leave
-		if (!$this->backward)
+		if (!$this->checkCurrency($params['cart'])) {
 			return;
+		}
 
 		include(dirname(__FILE__).'/lib/Simplify.php');
 
@@ -302,11 +312,11 @@ class SimplifyCommerce extends PaymentModule
 		error_log("Simp log: " . $mess);
 	}
 
-	public function dumpthis(){
-//		ob_start();
-		var_dump($this);
-//		$result = ob_get_clean();
-//		error_log($result);
+	public function dump($obj){
+		ob_start();
+		var_dump($obj);
+		$result = ob_get_clean();
+		error_log($result);
 
 	}
 	/**
