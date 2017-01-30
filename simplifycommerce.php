@@ -55,7 +55,6 @@ class SimplifyCommerce extends PaymentModule
 		$this->version = '1.2.0';
 		$this->author = 'MasterCard';
 		$this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
-		$this->need_instance = 0;
 
 		$this->currencies = true;
 		$this->currencies_mode = 'checkbox';
@@ -69,7 +68,7 @@ class SimplifyCommerce extends PaymentModule
 		$this->ps_versions_compliancy = array('min' => '1.7.0.0', 'max' => _PS_VERSION_);
 
 		if (!count(Currency::checkPaymentCurrencies($this->id))) {
-			$this->warning = $this->trans('No currency has been set for this module.', array(), 'Modules.CheckPayment.Admin');
+			$this->warning = $this->trans('No currency has been set for this module.', array(), 'Modules.SimplifyCommerce.Admin');
 		}
 
 	}
