@@ -109,12 +109,12 @@
                             <tr>
                                 <td>
                                     {if $requirement['result']}
-                                        <img src="../img/admin/ok.gif" alt=""/>
+                                        <img src="{$ok_icon_link}" alt="ok"/>
                                     {else}
-                                        <img src="../img/admin/forbbiden.gif" alt=""/>
+                                        <img src="{$nok_icon_link}" alt="not ok"/>
                                     {/if}
                                 </td>
-                                <td>
+                                <td class="simplify-require-text">
                                     {$requirement['name']|escape:'htmlall': 'UTF-8'}<br/>
                                     {if !$requirement['result'] && isset($requirement['resolution'])}
                                         {Tools::safeOutput($requirement['resolution']|escape:'htmlall':'UTF-8',true)}

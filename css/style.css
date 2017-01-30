@@ -652,3 +652,12 @@ i.simplifyFormContainer mg.enable {
 .simplifyFormContainer.box.no-saved {
 	margin-left: 2.475rem;
 }
+
+.simplify-technical img {
+	height: 1.0rem;
+	widgth: 1.0rem;
+}
+
+.simplify-require-text {
+	padding-left: 10px;
+}
