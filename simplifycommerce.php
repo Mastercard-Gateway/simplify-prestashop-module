@@ -41,7 +41,6 @@ if (!defined('_PS_VERSION_'))
  */
 class SimplifyCommerce extends PaymentModule
 {
-	protected $backward = false;
 	public $defaultPaymentMode = 'hosted_payments';
 	public $defaultModalOverlayColor = '#12B830';
 
@@ -737,7 +736,6 @@ class SimplifyCommerce extends PaymentModule
 		$this->smarty->assign('public_key_live', Configuration::get('SIMPLIFY_PUBLIC_KEY_LIVE'));
 		$this->smarty->assign('save_customer_details', Configuration::get('SIMPLIFY_SAVE_CUSTOMER_DETAILS'));
 		$this->smarty->assign('statuses', OrderState::getOrderStates((int)$this->context->cookie->id_lang));
-		$this->smarty->assign('is_backward', $this->backward);
 		$this->smarty->assign('request_uri', Tools::safeOutput($_SERVER['REQUEST_URI']));
 		$this->smarty->assign('payment_mode', Configuration::get('SIMPLIFY_PAYMENT_MODE'));
 		$this->smarty->assign('overlay_color', Configuration::get('SIMPLIFY_OVERLAY_COLOR') != null ? Configuration::get('SIMPLIFY_OVERLAY_COLOR') : $this->defaultModalOverlayColor);

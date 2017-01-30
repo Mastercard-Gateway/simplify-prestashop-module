@@ -128,9 +128,6 @@
             {/if}
         </section>
         <br/>
-        {if (!is_backward)}
-        /* If 1.4 and no backward, then leave */
-        {else}
         <form action="{$request_uri|escape:'UTF-8'}" method="post">
             <section class="simplify-settings">
                 <h2>API Key Mode</h2>
@@ -289,7 +286,6 @@
     </div>
     </section>
     </form>
-    {/if}
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
