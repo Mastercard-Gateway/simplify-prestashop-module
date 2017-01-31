@@ -130,7 +130,9 @@
                         data-amount="{$hosted_payment_amount}"
                         data-operation="create.token"
                         data-customer-name="{$firstname|escape:'htmlall':'UTF-8'} {$lastname|escape:'htmlall':'UTF-8'}"
-                        data-color="{$overlay_color|escape:'htmlall':'UTF-8'}">
+                        data-color="{$overlay_color|escape:'htmlall':'UTF-8'}"
+                        data-currency="{$currency_iso}"
+                >
                     Pay Now
                 </button>
             </div>

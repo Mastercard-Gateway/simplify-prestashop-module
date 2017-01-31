@@ -246,6 +246,8 @@ class SimplifyCommerce extends PaymentModule
 			$cardholder_details = $invoice_address;
 		}
 
+		$currency = new Currency((int)($this->context->cart->id_currency));
+
 		// Set js variables to send in card tokenization
 		$this->smarty->assign('simplify_public_key', Simplify::$public_key);
 
@@ -267,6 +269,8 @@ class SimplifyCommerce extends PaymentModule
 		$this->smarty->assign('overlay_color', Configuration::get('SIMPLIFY_OVERLAY_COLOR') != null ? Configuration::get('SIMPLIFY_OVERLAY_COLOR') : $this->defaultModalOverlayColor);
 
 		$this->smarty->assign('module_dir', $this->_path);
+
+		$this->smarty->assign('currency_iso', $currency->iso_code );
 
 		$option = $this->getPaymentOption();
 
@@ -327,6 +331,8 @@ class SimplifyCommerce extends PaymentModule
 	{ $this->llog("processPayment 2");
 		if (!$this->active)
 			return false;
+
+		$currency_order = new Currency((int)($this->context->cart->id_currency));
 
 		// Extract POST paramaters from the request
 		$simplify_token_post = Tools::getValue('simplifyToken');
@@ -422,7 +428,7 @@ class SimplifyCommerce extends PaymentModule
 					'amount' => $amount,
 					'customer' => $simplify_customer_id, // Customer stored in the database
 					'description' => $description,
-					'currency' => 'USD'
+					'currency' =>  $currency_order->iso_code
 				));
 			}
 			else
@@ -434,7 +440,7 @@ class SimplifyCommerce extends PaymentModule
 					'amount' => $amount,
 					'token' => $token, // Token returned by Simplify Card Tokenization
 					'description' => $description,
-					'currency' => 'USD'
+					'currency' =>  $currency_order->iso_code
 				));
 			}
 
