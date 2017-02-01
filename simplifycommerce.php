@@ -1,9 +1,11 @@
 <?php
 /**
- * Simplify Commerce module to start accepting payments now. It's that simple.
+ * Copyright (c) 2017, MasterCard International Incorporated
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are
  * permitted provided that the following conditions are met:
+ *
  * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright notice, this list of
@@ -22,11 +24,6 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- * @author    MasterCard (support@simplify.com)
- * @version   Release: 1.0.11
- * @copyright 2014, MasterCard International Incorporated. All rights reserved.
- * @license   See licence.txt
  */
 
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
