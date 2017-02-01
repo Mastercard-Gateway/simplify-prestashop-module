@@ -48,7 +48,7 @@ class SimplifyCommerce extends PaymentModule
 	 * Simplify Commerce's module constuctor
 	 */
 	public function __construct()
-	{ $this->llog("SimplifyCommerce::__construct");
+	{ 
 		$this->name = 'simplifycommerce';
 		$this->tab = 'payments_gateways';
 		$this->version = '1.2.0';
@@ -73,7 +73,7 @@ class SimplifyCommerce extends PaymentModule
 	}
 
 	public function checkCurrency($cart)
-	{ $this->llog("checkCurrency");
+	{ 
 
 		$currency_order = new Currency((int)($cart->id_currency));
 		$currencies_module = $this->getCurrency((int)$cart->id_currency);
@@ -90,17 +90,17 @@ class SimplifyCommerce extends PaymentModule
 
 
 	public function getBaseLink()
-	{ $this->llog("getBaseLink");
+	{ 
 		return __PS_BASE_URI__;
 	}
 
 	public function getLangLink()
-	{ $this->llog("getLangLink");
+	{ 
 		return '';
 	}
 
 	public function hookDisplayHeader(){
-		$this->llog("hookDisplayHeader");
+		
 		$this->context->controller->addCSS($this->_path.'css/style.css', 'all');
 
 		$this->context->controller->addJS($this->_path.'js/simplify.js');
@@ -108,17 +108,17 @@ class SimplifyCommerce extends PaymentModule
 
 
 		$mode = Configuration::get('SIMPLIFY_PAYMENT_MODE');
-		$this->llog("The mode is " . $mode);
+		
 		if($mode == "standard"){
 
-			$this->llog("hookDisplayHeader standard mode");
+			
 			$this->context->controller->registerJavascript(
 				'remote-simplifypayments-js',
 				'https://www.simplify.com/commerce/v1/simplify.js',
 				['server' => 'remote', 'position' => 'bottom', 'priority' => 20]
 			);
 		} else {
-			$this->llog("hookDisplayHeader hosted_payments mode");
+			
 			$this->context->controller->registerJavascript(
 				'remote-simplifypayments-hp',
 				'https://www.simplify.com/commerce/simplify.pay.js',
@@ -134,7 +134,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return boolean Install result
 	 */
 	public function install()
-	{ $this->llog("SimplifyCommerce::install");
+	{ 
 
 		return parent::install()
 			&& $this->registerHook('paymentOptions')
@@ -154,7 +154,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return boolean Database tables installation result
 	 */
 	public function createDatabaseTables()
-	{ $this->llog("createDatabaseTables");
+	{ 
 		return Db::getInstance()->Execute('
 			CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'simplify_customer` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 				`customer_id` varchar(32) NOT NULL, `simplify_customer_id` varchar(32) NOT NULL, `date_created` datetime NOT NULL, PRIMARY KEY (`id`), 
@@ -168,7 +168,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return boolean Uninstall result
 	 */
 	public function uninstall()
-	{ $this->llog("uninstall");
+	{ 
 		return parent::uninstall()
 			&& Configuration::deleteByName('SIMPLIFY_MODE')
 			&& Configuration::deleteByName('SIMPLIFY_SAVE_CUSTOMER_DETAILS')
@@ -188,7 +188,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return string Simplify Commerce's payment form
 	 */
 	public function hookPaymentOptions($params)
-	{ $this->llog("hookPaymentOptions 2");
+	{ 
 
 		if (!$this->active)
 			return false;
@@ -295,7 +295,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return string Simplify Commerce's payment confirmation screen
 	 */
 	public function hookOrderConfirmation($params)
-	{ $this->llog("hookOrderConfirmation");
+	{ 
 		if (!isset($params['objOrder']) || ($params['objOrder']->module != $this->name))
 			return false;
 
@@ -310,17 +310,6 @@ class SimplifyCommerce extends PaymentModule
 		return $this->display(__FILE__, 'views/templates/hook/order-confirmation.tpl');
 	}
 
-	public function llog($mess){
-		error_log("Simp log: " . $mess);
-	}
-
-	public function dump($obj){
-		ob_start();
-		var_dump($obj);
-		$result = ob_get_clean();
-		error_log($result);
-
-	}
 	/**
 	 * Process a payment with Simplify Commerce.
 	 * Depeding on the customer's input, we can delete/update
@@ -328,7 +317,7 @@ class SimplifyCommerce extends PaymentModule
 	 * from the generated card token.
 	 */
 	public function processPayment()
-	{ $this->llog("processPayment 2");
+	{ 
 		if (!$this->active)
 			return false;
 
@@ -360,11 +349,11 @@ class SimplifyCommerce extends PaymentModule
 
 		$simplify_customer_id = $this->getSimplifyCustomerID($simplify_customer['simplify_customer_id']);
 
-		$this->llog("processPayment should delete customer");
+		
 		// The user has chosen to delete the credit card, so we need to delete the customer
 		if (isset($simplify_customer_id) && $should_delete_customer)
 		{
-			$this->llog("processPayment should delete customer");
+			
 			try {
 				// delete on simplify.com
 				$customer = SimplifyCustomer::findCustomer($simplify_customer_id);
@@ -379,16 +368,16 @@ class SimplifyCommerce extends PaymentModule
 			$simplify_customer_id = null;
 		}
 
-		$this->llog("processPayment not delete customer");
+		
 		// The user has chosen to save the credit card details
 		if ($should_save_customer == 'on')
 		{
-			$this->llog("processPayment not should save customer");
+			
 			Logger::addLog($this->l('Simplify Commerce - $should_save_customer = '.$should_save_customer), 1, null, 'Cart', (int)$this->context->cart->id, true);
 			// Customer exists already so update the card details from the card token
 			if (isset($simplify_customer_id))
 			{
-				$this->llog("processPayment simplify_customer_id is set");
+				
 				try {
 					$customer = SimplifyCustomer::findCustomer($simplify_customer_id);
 					$updates = array(
@@ -399,23 +388,23 @@ class SimplifyCommerce extends PaymentModule
 
 					$customer->setAll($updates);
 					$customer->updateCustomer();
-					$this->llog("processPayment updated customer");
+					
 				} catch (SimplifyApiException $e) {
-					$this->llog("processPayment caught exception while findCustomer");
+					
 					if (class_exists('Logger'))
 						Logger::addLog($this->l('Simplify Commerce - Error updating customer card details'), 1, null, 'Cart', (int)$this->context->cart->id, true);
 				}
 			}
 			else {
-				$this->llog("processPayment going to createNewSimplifyCustomer");
+				
 				$simplify_customer_id = $this->createNewSimplifyCustomer($token); // Create a new customer from the card token
-				$this->llog("processPayment done createNewSimplifyCustomer");
+				
 			}
 		}
 
 		$charge = (float)$this->context->cart->getOrderTotal();
 
-		$this->llog("processPayment charging order total is" . $charge);
+		
 
 		try {
 			$amount = $charge * 100; // Cart total amount
@@ -423,7 +412,7 @@ class SimplifyCommerce extends PaymentModule
 
 			if (isset($simplify_customer_id) && ($should_charge_customer_card == 'true' || $should_save_customer == 'on'))
 			{
-				$this->llog("processPayment going to create payment with customer");
+				
 				$simplify_payment = SimplifyPayment::createPayment(array(
 					'amount' => $amount,
 					'customer' => $simplify_customer_id, // Customer stored in the database
@@ -433,8 +422,8 @@ class SimplifyCommerce extends PaymentModule
 			}
 			else
 			{
-				$this->llog("processPayment going to create payment with token");
-				$this->llog("processPayment the token is " . $token);
+				
+				
 
 				$simplify_payment = SimplifyPayment::createPayment(array(
 					'amount' => $amount,
@@ -445,14 +434,14 @@ class SimplifyCommerce extends PaymentModule
 			}
 
 			$payment_status = $simplify_payment->paymentStatus;
-			$this->llog("processPayment payment status was " . $payment_status);
+			
 		} catch (SimplifyApiException $e) {
-			$this->llog("processPayment caught error while making payment. error was " . $e->getMessage());
+			
 			$this->failPayment($e->getMessage());
 		}
 
 		if ($payment_status != 'APPROVED'){
-			$this->llog("processPayment not approved, failed payment");
+			
 			$this->failPayment('The transaction was '.$payment_status);
 		}
 
@@ -470,10 +459,10 @@ class SimplifyCommerce extends PaymentModule
 		$this->l('Card Expiry Month:').' '.$simplify_payment->card->expMonth.'\n'.
 		$this->l('Card Type:').' '.$simplify_payment->card->type.'\n';
 
-		$this->llog("processPayment, built order message: " . $message);
+		
 
 
-		$this->llog("processPayment, before validate order");
+		
 		// Create the PrestaShop order in database
 
 
@@ -489,41 +478,41 @@ class SimplifyCommerce extends PaymentModule
 			$this->context->customer->secure_key
 		);
 
-		$this->llog("processPayment, finished validate order");
+		
 
 		if (version_compare(_PS_VERSION_, '1.5', '>='))
 		{
 			$new_order = new Order((int)$this->currentOrder);
-			$this->llog("processPayment, created new order");
+			
 
 			if (Validate::isLoadedObject($new_order))
 			{
-				$this->llog("processPayment, validated new order");
+				
 				$payment = $new_order->getOrderPaymentCollection();
 
 				if (isset($payment[0]))
 				{
-					$this->llog("processPayment, payment was set from order");
+					
 					$payment[0]->transaction_id = pSQL($simplify_payment->id);
 					$payment[0]->save();
-					$this->llog("processPayment, payment saved");
+					
 				}
 			}
 		}
 
-		$this->llog("processPayment, done payment saved");
+		
 		if (Configuration::get('SIMPLIFY_MODE'))
 			Configuration::updateValue('SIMPLIFYCOMMERCE_CONFIGURED', true);
 
-		$this->llog("processPayment before redirect");
+		
 		if (version_compare(_PS_VERSION_, '1.5', '<')){
-			$this->llog("processPayment redirect < 1.5");
+			
 			Tools::redirect(Link::getPageLink('order-confirmation.php', null, null).
 				'?id_cart='.(int)$this->context->cart->id.'&id_module='.(int)$this->id.'&id_order='.
 				(int)$this->currentOrder.'&key='.$this->context->customer->secure_key, '');
 		}
 		else{
-			$this->llog("processPayment redirect > 1.5");
+			
 			Tools::redirect($this->context->link->getPagelink('order-confirmation.php', null, null,
 				array('id_cart' => (int)$this->context->cart->id, 'id_module' => (int)$this->id,
 					'id_order' => (int)$this->currentOrder, 'key' => $this->context->customer->secure_key)));
@@ -537,7 +526,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return string Simplify customer's id.
 	 */
 	private function getSimplifyCustomerID($customer_id)
-	{ $this->llog("getSimplifyCustomerID");
+	{ 
 		$simplify_customer_id = null;
 
 		try {
@@ -561,7 +550,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return string Simplify customer's id.
 	 */
 	private function deleteCustomerFromDB()
-	{ $this->llog("deleteCustomerFromDB");
+	{ 
 		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'simplify_customer WHERE customer_id = '.(int)$this->context->cookie->id_customer.';');
 	}
 
@@ -571,7 +560,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return string Simplify customer's id.
 	 */
 	private function createNewSimplifyCustomer($token)
-	{ $this->llog("createNewSimplifyCustomer");
+	{ 
 		try
 		{
 			$customer = SimplifyCustomer::createCustomer(array(
@@ -601,7 +590,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return object Simple object containin the Simplify public & private key values.
 	 */
 	private function getSimplifyAPIKeys()
-	{ $this->llog("getSimplifyAPIKeys");
+	{ 
 		$api_keys = new stdClass;
 		$api_keys->public_key = Configuration::get('SIMPLIFY_MODE') ?
 			Configuration::get('SIMPLIFY_PUBLIC_KEY_LIVE') : Configuration::get('SIMPLIFY_PUBLIC_KEY_TEST');
@@ -618,7 +607,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @param string $message Error message to log and to display to the user
 	 */
 	private function failPayment($message)
-	{ $this->llog("failPayment");
+	{ 
 		if (class_exists('Logger'))
 			Logger::addLog($this->l('Simplify Commerce - Payment transaction failed').' '.$message, 1, null, 'Cart', (int)$this->context->cart->id, true);
 
@@ -637,7 +626,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return boolean Whether the API Keys are set or not.
 	 */
 	public function checkSettings()
-	{ $this->llog("checkSettings");
+	{ 
 		if (Configuration::get('SIMPLIFY_MODE'))
 			return Configuration::get('SIMPLIFY_PUBLIC_KEY_LIVE') != '' && Configuration::get('SIMPLIFY_PRIVATE_KEY_LIVE') != '';
 		else
@@ -651,7 +640,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return boolean Whether the API Keys are set or not.
 	 */
 	public function checkKeyPrefix()
-	{ $this->llog("checkKeyPrefix");
+	{ 
 		if (Configuration::get('SIMPLIFY_MODE')) {
 			return strpos(Configuration::get('SIMPLIFY_PUBLIC_KEY_LIVE'), 'lvpb_') === 0;
 		}
@@ -666,7 +655,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return array Requirements tests results
 	 */
 	public function checkRequirements()
-	{ $this->llog("checkRequirements");
+	{ 
 		$tests = array('result' => true);
 		$tests['curl'] = array('name' => $this->l('PHP cURL extension must be enabled on your server'), 'result' => extension_loaded('curl'));
 
@@ -674,7 +663,7 @@ class SimplifyCommerce extends PaymentModule
 			$tests['ssl'] = array('name' => $this->l('SSL must be enabled on your store (before entering Live mode)'), 'result' =>
 				Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) && Tools::strtolower($_SERVER['HTTPS']) != 'off'));
 
-		$this->llog("PHP_VERSION: " . PHP_VERSION);
+		
 
 		$tests['php52'] = array('name' => $this->l('Your server must run PHP 5.3 or greater'), 'result' => version_compare(PHP_VERSION, '5.3.0', '>='));
 		$tests['configuration'] = array('name' => $this->l('You must set your Simplify Commerce API Keys'), 'result' => $this->checkSettings());
@@ -699,7 +688,7 @@ class SimplifyCommerce extends PaymentModule
 	 * @return string Simplify settings page
 	 */
 	public function getContent()
-	{ $this->llog("getContent");
+	{ 
 		$html = '';
 		// Update Simplify settings
 		if (Tools::isSubmit('SubmitSimplify'))
@@ -716,7 +705,7 @@ class SimplifyCommerce extends PaymentModule
 				'SIMPLIFY_PAYMENT_MODE' => Tools::getValue('simplify_payment_mode')
 			);
 
-			$this->llog(print_r($configuration_values, true));
+			
 
 			$ok = true;
 

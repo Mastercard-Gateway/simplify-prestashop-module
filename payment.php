@@ -36,7 +36,5 @@ include(dirname(__FILE__).'/simplifycommerce.php');
 if (!defined('_PS_VERSION_'))
 	exit;
 
-error_log("the outer payment.php");
-
 $simplify = new SimplifyCommerce();
 $simplify->processPayment();
