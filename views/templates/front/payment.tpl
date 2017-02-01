@@ -46,7 +46,6 @@
 <div class="simplifyFormContainer box {if !isset($show_saved_card_details)} no-saved {/if}">
 <div class="clearfix">
     <div class="error-msg">
-        <span id="simplify-test-mode-msg" class="test-msg">( TEST PAYMENT )</span>
         <span id="simplify-no-keys-msg" class="msg-container hidden">Payment Form not configured correctly. Please contact support.</span>
     </div>
 </div>
@@ -174,6 +173,7 @@
                 <img alt="Secure Icon" class="payment-cards" src="{$module_dir|escape}img/credit-cards.png"/>
             </div>
         {/if}
+        <span id="simplify-test-mode-msg" class="test-msg">( TEST PAYMENT )</span>
     </div>
 </div>
 {if $payment_mode == 'hosted_payments'}
