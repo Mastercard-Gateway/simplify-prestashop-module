@@ -661,3 +661,7 @@ i.simplifyFormContainer mg.enable {
 .simplify-require-text {
 	padding-left: 10px;
 }
+
+.simplify-features-footnote {
+	font-size: 80%;
+}

@@ -64,7 +64,14 @@
 
                     <h1 class="features item h1">{l s='Simple pricing' mod='simplifycommerce'}</h1>
 
-                    <p>No setup fees.<br>No monthly fees.<br>No minimum.</p>
+                    <p>
+                        No setup fees.
+                        <br>No refund costs.
+                        <br>No monthly service fees.*
+                        <br>
+                        <br>
+                        <span class="simplify-features-footnote">* Subject to $10 minimum monthly processing fee.</span>
+
                 </div>
             </div>
             <div class="marketing left">
@@ -80,7 +87,8 @@
         </div>
         <div class="clearfix">
             <div class="w-container admin-description-block">
-                <b>Simplify Commerce</b>, built my MasterCard, a global leader in the payment industry, makes it easy for small businesses to accept online payments. From our hosted ‘Pay Now’ solution that allows merchants to share links socially to our mobile point of sale to recurring payment solutions, we include must-have features key to businesses.
+                <b>Simplify Commerce</b>, built my MasterCard, a global leader in the payment industry, makes it easy for small businesses to accept online payments.
+                From our hosted ‘Pay Now’ solution that allows merchants to share links socially to our mobile point of sale to recurring payment solutions, we include must-have features key to businesses.
                 <ul>
                     <li>{l s='Omni-channel payment solution for website, mobile and eCommerce store' mod='simplifycommerce'}</li>
                     <li>{l s='Accepting major card brands' mod='simplifycommerce'}</li>
