@@ -257,7 +257,7 @@ $(document).ready(function () {
         return !! $("[name='hostedPayments']", $simplifyPaymentForm).val();
     }
 
-    thereShouldBeAbetterNameForThis();
+    initSimplify();
 });
 
 /**
@@ -372,7 +372,7 @@ function clickSimplifyPaymentOption(){
     $("#payment-option-" + number).click();
 }
 
-function thereShouldBeAbetterNameForThis(){
+function initSimplify(){
     //Hosted payments options
     var options = {};
 
