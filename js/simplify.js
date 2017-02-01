@@ -25,6 +25,7 @@
  * SUCH DAMAGE.
  */
 
+(function(){
 //Cached nodes so we can use it across the module
 var $simplifyPaymentForm, $simplifyPaymentErrors, $simplifySubmitButton, $simplifySpinner;
 
@@ -428,4 +429,5 @@ function initSimplify(){
         }
     });
 
-}
+}})();
+
