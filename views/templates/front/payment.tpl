@@ -170,9 +170,9 @@
                 <img alt="Secure Icon" class="payment-cards" src="{$module_dir|escape}img/credit-cards.png"/>
             </div>
         {/if}
-        <span id="simplify-test-mode-msg" class="test-msg">( TEST PAYMENT )</span>
     </div>
 </div>
+<div id="simplify-test-mode-msg" class="test-msg">( TEST PAYMENT )</div>
 {if $payment_mode == 'hosted_payments'}
     <input type="hidden" name="hostedPayments" value="true"/>
 {/if}
