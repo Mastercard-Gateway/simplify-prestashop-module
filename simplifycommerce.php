@@ -61,8 +61,6 @@ class SimplifyCommerce extends PaymentModule
 		$this->description = $this->l('Payments made easy - Start securely accepting credit card payments instantly.');
 		$this->confirmUninstall = $this->l('Warning: Are you sure you want to uninstall this module?');
 
-		$this->ps_versions_compliancy = array('min' => '1.7.0.0', 'max' => _PS_VERSION_);
-
 		if (!count(Currency::checkPaymentCurrencies($this->id))) {
 			$this->warning = $this->trans('No currency has been set for this module.', array(), 'Modules.SimplifyCommerce.Admin');
 		}
