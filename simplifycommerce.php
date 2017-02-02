@@ -39,7 +39,7 @@ if (!defined('_PS_VERSION_'))
 class SimplifyCommerce extends PaymentModule
 {
 	public $defaultPaymentMode = 'hosted_payments';
-	public $defaultModalOverlayColor = '#12B830';
+	public $defaultModalOverlayColor = '#22A6CA';
 
 	/**
 	 * Simplify Commerce's module constuctor
