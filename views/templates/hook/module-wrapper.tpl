@@ -275,6 +275,14 @@
                                             </option>
                                         </select>
                                     </td>
+                                    <td id="modal-overlay-config">
+                                        <label for="modal-overlay-color" class="modal-overlay">Modal
+                                            Overlay:</label><input name="simplify_overlay_color" type="text"
+                                                                   id="modal-overlay-color" size="8"
+                                                                   value="{$overlay_color|escape:'htmlall':'UTF-8'}"/><input
+                                                id="colorSelector" type="text"
+                                                value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="hp-notes" colspan="2">
