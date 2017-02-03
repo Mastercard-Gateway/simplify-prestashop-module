@@ -49,10 +49,10 @@
 
 <div id="simplify-ajax-loader">
     <span>Your payment is being processed...</span>
-    <img src="{$module_dir|escape}img/ajax-loader.gif" alt="Loader Icon"/>
+    <img src="{$module_dir|escape}views/img/ajax-loader.gif" alt="Loader Icon"/>
 </div>
 
-<div class="simplify-payment-errors">{if isset($smarty.get.simplify_error)}{$smarty.get.simplify_error|escape:html:'UTF-8'}{/if}</div>
+<div class="simplify-payment-errors">{if isset($smarty.get.simplify_error)}{$smarty.get.simplify_error|escape:'htmlall':'UTF-8'}{/if}</div>
 <form action="{$module_dir|escape}payment.php" method="POST" id="simplify-payment-form">
 {if isset($show_saved_card_details)}
     <div id="old-card-container" class='card-type-container selected clearfix'>
@@ -62,7 +62,7 @@
         </div>
         <div class="card-detail left">
             <div class='card-detail-label'>Card Type</div>
-            <label for="simp-saved-cc-radio" class='card-detail-text'>{$customer_details->card->type|escape:'htmlall': 'UTF-8'}</label>
+            <label for="simp-saved-cc-radio" class='card-detail-text'>{$customer_details->card->type|escape:'htmlall':'UTF-8'}</label>
         </div>
         <div class="card-detail left">
             <div class='card-detail-label'>Card Number</div>
@@ -77,7 +77,7 @@
 
                 <div id="cc-deletion-container" class="right center">
                     <div>
-                        <img id='trash-icon' src="{$module_dir|escape}img/trash.png" alt="trash icon"
+                        <img id='trash-icon' src="{$module_dir|escape}views/img/trash.png" alt="trash icon"
                              title="Delete Credit Card"/>
                     </div>
                     <div id="cc-confirm-deletion">
@@ -94,7 +94,7 @@
     </div>
     <div id="cc-deletion-msg">Your credit card has been deleted: <span id="cc-undo-deletion-lnk"
                                                                        class='underline'>Undo <img
-                    alt="Secure Icon" class="secure-icon" src="{$module_dir|escape}img/undo.png"/></span></div>
+                    alt="Secure Icon" class="secure-icon" src="{$module_dir|escape}views/img/undo.png"/></span></div>
 {/if}
 <div id="new-card-container" class='card-type-container clearfix {if !isset($show_saved_card_details)} no-saved {/if}'>
     {if isset($show_saved_card_details)}
@@ -167,7 +167,7 @@
 
         {if $payment_mode != 'hosted_payments'}
             <div>
-                <img alt="Secure Icon" class="payment-cards" src="{$module_dir|escape}img/credit-cards.png"/>
+                <img alt="Secure Icon" class="payment-cards" src="{$module_dir|escape}views/img/credit-cards.png"/>
             </div>
         {/if}
     </div>

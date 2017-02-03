@@ -101,10 +101,10 @@ class SimplifyCommerce extends PaymentModule
 			return;
 		}
 
-		$this->context->controller->addCSS($this->_path.'css/style.css', 'all');
+		$this->context->controller->addCSS($this->_path.'views/css/style.css', 'all');
 
-		$this->context->controller->addJS($this->_path.'js/simplify.js');
-		$this->context->controller->addJS($this->_path.'js/simplify.form.js');
+		$this->context->controller->addJS($this->_path.'views/js/simplify.js');
+		$this->context->controller->addJS($this->_path.'views/js/simplify.form.js');
 
 
 		$mode = Configuration::get('SIMPLIFY_PAYMENT_MODE');
@@ -179,7 +179,7 @@ class SimplifyCommerce extends PaymentModule
 			&& Configuration::deleteByName('SIMPLIFY_PAYMENT_ORDER_STATUS')
 			&& Configuration::deleteByName('SIMPLIFY_PAYMENT_MODE')
 			&& Configuration::deleteByName('SIMPLIFY_OVERLAY_COLOR')
-			&& Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'simplify_customer`');
+			&& Db::getInstance()->Execute('DROP TABLE IF EXISTS`'._DB_PREFIX_.'simplify_customer`');
 	}
 
 	/**
@@ -283,7 +283,7 @@ class SimplifyCommerce extends PaymentModule
 		$option->setCallToActionText($this->trans('Pay by Credit Card', array(), 'Modules.SimplifyCommerce.Admin'))
 			->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
 			->setForm($this->fetch('module:simplifycommerce/views/templates/front/payment.tpl'))
-			->setAdditionalInformation($this->fetch('module:simplifycommerce/views/templates/hook/additional_info.php'));
+			->setAdditionalInformation($this->fetch('module:simplifycommerce/views/templates/hook/additional_info.tpl'));
 
 		return $option;
 	}

@@ -24,10 +24,10 @@
 * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 * SUCH DAMAGE.
 *}
-<link href="{$module_dir|escape}css/style.css" rel="stylesheet" type="text/css" media="all"/>
-<link href="{$module_dir|escape}css/spectrum.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="{$module_dir|escape}views/css/style.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="{$module_dir|escape}views/css/spectrum.css" rel="stylesheet" type="text/css" media="all"/>
 <link href="//fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet"/>
-<script type="text/javascript" src="{$module_dir|escape}js/spectrum.js"></script>
+<script type="text/javascript" src="{$module_dir|escape}views/js/spectrum.js"></script>
 
 <div class="simplify-module-wrapper">
     <div class="simplify-module-header">
@@ -56,7 +56,7 @@
             </div>
             <div class="marketing left">
                 <div class="w-container features item">
-                    <img class="features item icon" src="{$module_dir|escape}img/feature_price.jpg"
+                    <img class="features item icon" src="{$module_dir|escape}views/img/feature_price.jpg"
                          alt="feature_signup.jpg">
 
                     <h1 class="features item h1">{l s='Simple pricing' mod='simplifycommerce'}</h1>
