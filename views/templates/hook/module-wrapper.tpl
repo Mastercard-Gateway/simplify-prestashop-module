@@ -120,7 +120,7 @@
                                     {/if}
                                 </td>
                                 <td class="simplify-require-text">
-                                    {$requirement['name']|escape:'htmlall': 'UTF-8'}<br/>
+                                    {$requirement['name']|escape:'htmlall':'UTF-8'}<br/>
                                     {if !$requirement['result'] && isset($requirement['resolution'])}
                                         {Tools::safeOutput($requirement['resolution']|escape:'htmlall':'UTF-8',true)}
                                         <br/>
@@ -238,7 +238,7 @@
                     </div>
                     <div class="half container left">
                         {foreach $statuses_options as $status_options}
-                            <h2>{$status_options['label']|escape:'htmlall': 'UTF-8'}</h2>
+                            <h2>{$status_options['label']|escape:'htmlall':'UTF-8'}</h2>
                             <p>Choose the status for an order once the payment has been successfully processed by
                                 Simplify.</p>
                             <div>
@@ -248,7 +248,7 @@
                                                 {if $status['id_order_state'] == $status_options['current_value']}
                                                     selected="selected"
                                                 {/if}
-                                                >{$status['name']|escape:'htmlall': 'UTF-8'}</option>
+                                                >{$status['name']|escape:'htmlall':'UTF-8'}</option>
                                     {/foreach}
                                 </select>
                             </div>
