@@ -55,6 +55,8 @@ class SimplifyCommerce extends PaymentModule
 		$this->currencies = true;
 		$this->currencies_mode = 'checkbox';
 
+		$this->module_key = '084fe8aecafea8b2f84cca493377eb9b';
+
 		parent::__construct();
 
 		$this->displayName = $this->l('Simplify Commerce');
