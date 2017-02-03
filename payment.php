@@ -30,7 +30,7 @@ include(dirname(__FILE__).'/../../config/config.inc.php');
 include(dirname(__FILE__).'/../../init.php');
 include(dirname(__FILE__).'/simplifycommerce.php');
 
-if (!defined('_PS_VERSION_')){
+if (!defined('_PS_VERSION_')) {
     exit;
 }
 
