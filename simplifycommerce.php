@@ -95,7 +95,10 @@ class SimplifyCommerce extends PaymentModule
 	}
 
 	public function hookDisplayHeader(){
-		
+		if (!$this->active) {
+			return;
+		}
+
 		$this->context->controller->addCSS($this->_path.'css/style.css', 'all');
 
 		$this->context->controller->addJS($this->_path.'js/simplify.js');
