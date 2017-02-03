@@ -722,7 +722,7 @@ class SimplifyCommerce extends PaymentModule
         $this->smarty->assign('statuses_options', array(array('name' => 'simplify_payment_status', 'label' =>
             $this->l('Successful Payment Order Status'), 'current_value' => Configuration::get('SIMPLIFY_PAYMENT_ORDER_STATUS'))));
 
-        $base_img = $this->context->link->getBaseLink() . 'modules/' . $this->name . '/img/';
+        $base_img = $this->context->link->getBaseLink() . 'modules/' . $this->name . '/views/img/';
 
         $this->smarty->assign('ok_icon_link', $base_img . 'checkmark-24.ico');
         $this->smarty->assign('nok_icon_link', $base_img . 'x-mark-24.ico');
