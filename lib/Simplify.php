@@ -57,7 +57,7 @@ class Simplify
     /**
     * @var string $user_agent User-agent string send with requests.
     */
-    public static $user_agent = 'PrestaShop';
+    public static $user_agent = 'PrestaShop-1.2.0';
 }
 
 require_once(dirname(__FILE__).'/Simplify/Object.php');
