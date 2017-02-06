@@ -36,14 +36,7 @@
     border: none;
 }
 
-#saveCustomerLabel {
-    margin-left: 5px;
-}
 
-#updateCustomerLabel {
-    margin-left: 5px;
-    display:none;
-}
 
 .simplify-module-wrapper .simplify-settings h2{
 	font-size: 16px;
@@ -274,15 +267,16 @@
 	color: #333;
 }
 
-.save-customer {
-    padding-top: 10px;
-    padding-left: 5px;
-}
-
-#simplify-payment-form label { 
-	display: inline-block; 
+#simplify-payment-form label {
+	display: inline-block;
 	margin-bottom: 4px; 
 	text-transform: uppercase; 
+}
+
+body#checkout section.checkout-step .payment-options  #simplify-cc-details label.save {
+	display: inline;
+	text-transform: none;
+	margin-left: 5px;
 }
 
 #simplify-payment-form label.lowercase { 
@@ -496,8 +490,7 @@ i.simplifyFormContainer mg.enable {
 }
 
 .simplifyFormContainer.box {
-	padding: 14px 18px 13px;
-	margin: 0 0 30px 0;
+	margin-left: 2.875rem;
 }
 
 #trash-icon {
@@ -536,7 +529,7 @@ i.simplifyFormContainer mg.enable {
 	color: #CF0101;	
 	display: none;
 	font-size: 16px;
-	margin-left: 10px;
+	margin-top: 10px;
 	text-transform: capitalize;
 }
 
@@ -638,4 +631,37 @@ i.simplifyFormContainer mg.enable {
 
 .simplifyFormContainer .underline {
 	text-decoration: underline;
+}
+
+#simplify-cc-details {
+	padding-left: 3.2rem;
+	padding-top: 1.7rem;
+}
+
+#new-card-container.no-saved #simplify-cc-details {
+	padding-left: 0;
+	padding-top: 0;
+}
+
+#new-card-container.no-saved {
+	padding: 0;
+}
+#new-card-container .clear {
+	clear: both;
+}
+.simplifyFormContainer.box.no-saved {
+	margin-left: 2.475rem;
+}
+
+.simplify-technical img {
+	height: 1.0rem;
+	widgth: 1.0rem;
+}
+
+.simplify-require-text {
+	padding-left: 10px;
+}
+
+.simplify-features-footnote {
+	font-size: 80%;
 }

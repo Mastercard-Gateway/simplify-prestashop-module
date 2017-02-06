@@ -1,36 +1,33 @@
-{*
- * Simplify Commerce module to start accepting payments now. It's that simple.
- *
- * Redistribution and use in source and binary forms, with or without modification, are
- * permitted provided that the following conditions are met:
- * Redistributions of source code must retain the above copyright notice, this list of
- * conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, this list of
- * conditions and the following disclaimer in the documentation and/or other materials
- * provided with the distribution.
- * Neither the name of the MasterCard International Incorporated nor the names of its
- * contributors may be used to endorse or promote products derived from this software
- * without specific prior written permission.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
- * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
- * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- *  @author    MasterCard (support@simplify.com)
- *  @version   Release: 1.0.3
- *  @copyright 2014, MasterCard International Incorporated. All rights reserved.
- *  @license   See licence.txt
- *}
-<link href="{$module_dir|escape}css/style.css" rel="stylesheet" type="text/css" media="all"/>
-<link href="{$module_dir|escape}css/spectrum.css" rel="stylesheet" type="text/css" media="all"/>
+{**
+* Copyright (c) 2017, MasterCard International Incorporated
+* All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without modification, are
+* permitted provided that the following conditions are met:
+*
+* Redistributions of source code must retain the above copyright notice, this list of
+* conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice, this list of
+* conditions and the following disclaimer in the documentation and/or other materials
+* provided with the distribution.
+* Neither the name of the MasterCard International Incorporated nor the names of its
+* contributors may be used to endorse or promote products derived from this software
+* without specific prior written permission.
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+* EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+* SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+* TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+* OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+* IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+* IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+* SUCH DAMAGE.
+*}
+<link href="{$module_dir|escape}views/css/style.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="{$module_dir|escape}views/css/spectrum.css" rel="stylesheet" type="text/css" media="all"/>
 <link href="//fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet"/>
-<script type="text/javascript" src="{$module_dir|escape}js/spectrum.js"></script>
+<script type="text/javascript" src="{$module_dir|escape}views/js/spectrum.js"></script>
 
 <div class="simplify-module-wrapper">
     <div class="simplify-module-header">
@@ -59,12 +56,19 @@
             </div>
             <div class="marketing left">
                 <div class="w-container features item">
-                    <img class="features item icon" src="{$module_dir|escape}img/feature_price.jpg"
+                    <img class="features item icon" src="{$module_dir|escape}views/img/feature_price.jpg"
                          alt="feature_signup.jpg">
 
                     <h1 class="features item h1">{l s='Simple pricing' mod='simplifycommerce'}</h1>
 
-                    <p>No setup fees.<br>No monthly fees.<br>No minimum.</p>
+                    <p>
+                        No setup fees.
+                        <br>No refund costs.
+                        <br>No monthly service fees.*
+                        <br>
+                        <br>
+                        <span class="simplify-features-footnote">* Subject to $10 minimum monthly processing fee.</span>
+
                 </div>
             </div>
             <div class="marketing left">
@@ -80,7 +84,8 @@
         </div>
         <div class="clearfix">
             <div class="w-container admin-description-block">
-                <b>Simplify Commerce</b>, built my MasterCard, a global leader in the payment industry, makes it easy for small businesses to accept online payments. From our hosted ‘Pay Now’ solution that allows merchants to share links socially to our mobile point of sale to recurring payment solutions, we include must-have features key to businesses.
+                <b>Simplify Commerce</b>, built my MasterCard, a global leader in the payment industry, makes it easy for small businesses to accept online payments.
+                From our hosted ‘Pay Now’ solution that allows merchants to share links socially to our mobile point of sale to recurring payment solutions, we include must-have features key to businesses.
                 <ul>
                     <li>{l s='Omni-channel payment solution for website, mobile and eCommerce store' mod='simplifycommerce'}</li>
                     <li>{l s='Accepting major card brands' mod='simplifycommerce'}</li>
@@ -109,13 +114,13 @@
                             <tr>
                                 <td>
                                     {if $requirement['result']}
-                                        <img src="../img/admin/ok.gif" alt=""/>
+                                        <img src="{$ok_icon_link}" alt="ok"/>
                                     {else}
-                                        <img src="../img/admin/forbbiden.gif" alt=""/>
+                                        <img src="{$nok_icon_link}" alt="not ok"/>
                                     {/if}
                                 </td>
-                                <td>
-                                    {$requirement['name']|escape:'htmlall': 'UTF-8'}<br/>
+                                <td class="simplify-require-text">
+                                    {$requirement['name']|escape:'htmlall':'UTF-8'}<br/>
                                     {if !$requirement['result'] && isset($requirement['resolution'])}
                                         {Tools::safeOutput($requirement['resolution']|escape:'htmlall':'UTF-8',true)}
                                         <br/>
@@ -128,9 +133,6 @@
             {/if}
         </section>
         <br/>
-        {if (!is_backward)}
-        /* If 1.4 and no backward, then leave */
-        {else}
         <form action="{$request_uri|escape:'UTF-8'}" method="post">
             <section class="simplify-settings">
                 <h2>API Key Mode</h2>
@@ -236,7 +238,7 @@
                     </div>
                     <div class="half container left">
                         {foreach $statuses_options as $status_options}
-                            <h2>{$status_options['label']|escape:'htmlall': 'UTF-8'}</h2>
+                            <h2>{$status_options['label']|escape:'htmlall':'UTF-8'}</h2>
                             <p>Choose the status for an order once the payment has been successfully processed by
                                 Simplify.</p>
                             <div>
@@ -246,7 +248,7 @@
                                                 {if $status['id_order_state'] == $status_options['current_value']}
                                                     selected="selected"
                                                 {/if}
-                                                >{$status['name']|escape:'htmlall': 'UTF-8'}</option>
+                                                >{$status['name']|escape:'htmlall':'UTF-8'}</option>
                                     {/foreach}
                                 </select>
                             </div>
@@ -274,12 +276,17 @@
                                         </select>
                                     </td>
                                     <td id="modal-overlay-config">
-                                        <label for="modal-overlay-color" class="modal-overlay">Modal
-                                            Overlay:</label><input name="simplify_overlay_color" type="text"
-                                                                   id="modal-overlay-color" size="8"
-                                                                   value="{$overlay_color|escape:'htmlall':'UTF-8'}"/><input
-                                                id="colorSelector" type="text"
-                                                value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
+                                        <label for="modal-overlay-color" class="modal-overlay">
+                                            {l s='Hosted payments button color' mod='simplifycommerce'}:</label>
+                                                <input
+                                                        name="simplify_overlay_color"
+                                                        type="text"
+                                                        id="modal-overlay-color"
+                                                        size="8"
+                                                        value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
+                                                <input
+                                                        id="colorSelector" type="text"
+                                                        value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -297,7 +304,6 @@
     </div>
     </section>
     </form>
-    {/if}
 </div>
 <script type="text/javascript">
     $(document).ready(function () {

@@ -1,5 +1,4 @@
-<?php
-/**
+{**
  * Simplify Commerce module to start accepting payments now. It's that simple.
  *
  * Redistribution and use in source and binary forms, with or without modification, are
@@ -24,47 +23,15 @@
  * SUCH DAMAGE.
  *
  *  @author    MasterCard (support@simplify.com)
- *  @version   Release: 1.0.1
+ *  @version   Release: 1.0.3
  *  @copyright 2014, MasterCard International Incorporated. All rights reserved.
  *  @license   See licence.txt
- */
+ *}
 
-require_once(dirname(__FILE__).'/Simplify/Constants.php');
-
-class Simplify
-{
-    /**
-    * @var string $public_key public API key used to authenticate requests.
-    */
-    public static $public_key;
-
-    /**
-    * @var string $private_key private API key used to authenticate requests.
-    */
-    public static $private_key;
-
-
-    /**
-    * @var string $api_base_live_url URL of the live API endpoint
-    */
-    public static $api_base_live_url = SimplifyConstants::API_BASE_LIVE_URL;
-
-    /**
-    * @var string $api_base_sandbox_url URL of the sandbox API endpoint
-    */
-    public static $api_base_sandbox_url = SimplifyConstants::API_BASE_SANDBOX_URL;
-
-    /**
-    * @var string $user_agent User-agent string send with requests.
-    */
-    public static $user_agent = 'PrestaShop-1.2.0';
-}
-
-require_once(dirname(__FILE__).'/Simplify/Object.php');
-require_once(dirname(__FILE__).'/Simplify/Authentication.php');
-require_once(dirname(__FILE__).'/Simplify/PaymentsApi.php');
-require_once(dirname(__FILE__).'/Simplify/Exceptions.php');
-require_once(dirname(__FILE__).'/Simplify/Http.php');
-require_once(dirname(__FILE__).'/Simplify/ResourceList.php');
-require_once(dirname(__FILE__).'/Simplify/Customer.php');
-require_once(dirname(__FILE__).'/Simplify/Payment.php');
+{if $payment_mode == 'hosted_payments'}
+<section>
+  <p>
+     {l s='You will be redirected to a secure payment form.' mod='simplifycommerce'}
+  </p>
+</section>
+ {/if}
