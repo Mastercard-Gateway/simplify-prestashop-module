@@ -7,7 +7,7 @@ This plugin adds Simplify Commerce as a payment option on your PrestaShop checko
 
 The Simplify Commerce module is not bundled in the PrestaShop download.
 
-The addon for Simplify Commerce can be downloaded here: http://addons.prestashop.com/en/17104-simplifycommerce.html
+The addon for Simplify Commerce can be downloaded here: https://github.com/PrestaShop/simplifycommerce/raw/master/dist/simplifycommerce.zip
 
 You will then need to place this folder (should be called 'simplifycommerce') under the prestashop directory in "./modules/" 
 
