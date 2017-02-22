@@ -1,1 +1,1 @@
-git archive HEAD --prefix=simplifycommerce/ -o simplifycommerce.zip
+git archive HEAD --prefix=simplifycommerce/ -o ./dist/simplifycommerce.zip
