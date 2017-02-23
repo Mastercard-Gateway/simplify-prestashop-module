@@ -9,9 +9,9 @@ The Simplify Commerce module is not bundled in the PrestaShop download.
 
 The addon for Simplify Commerce can be downloaded here: https://github.com/PrestaShop/simplifycommerce/raw/master/dist/simplifycommerce.zip
 
-You will then need to place this folder (should be called 'simplifycommerce') under the prestashop directory in "./modules/" 
+You will then upload the zip file, setup the API keys and you are good to go! 
 
-You can then install it from the list of available modules, setup the API keys and you are good to go!
+![Upload Module](docs/upload_module.png "Upload Simplify Commerce module")
 
 ![Install Module](docs/install_module.png "Install Simplify Commerce module")
 
