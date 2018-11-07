@@ -31,71 +31,12 @@
 
 <div class="simplify-module-wrapper">
     <div class="simplify-module-header">
-        <a href="https://www.simplify.com/" target="_blank" class="left">
-            <img class="logo" src="//www.simplify.com/commerce/static/images/app-logo-pos.png"
+        <a href="https://www.simplify.com/" target="_blank" class="center">
+            <img class="logo" src="//static.simplify.com/cdn/img/partner/simplify/logos/logo.png"
                  alt="Simplify Commerce Logo" width="150" height="64"></a>
-
-        <div class="header-title left">
-            <h1>{l s='Start accepting payments now.' mod='simplifycommerce'}</h1>
-
-            <h2>{l s='It’s that simple.' mod='simplifycommerce'}</h2>
-        </div>
-        <a href="https://www.simplify.com/commerce/partners/prestashop#/" target="_blank" class="btn right"><span>{l s='Sign up for free' mod='simplifycommerce'}</span></a>
-    </div>
-    <div class="section">
-        <div class="clearfix">
-            <div class="marketing left">
-                <div class="w-container features item">
-                    <img class="features item icon" src="//www.simplify.com/commerce/static/images/feature_signup.jpg"
-                         alt="feature_signup.jpg">
-
-                    <h1 class="features item h1">{l s='Easy sign up' mod='simplifycommerce'}</h1>
-
-                    <p>{l s='Click the "Sign up for free" button and become a Simplify merchant for free.' mod='simplifycommerce'}</p>
-                </div>
-            </div>
-            <div class="marketing left">
-                <div class="w-container features item">
-                    <img class="features item icon" src="{$module_dir|escape}views/img/feature_price.jpg"
-                         alt="feature_signup.jpg">
-
-                    <h1 class="features item h1">{l s='Simple pricing' mod='simplifycommerce'}</h1>
-
-                    <p>
-                        No setup fees.
-                        <br>No refund costs.
-                        <br>No monthly service fees.*
-                        <br>
-                        <br>
-                        <span class="simplify-features-footnote">* Subject to $10 minimum monthly processing fee.</span>
-
-                </div>
-            </div>
-            <div class="marketing left">
-                <div class="w-container features item">
-                    <img class="features item icon" src="//www.simplify.com/commerce/static/images/feature_funding.jpg"
-                         alt="feature_signup.jpg">
-
-                    <h1 class="features item h1">{l s='Two-day funding' mod='simplifycommerce'}</h1>
-
-                    <p>{l s='Deposits are made into your account in two business days for most transactions.' mod='simplifycommerce'}</p>
-                </div>
-            </div>
-        </div>
-        <div class="clearfix">
-            <div class="w-container admin-description-block">
-                <b>Simplify Commerce</b>, built my MasterCard, a global leader in the payment industry, makes it easy for small businesses to accept online payments.
-                From our hosted ‘Pay Now’ solution that allows merchants to share links socially to our mobile point of sale to recurring payment solutions, we include must-have features key to businesses.
-                <ul>
-                    <li>{l s='Omni-channel payment solution for website, mobile and eCommerce store' mod='simplifycommerce'}</li>
-                    <li>{l s='Accepting major card brands' mod='simplifycommerce'}</li>
-                    <li>{l s='Quick two-day funding' mod='simplifycommerce'}</li>
-                    <li>{l s='Highest Level 1 PCI certification' mod='simplifycommerce'}</li>
-                    <li>{l s='Simple eInvoicing' mod='simplifycommerce'}</li>
-                    <li>{l s='Recurring billing for monthly subscriptions' mod='simplifycommerce'}</li>
-                </ul>
-            </div>
-        </div>
+        <div class="header-title right">
+              <p>{l s='Your PrestaShop plugin is powered by Simplify Commerce by Mastercard. We have partnered with your acquirer to provide this payments connection for your business. Please refer to your acquirer for specific questions.' mod='simplifycommerce'}</p>
+         </div>
     </div>
     <div class="formContainer">
         <section class="technical-checks">
