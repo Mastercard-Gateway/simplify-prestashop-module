@@ -380,7 +380,7 @@ function initSimplify(){
     // if we have an old card then show update instead of save in the label
     showSaveCardDetailsLabel(! $("#old-card-container").is(":visible"));
 
-//if its non-HTTPS set the redirectUrl back to this page
+    //if its non-HTTPS set the redirectUrl back to this page
     if (!document.location.href.match(/^https:\/\//)) {
         //redirect back to payment step
         if (!window.location.origin) { //IE don't have window.location.origin :(
@@ -388,7 +388,6 @@ function initSimplify(){
         }
         options.redirectUrl = window.location.origin + window.location.pathname;
     }
-
 
     $(document).ready(function () {
         $('input[name="payment-option"]:checked').change(); // bug where presta shop doesn't show the form that is selected when we come back to this page
@@ -410,7 +409,7 @@ function initSimplify(){
                 cardToken: cardToken
             };
             processHostedPaymentForm(response, url);
-        } else if(simplifyPaymentMode == "hosted_payments") {
+        } else {
             initHostedPayments(options);
 
             $('#simplify-hosted-payment-button').click(function () {
@@ -425,9 +424,7 @@ function initSimplify(){
                 }
                 initHostedPayments(options);
             });
-        } else {
         }
     });
 
 }})();
-

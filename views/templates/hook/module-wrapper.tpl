@@ -259,78 +259,35 @@
                 </div>
                 <div class="clearfix">
                     <div class="left">
-                        <h2>{l s='Payment Mode' mod='simplifycommerce'}</h2>
+                        <h2>{l s='Hosted Payments Configuration' mod='simplifycommerce'}</h2>
 
                         <div class="container">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <select id="simplify_payment_mode" name="simplify_payment_mode">
-                                            <option value="hosted_payments"
-                                                    {if $payment_mode == 'hosted_payment'}selected="selected"{/if}>
-                                                Hosted Payments
-                                            </option>
-                                            <option value="standard"
-                                                    {if $payment_mode == 'standard'}selected="selected"{/if}>Standard
-                                            </option>
-                                        </select>
-                                    </td>
-                                    <td id="modal-overlay-config">
-                                        <label for="modal-overlay-color" class="modal-overlay">
-                                            {l s='Hosted payments button color' mod='simplifycommerce'}:</label>
-                                                <input
-                                                        name="simplify_overlay_color"
-                                                        type="text"
-                                                        id="modal-overlay-color"
-                                                        size="8"
-                                                        value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
-                                                <input
-                                                        id="colorSelector" type="text"
-                                                        value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="hp-notes" colspan="2">
-                                        To use hosted payments you must create a new API Key pair with the <b>'Enable hosted payments'</b> option selected.<br/>
-                                        For more information, please visit this <a target="_new" href="https://www.simplify.com/commerce/docs/tools/hosted-payments">link</a>
-                                    </td>
-                                </tr>
-                            </table>
+                            <div>
+                                <label for="modal-overlay-color" class="modal-overlay">
+                                    {l s='Button color' mod='simplifycommerce'}:</label>
+                                    <input
+                                            name="simplify_overlay_color"
+                                            type="text"
+                                            id="modal-overlay-color"
+                                            size="8"
+                                            value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
+                                    <input
+                                            id="colorSelector" type="text"
+                                            value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="clearfix"><input type="submit" class="settings-btn btn right" name="SubmitSimplify"
                                              value="Save Settings"/></div>
+            </section>
+        </form>
     </div>
-    </section>
-    </form>
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
         var $modalOverlayColor = $('#modal-overlay-color');
         var $colorSelector = $("#colorSelector");
-        var $modalOverlayConfig = $('#modal-overlay-config');
-        var $simplifyPaymentMode = $('#simplify_payment_mode');
-
-        function updateSimplifySettings() {
-            enableOrDisableOverlaySetting();
-        }
-
-        function enableOrDisableOverlaySetting() {
-            var disable = $simplifyPaymentMode.val() === 'standard';
-            $modalOverlayConfig.css('opacity', disable ? 0.6 : 1.0);
-            $colorSelector.spectrum(disable ? 'disable' : 'enable');
-            if (disable) {
-                $modalOverlayColor.attr('disabled', true);
-            }
-            else {
-                $modalOverlayColor.removeAttr('disabled');
-            }
-        }
-
-        $simplifyPaymentMode.change(enableOrDisableOverlaySetting);
-
-        $('input:radio[name=simplify_mode]').click(updateSimplifySettings);
 
         function changeColor(color) {
             $modalOverlayColor.val(color.toHexString());
@@ -346,7 +303,5 @@
         $modalOverlayColor.change(function () {
             $colorSelector.spectrum('set', $(this).val());
         });
-
-        updateSimplifySettings();
     });
 </script>
