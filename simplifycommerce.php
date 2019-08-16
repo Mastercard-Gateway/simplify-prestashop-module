@@ -39,7 +39,20 @@ if (!defined('_PS_VERSION_')) {
  */
 class SimplifyCommerce extends PaymentModule
 {
+    /**
+     * @var string
+     */
     public $defaultModalOverlayColor = '#22A6CA';
+
+    /**
+     * @var string
+     */
+    protected $defaultTitle;
+
+    /**
+     * @var string
+     */
+    protected $confirmUninstall;
 
     /**
      * Simplify Commerce's module constuctor
@@ -62,6 +75,7 @@ class SimplifyCommerce extends PaymentModule
         $this->displayName = $this->l('Simplify Commerce');
         $this->description = $this->l('Payments made easy - Start securely accepting credit card payments instantly.');
         $this->confirmUninstall = $this->l('Warning: Are you sure you want to uninstall this module?');
+        $this->defaultTitle = $this->l('Pay with Card');
 
         if (!count(Currency::checkPaymentCurrencies($this->id))) {
             $this->warning = $this->trans('No currency has been set for this module.', array(), 'Modules.SimplifyCommerce.Admin');
@@ -127,6 +141,7 @@ class SimplifyCommerce extends PaymentModule
         && Configuration::updateValue('SIMPLIFY_SAVE_CUSTOMER_DETAILS', 1)
         && Configuration::updateValue('SIMPLIFY_OVERLAY_COLOR', $this->defaultModalOverlayColor)
         && Configuration::updateValue('SIMPLIFY_PAYMENT_ORDER_STATUS', (int)Configuration::get('PS_OS_PAYMENT'))
+        && Configuration::updateValue('SIMPLIFY_PAYMENT_TITLE', $this->defaultTitle)
         && $this->createDatabaseTables();
     }
 
@@ -160,6 +175,7 @@ class SimplifyCommerce extends PaymentModule
         && Configuration::deleteByName('SIMPLIFY_PRIVATE_KEY_LIVE')
         && Configuration::deleteByName('SIMPLIFY_PAYMENT_ORDER_STATUS')
         && Configuration::deleteByName('SIMPLIFY_OVERLAY_COLOR')
+        && Configuration::deleteByName('SIMPLIFY_PAYMENT_TITLE')
         && Db::getInstance()->Execute('DROP TABLE IF EXISTS`'._DB_PREFIX_.'simplify_customer`');
     }
 
@@ -259,7 +275,7 @@ class SimplifyCommerce extends PaymentModule
     public function getPaymentOption()
     {
         $option = new PaymentOption();
-        $option->setCallToActionText($this->trans('Pay by Credit Card', array(), 'Modules.SimplifyCommerce.Admin'))
+        $option->setCallToActionText(Configuration::get('SIMPLIFY_PAYMENT_TITLE') ? : $this->defaultTitle)
             ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
             ->setForm($this->fetch('module:simplifycommerce/views/templates/front/payment.tpl'));
 
@@ -668,7 +684,8 @@ class SimplifyCommerce extends PaymentModule
                 'SIMPLIFY_PRIVATE_KEY_TEST' => Tools::getValue('simplify_private_key_test'),
                 'SIMPLIFY_PRIVATE_KEY_LIVE' => Tools::getValue('simplify_private_key_live'),
                 'SIMPLIFY_PAYMENT_ORDER_STATUS' => (int)Tools::getValue('simplify_payment_status'),
-                'SIMPLIFY_OVERLAY_COLOR' => Tools::getValue('simplify_overlay_color')
+                'SIMPLIFY_OVERLAY_COLOR' => Tools::getValue('simplify_overlay_color'),
+                'SIMPLIFY_PAYMENT_TITLE' => Tools::getValue('simplify_payment_title'),
             );
 
 
@@ -701,6 +718,7 @@ class SimplifyCommerce extends PaymentModule
         $this->smarty->assign('statuses', OrderState::getOrderStates((int)$this->context->cookie->id_lang));
         $this->smarty->assign('request_uri', Tools::safeOutput($_SERVER['REQUEST_URI']));
         $this->smarty->assign('overlay_color', Configuration::get('SIMPLIFY_OVERLAY_COLOR') != null ? Configuration::get('SIMPLIFY_OVERLAY_COLOR') : $this->defaultModalOverlayColor);
+        $this->smarty->assign('payment_title', Configuration::get('SIMPLIFY_PAYMENT_TITLE') ? : $this->defaultTitle);
         $this->smarty->assign('statuses_options', array(array('name' => 'simplify_payment_status', 'label' =>
             $this->l('Successful Payment Order Status'), 'current_value' => Configuration::get('SIMPLIFY_PAYMENT_ORDER_STATUS'))));
 

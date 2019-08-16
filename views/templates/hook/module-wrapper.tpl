@@ -216,23 +216,32 @@
                 </div>
                 <div class="clearfix">
                     <div class="left half">
-                        <h2>{l s='Save Customer Details' mod='simplifycommerce'}</h2>
+                        <div>
+                            <h2>{l s='Payment Method Title' mod='simplifycommerce'}</h2>
+                            <div class="container">
+                                <p>{l s='Here you can change the payment method title, how it appears in the frontend.' mod='simplifycommerce'}</p>
+                                <input name="simplify_payment_title" type="text" class="table_grid" value="{$payment_title|escape:'htmlall':'UTF-8'}" />
+                            </div>
+                        </div>
+                        <div>
+                            <h2>{l s='Save Customer Details' mod='simplifycommerce'}</h2>
 
-                        <div class="account-mode container">
-                            <p>Enable customers to save their card details securely on Simplify's servers for future
-                                transactions.</p>
+                            <div class="account-mode container">
+                                <p>Enable customers to save their card details securely on Simplify's servers for future
+                                    transactions.</p>
 
-                            <div class="saveCustomerDetailsContainer">
-                                <input class="radioInput" type="radio" name="simplify_save_customer_details" value="1"
-                                        {if $save_customer_details == 1}
-                                            checked="checked"
-                                        {/if}
-                                        /><span>Yes</span>
-                                <input class="radioInput" type="radio" name="simplify_save_customer_details" value="0"
-                                        {if $save_customer_details == 0}
-                                            checked="checked"
-                                        {/if}
-                                        /><span>No</span>
+                                <div class="saveCustomerDetailsContainer">
+                                    <input class="radioInput" type="radio" name="simplify_save_customer_details" value="1"
+                                            {if $save_customer_details == 1}
+                                                checked="checked"
+                                            {/if}
+                                            /><span>Yes</span>
+                                    <input class="radioInput" type="radio" name="simplify_save_customer_details" value="0"
+                                            {if $save_customer_details == 0}
+                                                checked="checked"
+                                            {/if}
+                                            /><span>No</span>
+                                </div>
                             </div>
                         </div>
                     </div>
