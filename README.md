@@ -3,6 +3,12 @@
 
 This plugin adds Simplify Commerce as a payment option on your PrestaShop checkout page.
 
+This module has been tested with following versions of PrestaShop:
+
+- 1.7.5.0
+- 1.7.5.2
+- 1.7.6.0
+
 ## Installation
 
 The Simplify Commerce module is not bundled in the PrestaShop download.
