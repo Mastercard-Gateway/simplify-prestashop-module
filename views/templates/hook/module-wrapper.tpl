@@ -219,7 +219,7 @@
                         <div>
                             <h2>{l s='Payment Method Title' mod='simplifycommerce'}</h2>
                             <div class="container">
-                                <p>{l s='Here you can change the payment method title, how it appears in the frontend.' mod='simplifycommerce'}</p>
+                                <p>{l s='Change the payment method title displayed in the frontend.' mod='simplifycommerce'}</p>
                                 <input name="simplify_payment_title" type="text" class="table_grid" value="{$payment_title|escape:'htmlall':'UTF-8'}" />
                             </div>
                         </div>
