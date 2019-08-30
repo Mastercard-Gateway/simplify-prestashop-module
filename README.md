@@ -1,7 +1,7 @@
 
 # Simplify Commerce Payment module for PrestaShop
 
-This plugin adds Simplify Commerce as a payment option on your PrestaShop checkout page.
+This plugin uses Simplify Commerce to connect your merchant account to PrestaShop and to set up a payment option on your PrestaShop checkout page.
 
 ## Installation
 
@@ -18,7 +18,7 @@ You will then upload the zip file, setup the API keys and you are good to go!
 
 ![Setup API Keys](docs/plugin_configuration.png "Plugin Configuration")
 
-You can manage your Simplify account (view deposits, perform refunds, create invoices etc.) using the Simplify dashboard at https://www.simplify.com/commerce/.
+You can manage your merchant account (view orders, perform refunds, create invoices etc.) using your merchant portal.
 
 ## License
 This software is Open Source, released under the BSD 3-Clause license. See licence.txt for more info.
