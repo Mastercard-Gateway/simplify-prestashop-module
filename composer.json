@@ -1,11 +1,11 @@
 {
   "name": "simplifycommerce",
-  "description": "Payments made easy - Start securely accepting credit card payments instantly.",
+  "description": "Payments made easy - Start securely accepting card payments instantly.",
   "homepage": "https://github.com/PrestaShop/simplifycommerce",
   "license": "BSD 3-Clause license",
   "authors": [
     {
-      "name": "MasterCard",
+      "name": "Mastercard",
       "email": "support@simplify.com"
     }
   ],

@@ -1,29 +1,7 @@
 <?php
 /**
- * Copyright (c) 2017, MasterCard International Incorporated
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification, are
- * permitted provided that the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list of
- * conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, this list of
- * conditions and the following disclaimer in the documentation and/or other materials
- * provided with the distribution.
- * Neither the name of the MasterCard International Incorporated nor the names of its
- * contributors may be used to endorse or promote products derived from this software
- * without specific prior written permission.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
- * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
- * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
+ * Copyright (c) 2019 Mastercard. Licensed under Open Software License ("OSL") v. 3.0.
+ * See file LICENSE.txt or go to https://opensource.org/licenses/OSL-3.0 for full license details.
  */
 
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
@@ -34,7 +12,7 @@ if (!defined('_PS_VERSION_')) {
 
 /**
  * This payment module enables the processing of
- * credit card transactions through the Simplify
+ * card transactions through the Simplify
  * Commerce framework.
  */
 class SimplifyCommerce extends PaymentModule
@@ -61,8 +39,8 @@ class SimplifyCommerce extends PaymentModule
     {
         $this->name = 'simplifycommerce';
         $this->tab = 'payments_gateways';
-        $this->version = '1.2.0';
-        $this->author = 'MasterCard';
+        $this->version = '2.0.0';
+        $this->author = 'Mastercard';
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
 
         $this->currencies = true;
@@ -73,7 +51,7 @@ class SimplifyCommerce extends PaymentModule
         parent::__construct();
 
         $this->displayName = $this->l('Simplify Commerce');
-        $this->description = $this->l('Payments made easy - Start securely accepting credit card payments instantly.');
+        $this->description = $this->l('Payments made easy - Start securely accepting card payments instantly.');
         $this->confirmUninstall = $this->l('Warning: Are you sure you want to uninstall this module?');
         $this->defaultTitle = $this->l('Pay with Card');
 
@@ -345,7 +323,7 @@ class SimplifyCommerce extends PaymentModule
         $simplify_customer_id = $this->getSimplifyCustomerID($simplify_customer['simplify_customer_id']);
 
 
-        // The user has chosen to delete the credit card, so we need to delete the customer
+        // The user has chosen to delete the card, so we need to delete the customer
         if (isset($simplify_customer_id) && $should_delete_customer) {
             try {
                 // delete on simplify.com
@@ -363,7 +341,7 @@ class SimplifyCommerce extends PaymentModule
         }
 
 
-        // The user has chosen to save the credit card details
+        // The user has chosen to save the card details
         if ($should_save_customer == 'on') {
             Logger::addLog($this->l('Simplify Commerce - $should_save_customer = '.$should_save_customer), 1, null, 'Cart', (int)$this->context->cart->id, true);
             // Customer exists already so update the card details from the card token
