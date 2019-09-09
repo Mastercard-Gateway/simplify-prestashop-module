@@ -20,17 +20,18 @@
 }
 
 .simplify-module-wrapper * {
-    color: #333;
+    /*color: #333;*/
     font-size: 13px;
     line-height: 20px;
 }
 
-.simplify-module-wrapper .simplify-module-header {
+.simplify-module-wrapper .simplify-module-header.formContainer {
     padding: 10px;
     clear: both;
     margin-bottom: 25px;
     padding-top: 15px;
     overflow: hidden;
+    padding-bottom: 0;
 }
 
 .hidden {
@@ -669,4 +670,35 @@ i.simplifyFormContainer mg.enable {
 
 .simplify-features-footnote {
     font-size: 80%;
+}
+
+.simplify-header-text > div {
+    width: 65%;
+    float: left;
+}
+
+.simplify-header-text > div.simplify-content-img {
+    width: 35%;
+    line-height: 0;
+}
+
+.simplify-content-img > img {
+    width: 100%;
+}
+
+.simplify-header-text {
+    overflow: hidden;
+}
+
+.simplify-header-logo {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.simplify-header-text ul {
+    color: #7F7F7F;
+}
+
+.simplify-content-text > div {
+    padding: 25px 35px 0 35px;
 }

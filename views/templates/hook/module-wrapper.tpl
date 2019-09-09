@@ -8,13 +8,28 @@
 <script type="text/javascript" src="{$module_dir|escape}views/js/spectrum.js"></script>
 
 <div class="simplify-module-wrapper">
-    <div class="simplify-module-header">
-        <a href="https://www.simplify.com/" target="_blank" class="center">
-            <img class="logo" src="//static.simplify.com/cdn/img/partner/simplify/logos/logo.png"
-                 alt="Simplify Commerce Logo" width="150" height="64"></a>
-        <div class="header-title right">
-              <p>{l s='Your PrestaShop plugin is powered by Simplify Commerce by Mastercard. We have partnered with your acquirer to provide this payments connection for your business. Please refer to your acquirer for specific questions.' mod='simplifycommerce'}</p>
-         </div>
+    <div class="simplify-module-header formContainer">
+        <div class="simplify-header-logo">
+            <a href="https://www.simplify.com/" target="_blank" class="center">
+                <img class="logo" src="//static.simplify.com/cdn/img/partner/simplify/logos/logo.png" alt="Simplify Commerce Logo" width="150" height="64">
+            </a>
+        </div>
+        <div class="simplify-header-text">
+            <div class="simplify-content-img">
+                <img src="{$module_dir|escape}views/img/simplify_phones.png" alt="" />
+            </div>
+            <div class="simplify-content-text">
+                <div>
+                    <p>{l s='Simplify Commerce, built by Mastercard, a global leader in the payment indrustry, makes it easy for small businesses to accept online payments. From our hosted "Pay Now" solution that allows merchants to share links socially to our mobile point of sale to recurring payment solutions, we include must-have features key to businesses.' mod='simplifycommerce'}</p>
+                    <ul>
+                        <li>{l s='Omni-channel payment solution for web, mobile and social platforms' mod='simplifycommerce'}</li>
+                        <li>{l s='Accept major card brands' mod='simplifycommerce'}</li>
+                        <li>{l s='Highest Level 1 PCI certification' mod='simplifycommerce'}</li>
+                        <li>{l s='Innovative, well-designed tools for merchants' mod='simplifycommerce'}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="formContainer">
         <section class="technical-checks">
