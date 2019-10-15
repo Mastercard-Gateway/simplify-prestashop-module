@@ -1,29 +1,19 @@
 <?php
 /**
- * Copyright (c) 2017, MasterCard International Incorporated
- * All rights reserved.
+ * Copyright (c) 2017-2019 Mastercard
  *
- * Redistribution and use in source and binary forms, with or without modification, are
- * permitted provided that the following conditions are met:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Redistributions of source code must retain the above copyright notice, this list of
- * conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, this list of
- * conditions and the following disclaimer in the documentation and/or other materials
- * provided with the distribution.
- * Neither the name of the MasterCard International Incorporated nor the names of its
- * contributors may be used to endorse or promote products derived from this software
- * without specific prior written permission.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
- * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
- * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
 
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
@@ -34,13 +24,25 @@ if (!defined('_PS_VERSION_')) {
 
 /**
  * This payment module enables the processing of
- * credit card transactions through the Simplify
+ * card transactions through the Simplify
  * Commerce framework.
  */
 class SimplifyCommerce extends PaymentModule
 {
-    public $defaultPaymentMode = 'hosted_payments';
+    /**
+     * @var string
+     */
     public $defaultModalOverlayColor = '#22A6CA';
+
+    /**
+     * @var string
+     */
+    protected $defaultTitle;
+
+    /**
+     * @var string
+     */
+    protected $confirmUninstall;
 
     /**
      * Simplify Commerce's module constuctor
@@ -49,8 +51,8 @@ class SimplifyCommerce extends PaymentModule
     {
         $this->name = 'simplifycommerce';
         $this->tab = 'payments_gateways';
-        $this->version = '1.2.0';
-        $this->author = 'MasterCard';
+        $this->version = '2.0.0';
+        $this->author = 'Mastercard';
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
 
         $this->currencies = true;
@@ -61,8 +63,9 @@ class SimplifyCommerce extends PaymentModule
         parent::__construct();
 
         $this->displayName = $this->l('Simplify Commerce');
-        $this->description = $this->l('Payments made easy - Start securely accepting credit card payments instantly.');
+        $this->description = $this->l('Payments made easy - Start securely accepting card payments instantly.');
         $this->confirmUninstall = $this->l('Warning: Are you sure you want to uninstall this module?');
+        $this->defaultTitle = $this->l('Pay with Card');
 
         if (!count(Currency::checkPaymentCurrencies($this->id))) {
             $this->warning = $this->trans('No currency has been set for this module.', array(), 'Modules.SimplifyCommerce.Admin');
@@ -106,22 +109,11 @@ class SimplifyCommerce extends PaymentModule
         $this->context->controller->addJS($this->_path.'views/js/simplify.js');
         $this->context->controller->addJS($this->_path.'views/js/simplify.form.js');
 
-
-        $mode = Configuration::get('SIMPLIFY_PAYMENT_MODE');
-
-        if ($mode == "standard") {
-            $this->context->controller->registerJavascript(
-                'remote-simplifypayments-js',
-                'https://www.simplify.com/commerce/v1/simplify.js',
-                ['server' => 'remote', 'position' => 'bottom', 'priority' => 20]
-            );
-        } else {
-            $this->context->controller->registerJavascript(
-                'remote-simplifypayments-hp',
-                'https://www.simplify.com/commerce/simplify.pay.js',
-                ['server' => 'remote', 'position' => 'bottom', 'priority' => 20]
-            );
-        }
+        $this->context->controller->registerJavascript(
+            'remote-simplifypayments-hp',
+            'https://www.simplify.com/commerce/simplify.pay.js',
+            ['server' => 'remote', 'position' => 'bottom', 'priority' => 20]
+        );
     }
 
     /**
@@ -137,9 +129,9 @@ class SimplifyCommerce extends PaymentModule
         && $this->registerHook('displayHeader')
         && Configuration::updateValue('SIMPLIFY_MODE', 0)
         && Configuration::updateValue('SIMPLIFY_SAVE_CUSTOMER_DETAILS', 1)
-        && Configuration::updateValue('SIMPLIFY_PAYMENT_MODE', $this->defaultPaymentMode)
         && Configuration::updateValue('SIMPLIFY_OVERLAY_COLOR', $this->defaultModalOverlayColor)
         && Configuration::updateValue('SIMPLIFY_PAYMENT_ORDER_STATUS', (int)Configuration::get('PS_OS_PAYMENT'))
+        && Configuration::updateValue('SIMPLIFY_PAYMENT_TITLE', $this->defaultTitle)
         && $this->createDatabaseTables();
     }
 
@@ -172,8 +164,8 @@ class SimplifyCommerce extends PaymentModule
         && Configuration::deleteByName('SIMPLIFY_PRIVATE_KEY_TEST')
         && Configuration::deleteByName('SIMPLIFY_PRIVATE_KEY_LIVE')
         && Configuration::deleteByName('SIMPLIFY_PAYMENT_ORDER_STATUS')
-        && Configuration::deleteByName('SIMPLIFY_PAYMENT_MODE')
         && Configuration::deleteByName('SIMPLIFY_OVERLAY_COLOR')
+        && Configuration::deleteByName('SIMPLIFY_PAYMENT_TITLE')
         && Db::getInstance()->Execute('DROP TABLE IF EXISTS`'._DB_PREFIX_.'simplify_customer`');
     }
 
@@ -259,7 +251,6 @@ class SimplifyCommerce extends PaymentModule
         $this->smarty->assign('hosted_payment_reference', 'Order Number'.(int)$this->context->cart->id);
         $this->smarty->assign('hosted_payment_amount', ($this->context->cart->getOrderTotal() * 100));
 
-        $this->smarty->assign('payment_mode', Configuration::get('SIMPLIFY_PAYMENT_MODE'));
         $this->smarty->assign('overlay_color', Configuration::get('SIMPLIFY_OVERLAY_COLOR') != null ? Configuration::get('SIMPLIFY_OVERLAY_COLOR') : $this->defaultModalOverlayColor);
 
         $this->smarty->assign('module_dir', $this->_path);
@@ -274,7 +265,7 @@ class SimplifyCommerce extends PaymentModule
     public function getPaymentOption()
     {
         $option = new PaymentOption();
-        $option->setCallToActionText($this->trans('Pay by Credit Card', array(), 'Modules.SimplifyCommerce.Admin'))
+        $option->setCallToActionText(Configuration::get('SIMPLIFY_PAYMENT_TITLE') ? : $this->defaultTitle)
             ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
             ->setForm($this->fetch('module:simplifycommerce/views/templates/front/payment.tpl'));
 
@@ -344,7 +335,7 @@ class SimplifyCommerce extends PaymentModule
         $simplify_customer_id = $this->getSimplifyCustomerID($simplify_customer['simplify_customer_id']);
 
 
-        // The user has chosen to delete the credit card, so we need to delete the customer
+        // The user has chosen to delete the card, so we need to delete the customer
         if (isset($simplify_customer_id) && $should_delete_customer) {
             try {
                 // delete on simplify.com
@@ -362,7 +353,7 @@ class SimplifyCommerce extends PaymentModule
         }
 
 
-        // The user has chosen to save the credit card details
+        // The user has chosen to save the card details
         if ($should_save_customer == 'on') {
             Logger::addLog($this->l('Simplify Commerce - $should_save_customer = '.$should_save_customer), 1, null, 'Cart', (int)$this->context->cart->id, true);
             // Customer exists already so update the card details from the card token
@@ -684,7 +675,7 @@ class SimplifyCommerce extends PaymentModule
                 'SIMPLIFY_PRIVATE_KEY_LIVE' => Tools::getValue('simplify_private_key_live'),
                 'SIMPLIFY_PAYMENT_ORDER_STATUS' => (int)Tools::getValue('simplify_payment_status'),
                 'SIMPLIFY_OVERLAY_COLOR' => Tools::getValue('simplify_overlay_color'),
-                'SIMPLIFY_PAYMENT_MODE' => Tools::getValue('simplify_payment_mode')
+                'SIMPLIFY_PAYMENT_TITLE' => Tools::getValue('simplify_payment_title'),
             );
 
 
@@ -716,8 +707,8 @@ class SimplifyCommerce extends PaymentModule
         $this->smarty->assign('save_customer_details', Configuration::get('SIMPLIFY_SAVE_CUSTOMER_DETAILS'));
         $this->smarty->assign('statuses', OrderState::getOrderStates((int)$this->context->cookie->id_lang));
         $this->smarty->assign('request_uri', Tools::safeOutput($_SERVER['REQUEST_URI']));
-        $this->smarty->assign('payment_mode', Configuration::get('SIMPLIFY_PAYMENT_MODE'));
         $this->smarty->assign('overlay_color', Configuration::get('SIMPLIFY_OVERLAY_COLOR') != null ? Configuration::get('SIMPLIFY_OVERLAY_COLOR') : $this->defaultModalOverlayColor);
+        $this->smarty->assign('payment_title', Configuration::get('SIMPLIFY_PAYMENT_TITLE') ? : $this->defaultTitle);
         $this->smarty->assign('statuses_options', array(array('name' => 'simplify_payment_status', 'label' =>
             $this->l('Successful Payment Order Status'), 'current_value' => Configuration::get('SIMPLIFY_PAYMENT_ORDER_STATUS'))));
 

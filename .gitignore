@@ -4,3 +4,4 @@
 *.iml
 node_modules/
 errorShots/
+config.xml
