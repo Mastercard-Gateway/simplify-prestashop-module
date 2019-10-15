@@ -9,6 +9,8 @@ This module has been tested with following versions of PrestaShop:
 - 1.7.5.2
 - 1.7.6.0
 
+The Standard payment form in some of the previous releases is now deprecated and out of support.
+
 ## Installation
 
 The Simplify Commerce module is not bundled in the PrestaShop download.
