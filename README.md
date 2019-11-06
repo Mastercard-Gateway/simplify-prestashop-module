@@ -29,4 +29,4 @@ You will then upload the zip file, setup the API keys and you are good to go!
 You can manage your merchant account (view orders, perform refunds, create invoices etc.) using your merchant portal.
 
 ## License
-This software is Open Source, released under the BSD 3-Clause license. See licence.txt for more info.
+This software is Open Source, released under the Apache License 2.0. See [LICENSE.txt](LICENSE.txt) for more info.
