@@ -29,6 +29,9 @@ if (!defined('_PS_VERSION_')) {
  */
 class SimplifyCommerce extends PaymentModule
 {
+    const TXN_MODE_PURCHASE = 'purchase';
+    const TXN_MODE_AUTHORIZE = 'authorize';
+
     /**
      * @var string
      */
@@ -132,6 +135,7 @@ class SimplifyCommerce extends PaymentModule
         && Configuration::updateValue('SIMPLIFY_OVERLAY_COLOR', $this->defaultModalOverlayColor)
         && Configuration::updateValue('SIMPLIFY_PAYMENT_ORDER_STATUS', (int)Configuration::get('PS_OS_PAYMENT'))
         && Configuration::updateValue('SIMPLIFY_PAYMENT_TITLE', $this->defaultTitle)
+        && Configuration::updateValue('SIMPLIFY_TXN_MODE', self::TXN_MODE_PURCHASE)
         && $this->createDatabaseTables();
     }
 
@@ -166,6 +170,7 @@ class SimplifyCommerce extends PaymentModule
         && Configuration::deleteByName('SIMPLIFY_PAYMENT_ORDER_STATUS')
         && Configuration::deleteByName('SIMPLIFY_OVERLAY_COLOR')
         && Configuration::deleteByName('SIMPLIFY_PAYMENT_TITLE')
+        && Configuration::deleteByName('SIMPLIFY_TXN_MODE')
         && Db::getInstance()->Execute('DROP TABLE IF EXISTS`'._DB_PREFIX_.'simplify_customer`');
     }
 
@@ -187,8 +192,8 @@ class SimplifyCommerce extends PaymentModule
         include(dirname(__FILE__).'/lib/Simplify.php');
 
         $api_keys = $this->getSimplifyAPIKeys();
-        Simplify::$public_key = $api_keys->public_key;
-        Simplify::$private_key = $api_keys->private_key;
+        Simplify::$publicKey = $api_keys->public_key;
+        Simplify::$privateKey = $api_keys->private_key;
 
         // If flag checked in the settings, look up customer details in the DB
         if (Configuration::get('SIMPLIFY_SAVE_CUSTOMER_DETAILS')) {
@@ -199,10 +204,10 @@ class SimplifyCommerce extends PaymentModule
             if ($simplify_customer_id) {
                 // look up the customer's details
                 try {
-                    $customer = SimplifyCustomer::findCustomer($simplify_customer_id);
+                    $customer = Simplify_Customer::findCustomer($simplify_customer_id);
                     $this->smarty->assign('show_saved_card_details', true);
                     $this->smarty->assign('customer_details', $customer);
-                } catch (SimplifyApiException $e) {
+                } catch (Simplify_ApiException $e) {
                     if (class_exists('Logger')) {
                         Logger::addLog($this->l('Simplify Commerce - Error retrieving customer'), 1, null, 'Cart', (int)$this->context->cart->id, true);
                     }
@@ -235,7 +240,7 @@ class SimplifyCommerce extends PaymentModule
         $currency = new Currency((int)($this->context->cart->id_currency));
 
         // Set js variables to send in card tokenization
-        $this->smarty->assign('simplify_public_key', Simplify::$public_key);
+        $this->smarty->assign('simplify_public_key', Simplify::$publicKey);
 
         $this->smarty->assign('firstname', $cardholder_details->firstname);
         $this->smarty->assign('lastname', $cardholder_details->lastname);
@@ -339,9 +344,9 @@ class SimplifyCommerce extends PaymentModule
         if (isset($simplify_customer_id) && $should_delete_customer) {
             try {
                 // delete on simplify.com
-                $customer = SimplifyCustomer::findCustomer($simplify_customer_id);
+                $customer = Simplify_Customer::findCustomer($simplify_customer_id);
                 $customer->deleteCustomer();
-            } catch (SimplifyApiException $e) {
+            } catch (Simplify_ApiException $e) {
                 // can't find the customer on Simplify, so no need to delete
                 if (class_exists('Logger')) {
                     Logger::addLog($this->l('Simplify Commerce - Error retrieving customer'), 1, null, 'Cart', (int)$this->context->cart->id, true);
@@ -359,7 +364,7 @@ class SimplifyCommerce extends PaymentModule
             // Customer exists already so update the card details from the card token
             if (isset($simplify_customer_id)) {
                 try {
-                    $customer = SimplifyCustomer::findCustomer($simplify_customer_id);
+                    $customer = Simplify_Customer::findCustomer($simplify_customer_id);
                     $updates = array(
                         'email' => (string)$this->context->cookie->email,
                         'name' => (string)$this->context->cookie->customer_firstname.' '.$this->context->cookie->customer_lastname,
@@ -368,7 +373,7 @@ class SimplifyCommerce extends PaymentModule
 
                     $customer->setAll($updates);
                     $customer->updateCustomer();
-                } catch (SimplifyApiException $e) {
+                } catch (Simplify_ApiException $e) {
                     if (class_exists('Logger')) {
                         Logger::addLog($this->l('Simplify Commerce - Error updating customer card details'), 1, null, 'Cart', (int)$this->context->cart->id, true);
                     }
@@ -387,23 +392,31 @@ class SimplifyCommerce extends PaymentModule
             $description = $this->context->shop->name.$this->l(' Order Number: ').(int)$this->context->cart->id;
 
             if (isset($simplify_customer_id) && ($should_charge_customer_card == 'true' || $should_save_customer == 'on')) {
-                $simplify_payment = SimplifyPayment::createPayment(array(
+                $requestData = array(
                     'amount' => $amount,
                     'customer' => $simplify_customer_id, // Customer stored in the database
                     'description' => $description,
                     'currency' =>  $currency_order->iso_code
-                ));
+                );
             } else {
-                $simplify_payment = SimplifyPayment::createPayment(array(
+                $requestData = array(
                     'amount' => $amount,
                     'token' => $token, // Token returned by Simplify Card Tokenization
                     'description' => $description,
                     'currency' =>  $currency_order->iso_code
-                ));
+                );
+            }
+
+            $txn_mode = Configuration::get('SIMPLIFY_TXN_MODE');
+
+            if ($txn_mode === self::TXN_MODE_PURCHASE) {
+                $simplify_payment = Simplify_Payment::createPayment($requestData);
+            } else if ($txn_mode === self::TXN_MODE_AUTHORIZE) {
+                $simplify_payment = Simplify_Authorization::createAuthorization($requestData);
             }
 
             $payment_status = $simplify_payment->paymentStatus;
-        } catch (SimplifyApiException $e) {
+        } catch (Simplify_ApiException $e) {
             $this->failPayment($e->getMessage());
         }
 
@@ -488,9 +501,9 @@ class SimplifyCommerce extends PaymentModule
         $simplify_customer_id = null;
 
         try {
-            $customer = SimplifyCustomer::findCustomer($customer_id);
+            $customer = Simplify_Customer::findCustomer($customer_id);
             $simplify_customer_id = $customer->id;
-        } catch (SimplifyApiException $e) {
+        } catch (Simplify_ApiException $e) {
             // can't find the customer on Simplify, so no need to delete
             if (class_exists('Logger')) {
                 Logger::addLog($this->l('Simplify Commerce - Error retrieving customer'), 1, null, 'Cart', (int)$this->context->cart->id, true);
@@ -522,7 +535,7 @@ class SimplifyCommerce extends PaymentModule
     private function createNewSimplifyCustomer($token)
     {
         try {
-            $customer = SimplifyCustomer::createCustomer(array(
+            $customer = Simplify_Customer::createCustomer(array(
                 'email' => (string)$this->context->cookie->email,
                 'name' => (string)$this->context->cookie->customer_firstname.' '.(string)$this->context->cookie->customer_lastname,
                 'token' => $token,
@@ -534,7 +547,7 @@ class SimplifyCommerce extends PaymentModule
             Db::getInstance()->Execute('
                 INSERT INTO '._DB_PREFIX_.'simplify_customer (id, customer_id, simplify_customer_id, date_created)
                 VALUES (NULL, '.(int)$this->context->cookie->id_customer.', \''.$simplify_customer_id.'\', NOW())');
-        } catch (SimplifyApiException $e) {
+        } catch (Simplify_ApiException $e) {
             $this->failPayment($e->getMessage());
         }
 
@@ -676,6 +689,7 @@ class SimplifyCommerce extends PaymentModule
                 'SIMPLIFY_PAYMENT_ORDER_STATUS' => (int)Tools::getValue('simplify_payment_status'),
                 'SIMPLIFY_OVERLAY_COLOR' => Tools::getValue('simplify_overlay_color'),
                 'SIMPLIFY_PAYMENT_TITLE' => Tools::getValue('simplify_payment_title'),
+                'SIMPLIFY_TXN_MODE' => Tools::getValue('simplify_txn_mode'),
             );
 
 
@@ -709,8 +723,24 @@ class SimplifyCommerce extends PaymentModule
         $this->smarty->assign('request_uri', Tools::safeOutput($_SERVER['REQUEST_URI']));
         $this->smarty->assign('overlay_color', Configuration::get('SIMPLIFY_OVERLAY_COLOR') != null ? Configuration::get('SIMPLIFY_OVERLAY_COLOR') : $this->defaultModalOverlayColor);
         $this->smarty->assign('payment_title', Configuration::get('SIMPLIFY_PAYMENT_TITLE') ? : $this->defaultTitle);
-        $this->smarty->assign('statuses_options', array(array('name' => 'simplify_payment_status', 'label' =>
-            $this->l('Successful Payment Order Status'), 'current_value' => Configuration::get('SIMPLIFY_PAYMENT_ORDER_STATUS'))));
+        $this->smarty->assign('txn_mode', Configuration::get('SIMPLIFY_TXN_MODE') ? : self::TXN_MODE_PURCHASE);
+        $this->smarty->assign('txn_mode_options', array(
+            array(
+                'label' => $this->l('Payment'),
+                'value' => self::TXN_MODE_PURCHASE,
+            ),
+            array(
+                'label' => $this->l('Authorize'),
+                'value' => self::TXN_MODE_AUTHORIZE,
+            ),
+        ));
+        $this->smarty->assign('statuses_options', array(
+            array(
+                'name' => 'simplify_payment_status',
+                'label' => $this->l('Successful Payment Order Status'),
+                'current_value' => Configuration::get('SIMPLIFY_PAYMENT_ORDER_STATUS')
+            ),
+        ));
 
         $base_img = $this->context->link->getBaseLink() . 'modules/' . $this->name . '/views/img/';
 
