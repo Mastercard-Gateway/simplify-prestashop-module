@@ -45,13 +45,13 @@ class SimplifyCommerce extends PaymentModule
     protected $confirmUninstall;
 
     /**
-     * Simplify Commerce's module constuctor
+     * Simplify Commerce's module constructor
      */
     public function __construct()
     {
         $this->name = 'simplifycommerce';
         $this->tab = 'payments_gateways';
-        $this->version = '2.0.0';
+        $this->version = '2.1.0';
         $this->author = 'Mastercard';
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
 
@@ -150,7 +150,7 @@ class SimplifyCommerce extends PaymentModule
     }
 
     /**
-     * Simplify Commerce's module uninstallation. Remove the config values and delete the tables.
+     * Simplify Commerce's module uninstalling. Remove the config values and delete the tables.
      *
      * @return boolean Uninstall result
      */
