@@ -48,6 +48,11 @@ class SimplifyCommerce extends PaymentModule
     protected $confirmUninstall;
 
     /**
+     * @var string
+     */
+    protected $controllerAdmin;
+
+    /**
      * Simplify Commerce's module constructor
      */
     public function __construct()
@@ -69,10 +74,46 @@ class SimplifyCommerce extends PaymentModule
         $this->description = $this->l('Payments made easy - Start securely accepting card payments instantly.');
         $this->confirmUninstall = $this->l('Warning: Are you sure you want to uninstall this module?');
         $this->defaultTitle = $this->l('Pay with Card');
+        $this->controllerAdmin = 'AdminSimplify';
 
         if (!count(Currency::checkPaymentCurrencies($this->id))) {
             $this->warning = $this->trans('No currency has been set for this module.', array(), 'Modules.SimplifyCommerce.Admin');
         }
+    }
+
+    /**
+     * @return int
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    private function installTab()
+    {
+        $tab = new Tab();
+        $tab->class_name = $this->controllerAdmin;
+        $tab->active = 1;
+        $tab->name = array();
+        foreach (Language::getLanguages(true) as $lang) {
+            $tab->name[$lang['id_lang']] = $this->name;
+        }
+        $tab->id_parent = -1;
+        $tab->module = $this->name;
+
+        return $tab->add();
+    }
+
+    /**
+     * @return bool
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    private function uninstallTab()
+    {
+        $id_tab = (int)Tab::getIdFromClassName($this->controllerAdmin);
+        $tab = new Tab($id_tab);
+        if (Validate::isLoadedObject($tab)) {
+            return $tab->delete();
+        }
+        return true;
     }
 
     public function checkCurrency($cart)
@@ -126,17 +167,83 @@ class SimplifyCommerce extends PaymentModule
      */
     public function install()
     {
+        // Install admin tab
+        if (!$this->installTab()) {
+            return false;
+        }
+
         return parent::install()
         && $this->registerHook('paymentOptions')
         && $this->registerHook('orderConfirmation')
         && $this->registerHook('displayHeader')
+        && $this->registerHook('displayAdminOrderLeft')
         && Configuration::updateValue('SIMPLIFY_MODE', 0)
         && Configuration::updateValue('SIMPLIFY_SAVE_CUSTOMER_DETAILS', 1)
         && Configuration::updateValue('SIMPLIFY_OVERLAY_COLOR', $this->defaultModalOverlayColor)
         && Configuration::updateValue('SIMPLIFY_PAYMENT_ORDER_STATUS', (int)Configuration::get('PS_OS_PAYMENT'))
         && Configuration::updateValue('SIMPLIFY_PAYMENT_TITLE', $this->defaultTitle)
         && Configuration::updateValue('SIMPLIFY_TXN_MODE', self::TXN_MODE_PURCHASE)
-        && $this->createDatabaseTables();
+        && $this->createCustomerTable()
+        && $this->installOrderState();
+    }
+
+    public function hookDisplayAdminOrderLeft($params)
+    {
+        if ($this->active == false) {
+            return '';
+        }
+
+        $order = new Order($params['id_order']);
+        if ($order->payment != $this->displayName) {
+            return '';
+        }
+
+        $isAuthorized = $order->current_state == Configuration::get('SIMPLIFY_OS_AUTHORIZED');
+        $canVoid = $isAuthorized;
+        $canCapture = $isAuthorized;
+        $canRefund = $order->current_state == Configuration::get('PS_OS_PAYMENT');
+
+        $canAction = $isAuthorized || $canVoid || $canCapture || $canRefund;
+
+        $this->smarty->assign(array(
+            'module_dir' => $this->_path,
+            'order' => $order,
+            'simplify_order_ref' => (string) $order->id_cart,
+            'can_void' => $canVoid,
+            'can_capture' => $canCapture,
+            'can_refund' => $canRefund,
+            'is_authorized' => $isAuthorized,
+            'can_action' => $canAction,
+        ));
+
+        return $this->display(__FILE__, 'views/templates/hook/order_actions.tpl');
+    }
+
+    public function installOrderState()
+    {
+        if (!Configuration::get('SIMPLIFY_OS_AUTHORIZED')
+            || !Validate::isLoadedObject(new OrderState(Configuration::get('SIMPLIFY_OS_AUTHORIZED')))) {
+
+            $order_state = new OrderState();
+            foreach (Language::getLanguages() as $language) {
+                $order_state->name[$language['id_lang']] = 'Payment Authorized';
+                $order_state->template[$language['id_lang']] = 'payment';
+            }
+            $order_state->send_email = true;
+            $order_state->color = '#4169E1';
+            $order_state->hidden = false;
+            $order_state->delivery = false;
+            $order_state->logable = true;
+            $order_state->paid = true;
+            $order_state->invoice = false;
+            if ($order_state->add()) {
+                $source = _PS_ROOT_DIR_.'/img/os/10.gif';
+                $destination = _PS_ROOT_DIR_.'/img/os/'.(int) $order_state->id.'.gif';
+                copy($source, $destination);
+            }
+
+            Configuration::updateValue('SIMPLIFY_OS_AUTHORIZED', (int) $order_state->id);
+        }
     }
 
     /**
@@ -144,7 +251,7 @@ class SimplifyCommerce extends PaymentModule
      *
      * @return boolean Database tables installation result
      */
-    public function createDatabaseTables()
+    public function createCustomerTable()
     {
         return Db::getInstance()->Execute('
             CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'simplify_customer` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -160,6 +267,8 @@ class SimplifyCommerce extends PaymentModule
      */
     public function uninstall()
     {
+        $this->uninstallTab();
+
         return parent::uninstall()
         && Configuration::deleteByName('SIMPLIFY_MODE')
         && Configuration::deleteByName('SIMPLIFY_SAVE_CUSTOMER_DETAILS')
@@ -171,7 +280,23 @@ class SimplifyCommerce extends PaymentModule
         && Configuration::deleteByName('SIMPLIFY_OVERLAY_COLOR')
         && Configuration::deleteByName('SIMPLIFY_PAYMENT_TITLE')
         && Configuration::deleteByName('SIMPLIFY_TXN_MODE')
-        && Db::getInstance()->Execute('DROP TABLE IF EXISTS`'._DB_PREFIX_.'simplify_customer`');
+        && Db::getInstance()->Execute('DROP TABLE IF EXISTS`'._DB_PREFIX_.'simplify_customer`')
+        && $this->unregisterHook('paymentOptions')
+        && $this->unregisterHook('orderConfirmation')
+        && $this->unregisterHook('displayHeader')
+        && $this->unregisterHook('displayAdminOrderLeft');
+    }
+
+    /**
+     * @return void
+     */
+    public function initSimplify()
+    {
+        include(dirname(__FILE__).'/lib/Simplify.php');
+
+        $api_keys = $this->getSimplifyAPIKeys();
+        Simplify::$publicKey = $api_keys->public_key;
+        Simplify::$privateKey = $api_keys->private_key;
     }
 
     /**
@@ -189,11 +314,7 @@ class SimplifyCommerce extends PaymentModule
             return;
         }
 
-        include(dirname(__FILE__).'/lib/Simplify.php');
-
-        $api_keys = $this->getSimplifyAPIKeys();
-        Simplify::$publicKey = $api_keys->public_key;
-        Simplify::$privateKey = $api_keys->private_key;
+        $this->initSimplify();
 
         // If flag checked in the settings, look up customer details in the DB
         if (Configuration::get('SIMPLIFY_SAVE_CUSTOMER_DETAILS')) {
@@ -329,8 +450,8 @@ class SimplifyCommerce extends PaymentModule
 
         include(dirname(__FILE__).'/lib/Simplify.php');
         $api_keys = $this->getSimplifyAPIKeys();
-        Simplify::$public_key = $api_keys->public_key;
-        Simplify::$private_key = $api_keys->private_key;
+        Simplify::$publicKey = $api_keys->public_key;
+        Simplify::$privateKey = $api_keys->private_key;
 
         // look up the customer
         $simplify_customer = Db::getInstance()->getRow('
@@ -386,7 +507,7 @@ class SimplifyCommerce extends PaymentModule
         $charge = (float)$this->context->cart->getOrderTotal();
 
 
-
+        $payment_status = null;
         try {
             $amount = $charge * 100; // Cart total amount
             $description = $this->context->shop->name.$this->l(' Order Number: ').(int)$this->context->cart->id;
@@ -438,16 +559,14 @@ class SimplifyCommerce extends PaymentModule
             $this->l('Card Expiry Month:').' '.$simplify_payment->card->expMonth.'\n'.
             $this->l('Card Type:').' '.$simplify_payment->card->type.'\n';
 
-
-
-
-
         // Create the PrestaShop order in database
-
+        $newStatus = ($txn_mode === self::TXN_MODE_AUTHORIZE)
+            ? (int)Configuration::get('SIMPLIFY_OS_AUTHORIZED')
+            : (int)Configuration::get('SIMPLIFY_PAYMENT_ORDER_STATUS');
 
         $this->validateOrder(
             (int)$this->context->cart->id,
-            (int)Configuration::get('SIMPLIFY_PAYMENT_ORDER_STATUS'),
+            $newStatus,
             $charge,
             $this->displayName,
             $message,
@@ -456,8 +575,6 @@ class SimplifyCommerce extends PaymentModule
             false,
             $this->context->customer->secure_key
         );
-
-
 
         if (version_compare(_PS_VERSION_, '1.5', '>=')) {
             $new_order = new Order((int)$this->currentOrder);

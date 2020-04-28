@@ -211,7 +211,7 @@
                         </div>
                         <div>
                             <h2>{l s='Transaction Mode' mod='simplifycommerce'}</h2>
-                            <p>	{l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Woocommerce admin panel.' mod='simplifycommerce'}</p>
+                            <p>	{l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>
                             <div>
                                 <select name="simplify_txn_mode">
                                     {foreach $txn_mode_options as $_txn_mode}
