@@ -169,21 +169,36 @@ $(document).ready(function () {
                 return true;
             }
             else {
-                SimplifyCommerce.generateToken({
+                var card = {
                     key: simplifyPublicKey,
                     card: {
                         number: $(".simplify-card-number").val().trim().replace(/\s+/g, ''),
                         cvc: $(".simplify-card-cvc").val(),
                         expMonth: $("#simplify-cc-details select[name='Date_Month']").val(),
-                        expYear: $("#simplify-cc-details select[name='Date_Year']").val().substring(2),
-                        name: simplifyFirstname + ' ' + simplifyLastname,
-                        addressCity: simplifyCity,
-                        addressLine1: simplifyAddress1,
-                        addressLine2: simplifyAddress2,
-                        addressState: simplifyState,
-                        addressZip: simplifyPostcode
+                        expYear: $("#simplify-cc-details select[name='Date_Year']").val().substring(2)
                     }
-                }, simplifyResponseHandler);
+                };
+
+                if (simplifyCustomerName) {
+                    card['card']['name'] = simplifyCustomerName;
+                }
+                if (simplifyCity) {
+                    card['card']['addressCity'] = simplifyCustomerName;
+                }
+                if (simplifyAddress1) {
+                    card['card']['addressLine1'] = simplifyAddress1;
+                }
+                if (simplifyAddress2) {
+                    card['card']['addressLine2'] = simplifyAddress2;
+                }
+                if (simplifyState) {
+                    card['card']['addressState'] = simplifyState;
+                }
+                if (simplifyPostcode) {
+                    card['card']['addressZip'] = simplifyPostcode;
+                }
+
+                SimplifyCommerce.generateToken(card, simplifyResponseHandler);
             }
             return false;
             /* Prevent the form from submitting with the default action */
