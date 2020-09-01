@@ -11,6 +11,10 @@ This module has been tested with following versions of PrestaShop:
 
 The Standard payment form in some of the previous releases is now deprecated and out of support.
 
+## Support
+
+For any issues or enhancement requests you have with this plugin, please raise them with the bank's support team. Please make sure you also provide your module & prestashop version as well as your merchant ID where applicable. This will help to speed up the troubleshooting of any issues you are having.
+
 ## Installation
 
 The Simplify Commerce module is not bundled in the PrestaShop download.
