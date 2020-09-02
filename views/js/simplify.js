@@ -183,7 +183,7 @@ $(document).ready(function () {
                     card['card']['name'] = simplifyCustomerName;
                 }
                 if (simplifyCity) {
-                    card['card']['addressCity'] = simplifyCustomerName;
+                    card['card']['addressCity'] = simplifyCity;
                 }
                 if (simplifyAddress1) {
                     card['card']['addressLine1'] = simplifyAddress1;
