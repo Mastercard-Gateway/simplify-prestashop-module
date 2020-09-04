@@ -167,22 +167,34 @@ $(document).ready(function () {
             if (isHostedPaymentsEnabled()) {
                 //we already created a card token, so continue processing
                 return true;
-            }
-            else {
+            } else {
+                var customer = {
+                    name: simplifyCustomerName,
+                    addressCity: simplifyCity,
+                    addressLine1: simplifyAddress1,
+                    addressLine2: simplifyAddress2,
+                    addressState: simplifyState,
+                    addressZip: simplifyPostcode
+                };
+
+                $.each(customer, function(key, value){
+                    if (value === "" || value === null){
+                        delete customer[key];
+                    }
+                });
+
+                var card = {
+                    number: $(".simplify-card-number").val().trim().replace(/\s+/g, ''),
+                    cvc: $(".simplify-card-cvc").val(),
+                    expMonth: $("#simplify-cc-details select[name='Date_Month']").val(),
+                    expYear: $("#simplify-cc-details select[name='Date_Year']").val().substring(2)
+                };
+
+                $.extend(card, customer);
+
                 SimplifyCommerce.generateToken({
                     key: simplifyPublicKey,
-                    card: {
-                        number: $(".simplify-card-number").val().trim().replace(/\s+/g, ''),
-                        cvc: $(".simplify-card-cvc").val(),
-                        expMonth: $("#simplify-cc-details select[name='Date_Month']").val(),
-                        expYear: $("#simplify-cc-details select[name='Date_Year']").val().substring(2),
-                        name: simplifyFirstname + ' ' + simplifyLastname,
-                        addressCity: simplifyCity,
-                        addressLine1: simplifyAddress1,
-                        addressLine2: simplifyAddress2,
-                        addressState: simplifyState,
-                        addressZip: simplifyPostcode
-                    }
+                    card: card
                 }, simplifyResponseHandler);
             }
             return false;

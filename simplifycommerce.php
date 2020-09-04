@@ -237,17 +237,15 @@ class SimplifyCommerce extends PaymentModule
         // Set js variables to send in card tokenization
         $this->smarty->assign('simplify_public_key', Simplify::$public_key);
 
-        $this->smarty->assign('firstname', $cardholder_details->firstname);
-        $this->smarty->assign('lastname', $cardholder_details->lastname);
-        $this->smarty->assign('city', $cardholder_details->city);
-        $this->smarty->assign('address1', $cardholder_details->address1);
-        $this->smarty->assign('address2', $cardholder_details->address2);
-        $this->smarty->assign('state', isset($cardholder_details->state)?$cardholder_details->state:'');
-        $this->smarty->assign('postcode', $cardholder_details->postcode);
+        $this->smarty->assign('city', $this->safe($cardholder_details->city, 2, 50));
+        $this->smarty->assign('address1', $this->safe($cardholder_details->address1, 0, 255));
+        $this->smarty->assign('address2', $this->safe($cardholder_details->address2, 0, 255));
+        $this->smarty->assign('state', isset($cardholder_details->state)?$this->safe($cardholder_details->state, 0, 255):'');
+        $this->smarty->assign('postcode', $this->safe($cardholder_details->postcode, 0, 255));
 
         //fields related to hosted payments
-        $this->smarty->assign('hosted_payment_name', $this->context->shop->name);
-        $this->smarty->assign('hosted_payment_description', $this->context->shop->name.$this->l(' Order Number: ').(int)$this->context->cart->id);
+        $this->smarty->assign('hosted_payment_name', $this->safe($this->context->shop->name), 0, 255);
+        $this->smarty->assign('hosted_payment_description', $this->safe($this->context->shop->name).$this->l(' Order Number: ').(int)$this->context->cart->id);
         $this->smarty->assign('hosted_payment_reference', 'Order Number'.(int)$this->context->cart->id);
         $this->smarty->assign('hosted_payment_amount', ($this->context->cart->getOrderTotal() * 100));
 
@@ -257,9 +255,41 @@ class SimplifyCommerce extends PaymentModule
 
         $this->smarty->assign('currency_iso', $currency->iso_code);
 
+        $this->smarty->assign(
+            'customer_name',
+            $this->safe($cardholder_details->firstname . ' ' . $this->safe($cardholder_details->lastname), 2, 50)
+        );
+
         $option = $this->getPaymentOption();
 
         return [$option];
+    }
+
+    protected function safe($field, $minLength = 0, $maxLength = 0)
+    {
+        $encoding = mb_detect_encoding($field);
+        if ($encoding !== 'ASCII') {
+            if (function_exists('transliterator_transliterate')) {
+                $field = transliterator_transliterate('Any-Latin; Latin-ASCII; [\u0080-\u7fff] remove', $field);
+            } else {
+                // fall back to iconv if intl module not available
+                $field = iconv($encoding, 'ASCII//TRANSLIT//IGNORE', $field);
+                $field = str_ireplace('?', '', $field);
+                $field = trim($field);
+            }
+        }
+        $field = (string) $field;
+        if ($minLength > 0) {
+            if (strlen($field) < $minLength) {
+                return null;
+            }
+        }
+        if ($maxLength > 0) {
+            if (strlen($field) > $maxLength) {
+                return null;
+            }
+        }
+        return $field;
     }
 
     public function getPaymentOption()
