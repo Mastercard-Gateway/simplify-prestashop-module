@@ -207,8 +207,8 @@
                                     {/foreach}
                                 </select>
                             </div>
-                        {/foreach}
                         </div>
+                        {/foreach}
                         <div>
                             <h2>{l s='Transaction Mode' mod='simplifycommerce'}</h2>
                             <p>	{l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>

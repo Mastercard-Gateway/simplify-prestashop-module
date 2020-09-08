@@ -261,7 +261,7 @@ class SimplifyCommerce extends PaymentModule
     }
 
     /**
-     * Simplify Commerce's module uninstalling. Remove the config values and delete the tables.
+     * Uninstall Simplify Commerce's module. Remove the config values and delete the tables.
      *
      * @return boolean Uninstall result
      */
