@@ -192,6 +192,7 @@
                     </div>
                     <div class="half container left">
                         {foreach $statuses_options as $status_options}
+                        <div>
                             <h2>{$status_options['label']|escape:'htmlall':'UTF-8'}</h2>
                             <p>Choose the status for an order once the payment has been successfully processed by
                                 Simplify.</p>
@@ -207,7 +208,21 @@
                                 </select>
                             </div>
                         {/foreach}
+                        </div>
                         <div>
+                            <h2>{l s='Transaction Mode' mod='simplifycommerce'}</h2>
+                            <p>	{l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>
+                            <div>
+                                <select name="simplify_txn_mode">
+                                    {foreach $txn_mode_options as $_txn_mode}
+                                        <option value="{$_txn_mode['value']|escape:'htmlall':'UTF-8'}"
+                                                {if $txn_mode === $_txn_mode['value']}
+                                                    selected="selected"
+                                                {/if}
+                                        >{$_txn_mode['label']|escape:'htmlall':'UTF-8'}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,3 @@
-
 # Simplify Commerce Payment module for PrestaShop
 
 This plugin uses Simplify Commerce to connect your merchant account to PrestaShop and to set up a payment option on your PrestaShop checkout page.
@@ -8,6 +7,7 @@ This module has been tested with following versions of PrestaShop:
 - 1.7.5.0
 - 1.7.5.2
 - 1.7.6.0
+- 1.7.6.4
 
 The Standard payment form in some of the previous releases is now deprecated and out of support.
 

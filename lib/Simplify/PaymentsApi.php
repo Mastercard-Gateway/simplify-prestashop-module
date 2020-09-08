@@ -1,41 +1,39 @@
 <?php
-/**
- * Simplify Commerce module to start accepting payments now. It's that simple.
- *
- * Redistribution and use in source and binary forms, with or without modification, are
+/*
+ * Copyright (c) 2013 - 2017 Mastercard International Incorporated
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification, are 
  * permitted provided that the following conditions are met:
- * Redistributions of source code must retain the above copyright notice, this list of
+ * 
+ * Redistributions of source code must retain the above copyright notice, this list of 
  * conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, this list of
- * conditions and the following disclaimer in the documentation and/or other materials
+ * Redistributions in binary form must reproduce the above copyright notice, this list of 
+ * conditions and the following disclaimer in the documentation and/or other materials 
  * provided with the distribution.
- * Neither the name of the MasterCard International Incorporated nor the names of its
- * contributors may be used to endorse or promote products derived from this software
+ * Neither the name of the Mastercard International Incorporated nor the names of its
+ * contributors may be used to endorse or promote products derived from this software 
  * without specific prior written permission.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT 
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
- * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
- * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; 
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER 
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING 
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
  * SUCH DAMAGE.
- *
- *  @author    MasterCard (support@simplify.com)
- *  @version   Release: 1.0.1
- *  @copyright 2014, MasterCard International Incorporated. All rights reserved.
- *  @license   See licence.txt
  */
 
-class SimplifyPaymentsApi
+
+class Simplify_PaymentsApi
 {
 
     /**
      * @ignore
      */
-    public static $method_map = array(
+    public static $methodMap = array(
         'create' => 'POST',
         'delete' => 'DELETE',
         'list' => 'GET',
@@ -46,13 +44,13 @@ class SimplifyPaymentsApi
     /**
      * @ignore
      */
-    public static function createObject($object, $authentication = null)
+    static public function createObject($object, $authentication = null)
     {
-        $payments_api = new SimplifyPaymentsApi();
+        $paymentsApi = new Simplify_PaymentsApi();
 
-        $json_object = $payments_api->execute('create', $object, $authentication);
+        $jsonObject = $paymentsApi->execute("create", $object, $authentication);
 
-        $o = $payments_api->convertFromHashToObject($json_object, $object->getClazz());
+        $o = $paymentsApi->convertFromHashToObject($jsonObject, $object->getClazz());
 
         return $o;
     }
@@ -60,12 +58,12 @@ class SimplifyPaymentsApi
     /**
      * @ignore
      */
-    public static function findObject($object, $authentication = null)
+    static public function findObject($object, $authentication = null)
     {
-        $payments_api = new SimplifyPaymentsApi();
+        $paymentsApi = new Simplify_PaymentsApi();
 
-        $json_object = $payments_api->execute('show', $object, $authentication);
-        $o = $payments_api->convertFromHashToObject($json_object, $object->getClazz());
+        $jsonObject = $paymentsApi->execute("show", $object, $authentication);
+        $o = $paymentsApi->convertFromHashToObject($jsonObject, $object->getClazz());
 
         return $o;
     }
@@ -73,12 +71,11 @@ class SimplifyPaymentsApi
     /**
      * @ignore
      */
-    public static function updateObject($object, $authentication = null)
-    {
-        $payments_api = new SimplifyPaymentsApi();
+    static public function updateObject($object, $authentication = null) {
+        $paymentsApi = new Simplify_PaymentsApi();
 
-        $json_object = $payments_api->execute('update', $object, $authentication);
-        $o = $payments_api->convertFromHashToObject($json_object, $object->getClazz());
+        $jsonObject = $paymentsApi->execute("update", $object, $authentication);
+        $o = $paymentsApi->convertFromHashToObject($jsonObject, $object->getClazz());
 
         return $o;
     }
@@ -86,20 +83,18 @@ class SimplifyPaymentsApi
     /**
      * @ignore
      */
-    public static function deleteObject($object, $authentication = null)
-    {
-        $payments_api = new SimplifyPaymentsApi();
+    static public function deleteObject($object, $authentication = null) {
+        $paymentsApi = new Simplify_PaymentsApi();
 
-        $json_object = $payments_api->execute('delete', $object, $authentication);
+        $jsonObject = $paymentsApi->execute("delete", $object, $authentication);
 
-        return $json_object;
+        return $jsonObject;
     }
 
     /**
      * @ignore
      */
-    public static function listObject($object, $criteria = null, $authentication = null)
-    {
+    static public function listObject($object, $criteria = null, $authentication =null) {
         if ($criteria != null) {
             if (isset($criteria['max'])) {
                 $object->max = $criteria['max'];
@@ -115,16 +110,15 @@ class SimplifyPaymentsApi
             }
         }
 
-        $payments_api = new SimplifyPaymentsApi();
-        $json_object = $payments_api->execute('list', $object, $authentication);
+        $paymentsApi = new Simplify_PaymentsApi();
+        $jsonObject = $paymentsApi->execute("list", $object, $authentication);
 
-        $ret = new SimplifyResourceList();
-        if (array_key_exists('list', $json_object) & is_array($json_object['list'])) {
-            foreach ($json_object['list'] as $obj) {
-                array_push($ret->list, $payments_api->convertFromHashToObject($obj, $object->getClazz()));
+        $ret = new Simplify_ResourceList();
+        if (array_key_exists('list', $jsonObject) & is_array($jsonObject['list'])) {
+            foreach ($jsonObject['list'] as $obj) {
+                array_push($ret->list, $paymentsApi->convertFromHashToObject($obj, $object->getClazz()));
             }
-
-            $ret->total = $json_object['total'];
+            $ret->total = $jsonObject['total'];
         }
 
         return $ret;
@@ -133,25 +127,23 @@ class SimplifyPaymentsApi
     /**
      * @ignore
      */
-    public function convertFromHashToObject($from, $to_clazz)
+    public function convertFromHashToObject($from, $toClazz)
     {
         $clazz = 'stdClass';
-        $to_clazz = 'Simplify'.$to_clazz;
-        if ('stdClass' != $to_clazz && class_exists("{$to_clazz}", false)) {
-            $clazz = "{$to_clazz}";
+        $toClazz = "Simplify_" . $toClazz;
+        if ("stdClass" != $toClazz && class_exists("{$toClazz}", false)) {
+            $clazz = "{$toClazz}";
         }
-
         $object = new $clazz();
 
         foreach ($from as $key => $value) {
             if (is_array($value) && count(array_keys($value))) {
-                $new_clazz = 'Simplify'.Tools::ucfirst($key);
-
-                if (!class_exists($new_clazz, false)) {
-                    $new_clazz = 'stdClass';
+                $newClazz = "Simplify_" . ucfirst($key);
+                if (!class_exists($newClazz, false)) {
+                    $newClazz = 'stdClass';
                 }
 
-                $object->$key = $this->convertFromHashToObject($value, $new_clazz);
+                $object->$key = $this->convertFromHashToObject($value, $newClazz);
             } else {
                 $object->$key = $value;
             }
@@ -163,43 +155,41 @@ class SimplifyPaymentsApi
     /**
      * @ignore
      */
-    public function getUrl($public_key, $action, $object)
+    public function getUrl($publicKey, $action, $object)
     {
-        $url = $this->fixUrl(Simplify::$api_base_sandbox_url);
-        if ($this->isLiveKey($public_key)) {
-            $url = $this->fixUrl(Simplify::$api_base_live_url);
+        $url = $this->fixUrl(Simplify::$apiBaseSandboxUrl);
+        if ($this->isLiveKey($publicKey)) {
+            $url = $this->fixUrl(Simplify::$apiBaseLiveUrl);
         }
+        $url = $this->fixUrl($url) . urlencode(lcfirst($object->getClazz())) . '/';
 
-        $url = $this->fixUrl($url).urlencode(lcfirst($object->getClazz())).'/';
-
-        $query_params = array();
-        if ($action == 'show') {
+        $queryParams = array();
+        if ($action == "show") {
             $url .= urlencode($object->id);
-        } elseif ($action == 'list') {
-            $query_params = array_merge($query_params, array('max' => $object->max, 'offset' => $object->offset));
+        } elseif ($action == "list") {
+            $queryParams = array_merge($queryParams, array('max' => $object->max, 'offset' => $object->offset));
             if (is_array($object->filter) && count(array_keys($object->filter))) {
                 foreach ($object->filter as $key => $value) {
-                    $query_params["filter[$key]"] = $value;
+		    $queryParams["filter[$key]"] = $value;
                 }
             }
             if (is_array($object->sorting) && count(array_keys($object->sorting))) {
                 foreach ($object->sorting as $key => $value) {
-                    $query_params["sorting[$key]"] = $value;
+                    $queryParams["sorting[$key]"] = $value;
                 }
             }
-            $query = http_build_query($query_params);
+            $query = http_build_query($queryParams);
             if ($query != '') {
-                if (strpos($url, '?', Tools::strlen($url)) === false) {
-                    $url .= '?';
-                }
+                if (strpos($url, '?', strlen($url)) === false) $url .= '?';
                 $url .= $query;
             }
-        } elseif ($action == 'delete') {
-            $url .= urlencode($object->id);
-        } elseif ($action == 'update') {
-            $url .= urlencode($object->id);
-        }
 
+        } elseif ($action == "delete") {
+            $url .= urlencode($object->id);
+        } elseif ($action == "update") {
+            $url .= urlencode($object->id);
+        } elseif ($action == "create") {
+        }
         return $url;
     }
 
@@ -208,10 +198,9 @@ class SimplifyPaymentsApi
      */
     public function getMethod($action)
     {
-        if (array_key_exists(Tools::strtolower($action), self::$method_map)) {
-            return self::$method_map[Tools::strtolower($action)];
+        if (array_key_exists(strtolower($action), self::$methodMap)) {
+            return self::$methodMap[strtolower($action)];
         }
-
         return 'GET';
     }
 
@@ -220,10 +209,10 @@ class SimplifyPaymentsApi
      */
     private function execute($action, $object, $authentication)
     {
-        $http = new SimplifyHTTP();
+        $http = new Simplify_HTTP();
 
-        return $http->apiRequest($this->getUrl($authentication->public_key, $action, $object), $this->getMethod($action),
-            $authentication, Tools::jsonEncode($object->getProperties()));
+        return $http->apiRequest($this->getUrl($authentication->publicKey, $action, $object), $this->getMethod($action),
+            $authentication, json_encode($object->getProperties()));
     }
 
     /**
@@ -231,11 +220,11 @@ class SimplifyPaymentsApi
      */
     public function jwsDecode($hash, $authentication)
     {
-        $http = new SimplifyHTTP();
+        $http = new Simplify_HTTP();
 
         $data = $http->jwsDecode($authentication, $hash);
 
-        return Tools::jsonDecode($data, true);
+        return json_decode($data, true);
     }
 
     /**
@@ -246,16 +235,14 @@ class SimplifyPaymentsApi
         if ($this->endsWith($url, '/')) {
             return $url;
         }
-
-        return $url.'/';
+        return $url . '/';
     }
 
     /**
      * @ignore
      */
-    private function isLiveKey($k)
-    {
-        return strpos($k, 'lvpb') === 0;
+    private function isLiveKey($k) {
+        return strpos($k, "lvpb") === 0;
     }
 
     /**
@@ -263,7 +250,7 @@ class SimplifyPaymentsApi
      */
     private function endsWith($s, $c)
     {
-        return Tools::substr($s, -Tools::strlen($c)) == $c;
+        return substr($s, -strlen($c)) == $c;
     }
 
     /**
@@ -275,28 +262,29 @@ class SimplifyPaymentsApi
      * @ignore
      * @param $authentication
      * @param $args
-     * @param $expected_arg_count
-     * @return SimplifyAuthentication
+     * @param $expectedArgCount
+     * @return Simplify_Authentication
      */
-    public static function buildAuthenticationObject($authentication = null, $args, $expected_arg_count)
-    {
-        if (count($args) > $expected_arg_count) {
-            $authentication = new SimplifyAuthentication($args[$expected_arg_count - 1], $args[$expected_arg_count]);
+    static function buildAuthenticationObject($authentication = null, $args, $expectedArgCount){
+
+        if(sizeof($args) > $expectedArgCount) {
+            $authentication = new Simplify_Authentication($args[$expectedArgCount-1], $args[$expectedArgCount]);
         }
 
-        if ($authentication == null) {
-            $authentication = new SimplifyAuthentication();
+        if ($authentication == null){
+            $authentication = new Simplify_Authentication();
         }
 
         // check that the keys have been set, if not use the global keys
-        if (empty($authentication->public_key)) {
-            $authentication->public_key = Simplify::$public_key;
+        if ( empty($authentication->publicKey)){
+            $authentication->publicKey = Simplify::$publicKey;
         }
-
-        if (empty($authentication->private_key)) {
-            $authentication->private_key = Simplify::$private_key;
+        if ( empty($authentication->privateKey)){
+            $authentication->privateKey = Simplify::$privateKey;
         }
 
         return $authentication;
     }
+
 }
+
