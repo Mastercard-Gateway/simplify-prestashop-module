@@ -70,7 +70,7 @@ class SimplifyCommerce extends PaymentModule
 
         parent::__construct();
 
-        $this->displayName = $this->l('Simplify Commerce');
+        $this->displayName = $this->l('Mastercard Payment Gateway Services - Simplify');
         $this->description = $this->l('Payments made easy - Start securely accepting card payments instantly.');
         $this->confirmUninstall = $this->l('Warning: Are you sure you want to uninstall this module?');
         $this->defaultTitle = $this->l('Pay with Card');
