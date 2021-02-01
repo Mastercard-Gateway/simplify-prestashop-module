@@ -302,7 +302,7 @@ class SimplifyCommerce extends PaymentModule
     /**
      * Display the Simplify Commerce's payment form
      *
-     * @return string Simplify Commerce's payment form
+     * @return string[]|bool Simplify Commerce's payment form
      */
     public function hookPaymentOptions($params)
     {
@@ -383,9 +383,19 @@ class SimplifyCommerce extends PaymentModule
 
         $this->smarty->assign('currency_iso', $currency->iso_code);
 
-        $option = $this->getPaymentOption();
+        $this->smarty->assign('enabled_payment_window', Configuration::get('SIMPLIFY_ENABLED_PAYMENT_WINDOW'));
+        $this->smarty->assign('enabled_embedded', Configuration::get('SIMPLIFY_ENABLED_EMBEDDED'));
 
-        return [$option];
+        $options = [];
+        if (Configuration::get('SIMPLIFY_ENABLED_PAYMENT_WINDOW')) {
+            $options[] = $this->getPaymentOption();
+        }
+
+        if (Configuration::get('SIMPLIFY_ENABLED_EMBEDDED')) {
+            $options[] = $this->getEmbeddedPaymentOption();
+        }
+
+        return $options;
     }
 
     protected function safe($field)
@@ -418,6 +428,16 @@ class SimplifyCommerce extends PaymentModule
         $option->setCallToActionText(Configuration::get('SIMPLIFY_PAYMENT_TITLE') ? : $this->defaultTitle)
             ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
             ->setForm($this->fetch('module:simplifycommerce/views/templates/front/payment.tpl'));
+
+        return $option;
+    }
+
+    public function getEmbeddedPaymentOption()
+    {
+        $option = new PaymentOption();
+        $option->setCallToActionText(Configuration::get('SIMPLIFY_EMBEDDED_PAYMENT_TITLE') ? : $this->defaultTitle)
+            ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
+            ->setForm($this->fetch('module:simplifycommerce/views/templates/front/embedded-payment.tpl'));
 
         return $option;
     }
