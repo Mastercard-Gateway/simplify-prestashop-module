@@ -428,6 +428,7 @@ class SimplifyCommerce extends PaymentModule
         $option = new PaymentOption();
         $option->setCallToActionText(Configuration::get('SIMPLIFY_PAYMENT_TITLE') ? : $this->defaultTitle)
             ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
+            ->setModuleName('simplifycommerce')
             ->setForm($this->fetch('module:simplifycommerce/views/templates/front/payment.tpl'));
 
         return $option;
@@ -438,6 +439,7 @@ class SimplifyCommerce extends PaymentModule
         $option = new PaymentOption();
         $option->setCallToActionText(Configuration::get('SIMPLIFY_EMBEDDED_PAYMENT_TITLE') ? : $this->defaultTitle)
             ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
+            ->setModuleName('simplifycommerce_embedded')
             ->setForm($this->fetch('module:simplifycommerce/views/templates/front/embedded-payment.tpl'));
 
         return $option;

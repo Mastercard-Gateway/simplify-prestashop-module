@@ -36,16 +36,10 @@
         <form action="{$module_dir|escape}payment.php" method="POST" id="simplify-embedded-payment-form">
             <div id="new-embedded-card-container"
                  class='card-type-container clearfix {if !isset($show_saved_card_details)} no-saved {/if}'>
-                <div
-                        id="simplify-embedded-cc-details"
-                        {if isset($show_saved_card_details)}
-                            style="display: {if isset($smarty.get.simplify_error)}block;{else}none;{/if}"
-                        {/if}
-                >
-                    <a name="simplify_error" class="hidden"></a>
+                <div id="simplify-embedded-cc-details">
 
                     <iframe width="100%"
-                            height="400px"
+                            height="600px"
                             name="{$hosted_payment_name|escape:'htmlall':'UTF-8'}"
                             data-role="embedded_pay"
                             data-sc-key="{$simplify_public_key|escape:'htmlall':'UTF-8'}"
@@ -74,7 +68,7 @@
 
                 </div>
             </div>
-            <div id="simplify-test-mode-msg" class="test-msg">( TEST PAYMENT )</div>
+            <div id="simplify-embedded-test-mode-msg" class="test-msg">( TEST PAYMENT )</div>
             <input type="hidden" name="hostedPayments" value="true"/>
         </form>
     </div>

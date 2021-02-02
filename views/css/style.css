@@ -543,7 +543,7 @@ i.simplifyFormContainer mg.enable {
     cursor: pointer;
 }
 
-#simplify-test-mode-msg {
+#simplify-test-mode-msg, #simplify-embedded-test-mode-msg {
     color: #CF0101;
     display: none;
     font-size: 16px;
