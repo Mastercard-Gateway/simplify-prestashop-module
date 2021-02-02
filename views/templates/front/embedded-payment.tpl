@@ -28,21 +28,16 @@
     <div class="simplifyFormContainer box {if !isset($show_saved_card_details)} no-saved {/if}">
         <div class="clearfix">
             <div class="error-msg">
-                <span id="simplify-no-keys-msg" class="msg-container hidden">Payment Form not configured correctly. Please contact support.</span>
+                <span id="simplify-embedded-no-keys-msg" class="msg-container hidden">Payment Form not configured correctly. Please contact support.</span>
             </div>
-        </div>
-
-        <div id="simplify-ajax-loader">
-            <span>Your payment is being processed...</span>
-            <img src="{$module_dir|escape}views/img/ajax-loader.gif" alt="Loader Icon"/>
         </div>
 
         <div class="simplify-payment-errors">{if isset($smarty.get.simplify_error)}{$smarty.get.simplify_error|escape:'htmlall':'UTF-8'}{/if}</div>
         <form action="{$module_dir|escape}payment.php" method="POST" id="simplify-embedded-payment-form">
-            <div id="new-card-container"
+            <div id="new-embedded-card-container"
                  class='card-type-container clearfix {if !isset($show_saved_card_details)} no-saved {/if}'>
                 <div
-                        id="simplify-cc-details"
+                        id="simplify-embedded-cc-details"
                         {if isset($show_saved_card_details)}
                             style="display: {if isset($smarty.get.simplify_error)}block;{else}none;{/if}"
                         {/if}
@@ -51,6 +46,7 @@
 
                     <iframe width="100%"
                             height="400px"
+                            name="{$hosted_payment_name|escape:'htmlall':'UTF-8'}"
                             data-role="embedded_pay"
                             data-sc-key="{$simplify_public_key|escape:'htmlall':'UTF-8'}"
                             data-name="{$hosted_payment_name|escape:'htmlall':'UTF-8'}"
@@ -59,8 +55,22 @@
                             data-amount="{$hosted_payment_amount}"
                             data-customer-name="{$firstname|escape:'htmlall':'UTF-8'} {$lastname|escape:'htmlall':'UTF-8'}"
                             data-color="{$overlay_color|escape:'htmlall':'UTF-8'}"
-                            data-currency="{$currency_iso}">
+                            data-currency="{$currency_iso}"
+                            data-operation="create.token"
+                    >
                     </iframe>
+                    <script>
+                        function getEmbeddedConfig() {
+                            return {
+                                scKey: "{$simplify_public_key|escape:'htmlall':'UTF-8'}",
+                                amount: "{$hosted_payment_amount}",
+                                currency: "{$currency_iso}",
+                                reference: "{$hosted_payment_reference|escape:'htmlall':'UTF-8'}",
+                                operation: 'create.token',
+                                selector: '[data-role=embedded_pay]',
+                            }
+                        }
+                    </script>
 
                 </div>
             </div>

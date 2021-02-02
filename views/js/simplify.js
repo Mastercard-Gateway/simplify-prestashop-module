@@ -31,6 +31,10 @@ $(document).ready(function () {
         $simplifyPaymentErrors.show();
     }
 
+    if ($simplifyPaymentForm.length === 0) {
+        return;
+    }
+
     // Check that the Simplify API Keys are set
     if (window.simplifyPublicKey == undefined || window.simplifyPublicKey.length == 0) {
         $('#simplify-no-keys-msg').show();

@@ -152,6 +152,7 @@ class SimplifyCommerce extends PaymentModule
 
         $this->context->controller->addJS($this->_path.'views/js/simplify.js');
         $this->context->controller->addJS($this->_path.'views/js/simplify.form.js');
+        $this->context->controller->addJS($this->_path.'views/js/simplify.embedded.js');
 
         $this->context->controller->registerJavascript(
             'remote-simplifypayments-hp',
