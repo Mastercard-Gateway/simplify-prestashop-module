@@ -12,7 +12,7 @@ $(function() {
         var $conditionApprove = $('[id="conditions_to_approve[terms-and-conditions]"]');
         var $simplifyEmbeddedForm = $('#simplify-embedded-payment-form');
 
-        if (false && $conditionApprove.length > 0) {
+        if ($conditionApprove.length > 0) {
             $simplifyEmbeddedForm.toggle(!!$conditionApprove.prop('checked'));
             $conditionApprove.change(function () {
                 $simplifyEmbeddedForm.toggle(!!$conditionApprove.prop('checked'));

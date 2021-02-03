@@ -39,7 +39,7 @@
                 <div id="simplify-embedded-cc-details">
 
                     <iframe width="100%"
-                            height="600px"
+                            height="450px"
                             name="{$hosted_payment_name|escape:'htmlall':'UTF-8'}"
                             data-role="embedded_pay"
                             data-sc-key="{$simplify_public_key|escape:'htmlall':'UTF-8'}"
