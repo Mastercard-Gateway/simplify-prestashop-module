@@ -852,11 +852,9 @@ class SimplifyCommerce extends PaymentModule
                 'SIMPLIFY_PRIVATE_KEY_LIVE' => Tools::getValue('simplify_private_key_live'),
                 'SIMPLIFY_ENABLED_PAYMENT_WINDOW' => Tools::getValue('simplify_enabled_payment_window'),
                 'SIMPLIFY_PAYMENT_ORDER_STATUS' => (int)Tools::getValue('simplify_payment_status'),
-                'SIMPLIFY_EMBEDDED_PAYMENT_ORDER_STATUS' => (int)Tools::getValue('simplify_embedded_payment_status'),
                 'SIMPLIFY_OVERLAY_COLOR' => Tools::getValue('simplify_overlay_color'),
                 'SIMPLIFY_PAYMENT_TITLE' => Tools::getValue('simplify_payment_title'),
                 'SIMPLIFY_TXN_MODE' => Tools::getValue('simplify_txn_mode'),
-                'SIMPLIFY_EMBEDDED_TXN_MODE' => Tools::getValue('simplify_embedded_txn_mode'),
                 'SIMPLIFY_ENABLED_EMBEDDED' => Tools::getValue('simplify_enabled_embedded'),
                 'SIMPLIFY_EMBEDDED_PAYMENT_TITLE' => Tools::getValue('simplify_embedded_payment_title'),
             );
@@ -896,7 +894,6 @@ class SimplifyCommerce extends PaymentModule
         $this->smarty->assign('payment_title', Configuration::get('SIMPLIFY_PAYMENT_TITLE') ? : $this->defaultTitle);
         $this->smarty->assign('embedded_payment_title', Configuration::get('SIMPLIFY_EMBEDDED_PAYMENT_TITLE') ? : $this->defaultTitle);
         $this->smarty->assign('txn_mode', Configuration::get('SIMPLIFY_TXN_MODE') ? : self::TXN_MODE_PURCHASE);
-        $this->smarty->assign('embedded_txn_mode', Configuration::get('SIMPLIFY_EMBEDDED_TXN_MODE') ? : self::TXN_MODE_PURCHASE);
         $this->smarty->assign('txn_mode_options', array(
             array(
                 'label' => $this->l('Payment'),
@@ -912,13 +909,6 @@ class SimplifyCommerce extends PaymentModule
                 'name' => 'simplify_payment_status',
                 'label' => $this->l('Successful Payment Order Status'),
                 'current_value' => Configuration::get('SIMPLIFY_PAYMENT_ORDER_STATUS')
-            ),
-        ));
-        $this->smarty->assign('embedded_statuses_options', array(
-            array(
-                'name' => 'simplify_embedded_payment_status',
-                'label' => $this->l('Successful Payment Order Status'),
-                'current_value' => Configuration::get('SIMPLIFY_EMBEDDED_PAYMENT_ORDER_STATUS')
             ),
         ));
 

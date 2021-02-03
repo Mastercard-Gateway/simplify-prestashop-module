@@ -153,10 +153,43 @@
                             </div>
                         </div>
                     </div>
+                    {foreach $statuses_options as $status_options}
+                        <div class="left half">
+                            <h2>{$status_options['label']|escape:'htmlall':'UTF-8'}</h2>
+                            <p>Choose the status for an order once the payment has been successfully processed by
+                                Simplify.</p>
+                            <div>
+                                <select name="{$status_options['name']|escape:'htmlall':'UTF-8'}">
+                                    {foreach $statuses as $status}
+                                        <option value="{$status['id_order_state']|escape:'htmlall':'UTF-8'}"
+                                                {if $status['id_order_state'] == $status_options['current_value']}
+                                                    selected="selected"
+                                                {/if}
+                                        >{$status['name']|escape:'htmlall':'UTF-8'}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    {/foreach}
+                    <div class="left half">
+                        <h2>{l s='Transaction Mode' mod='simplifycommerce'}</h2>
+                        <p>	{l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>
+                        <div>
+                            <select name="simplify_txn_mode">
+                                {foreach $txn_mode_options as $_txn_mode}
+                                    <option value="{$_txn_mode['value']|escape:'htmlall':'UTF-8'}"
+                                            {if $txn_mode === $_txn_mode['value']}
+                                                selected="selected"
+                                            {/if}
+                                    >{$_txn_mode['label']|escape:'htmlall':'UTF-8'}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="clearfix">
                     <h2>{l s='Hosted Payment' mod='simplifycommerce'}</h2>
-                    <div>
+                    <div class="left half">
                         <h2>{l s='Enbale Modal Payment Window' mod='simplifycommerce'}</h2>
 
                         <div class="account-mode container">
@@ -173,16 +206,6 @@
                                 /><span>No</span>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="left half">
-                        <div>
-                            <h2>{l s='Payment Method Title' mod='simplifycommerce'}</h2>
-                            <div class="container">
-                                <p>{l s='Change the payment method title displayed in the frontend.' mod='simplifycommerce'}</p>
-                                <input name="simplify_payment_title" type="text" class="table_grid" value="{$payment_title|escape:'htmlall':'UTF-8'}" />
-                            </div>
-                        </div>
                         <div>
                             <h2>{l s='Save Customer Details' mod='simplifycommerce'}</h2>
 
@@ -195,113 +218,58 @@
                                             {if $save_customer_details == 1}
                                                 checked="checked"
                                             {/if}
-                                            /><span>Yes</span>
+                                    /><span>Yes</span>
                                     <input class="radioInput" type="radio" name="simplify_save_customer_details" value="0"
                                             {if $save_customer_details == 0}
                                                 checked="checked"
                                             {/if}
-                                            /><span>No</span>
+                                    /><span>No</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="half container left">
-                        {foreach $statuses_options as $status_options}
-                        <div>
-                            <h2>{$status_options['label']|escape:'htmlall':'UTF-8'}</h2>
-                            <p>Choose the status for an order once the payment has been successfully processed by
-                                Simplify.</p>
-                            <div>
-                                <select name="{$status_options['name']|escape:'htmlall':'UTF-8'}">
-                                    {foreach $statuses as $status}
-                                        <option value="{$status['id_order_state']|escape:'htmlall':'UTF-8'}"
-                                                {if $status['id_order_state'] == $status_options['current_value']}
-                                                    selected="selected"
-                                                {/if}
-                                                >{$status['name']|escape:'htmlall':'UTF-8'}</option>
-                                    {/foreach}
-                                </select>
-                            </div>
-                        {/foreach}
-                        </div>
-                        <div>
-                            <h2>{l s='Transaction Mode' mod='simplifycommerce'}</h2>
-                            <p>	{l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>
-                            <div>
-                                <select name="simplify_txn_mode">
-                                    {foreach $txn_mode_options as $_txn_mode}
-                                        <option value="{$_txn_mode['value']|escape:'htmlall':'UTF-8'}"
-                                                {if $txn_mode === $_txn_mode['value']}
-                                                    selected="selected"
-                                                {/if}
-                                        >{$_txn_mode['label']|escape:'htmlall':'UTF-8'}</option>
-                                    {/foreach}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix">
-                    <h2>{l s='Embedded Payment' mod='simplifycommerce'}</h2>
-                    <div>
-                        <h2>{l s='Enbale Embedded Payment' mod='simplifycommerce'}</h2>
 
-                        <div class="account-mode container">
-                            <div class="saveCustomerDetailsContainer">
-                                <input class="radioInput" type="radio" name="simplify_enabled_embedded" value="1"
-                                        {if $enabled_embedded == 1}
-                                            checked="checked"
-                                        {/if}
-                                /><span>Yes</span>
-                                <input class="radioInput" type="radio" name="simplify_enabled_embedded" value="0"
-                                        {if $enabled_embedded == 0}
-                                            checked="checked"
-                                        {/if}
-                                /><span>No</span>
-                            </div>
-                        </div>
-                    </div>
                     <div class="left half">
                         <div>
                             <h2>{l s='Payment Method Title' mod='simplifycommerce'}</h2>
                             <div class="container">
                                 <p>{l s='Change the payment method title displayed in the frontend.' mod='simplifycommerce'}</p>
-                                <input name="simplify_embedded_payment_title" type="text" class="table_grid" value="{$embedded_payment_title|escape:'htmlall':'UTF-8'}" />
+                                <input name="simplify_payment_title" type="text" class="table_grid" value="{$payment_title|escape:'htmlall':'UTF-8'}" />
                             </div>
                         </div>
                     </div>
                     <div class="half container left">
-                        {foreach $embedded_statuses_options as $status_options}
+
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <h2>{l s='Embedded Payment' mod='simplifycommerce'}</h2>
+                    <div class="left half">
                         <div>
-                            <h2>{$status_options['label']|escape:'htmlall':'UTF-8'}</h2>
-                            <p>Choose the status for an order once the payment has been successfully processed by
-                               Simplify.</p>
-                            <div>
-                                <select name="{$status_options['name']|escape:'htmlall':'UTF-8'}">
-                                    {foreach $statuses as $status}
-                                        <option value="{$status['id_order_state']|escape:'htmlall':'UTF-8'}"
-                                                {if $status['id_order_state'] == $status_options['current_value']}
-                                                    selected="selected"
-                                                {/if}
-                                        >{$status['name']|escape:'htmlall':'UTF-8'}</option>
-                                    {/foreach}
-                                </select>
+                            <h2>{l s='Enbale Embedded Payment' mod='simplifycommerce'}</h2>
+
+                            <div class="account-mode container">
+                                <div class="saveCustomerDetailsContainer">
+                                    <input class="radioInput" type="radio" name="simplify_enabled_embedded" value="1"
+                                            {if $enabled_embedded == 1}
+                                                checked="checked"
+                                            {/if}
+                                    /><span>Yes</span>
+                                    <input class="radioInput" type="radio" name="simplify_enabled_embedded" value="0"
+                                            {if $enabled_embedded == 0}
+                                                checked="checked"
+                                            {/if}
+                                    /><span>No</span>
+                                </div>
                             </div>
-                            {/foreach}
                         </div>
+                    </div>
+                    <div class="half container left">
                         <div>
-                            <h2>{l s='Transaction Mode' mod='simplifycommerce'}</h2>
-                            <p>	{l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>
-                            <div>
-                                <select name="simplify_embedded_txn_mode">
-                                    {foreach $txn_mode_options as $_txn_mode}
-                                        <option value="{$_txn_mode['value']|escape:'htmlall':'UTF-8'}"
-                                                {if $embedded_txn_mode === $_txn_mode['value']}
-                                                    selected="selected"
-                                                {/if}
-                                        >{$_txn_mode['label']|escape:'htmlall':'UTF-8'}</option>
-                                    {/foreach}
-                                </select>
+                            <h2>{l s='Payment Method Title' mod='simplifycommerce'}</h2>
+                            <div class="container">
+                                <p>{l s='Change the payment method title displayed in the frontend.' mod='simplifycommerce'}</p>
+                                <input name="simplify_embedded_payment_title" type="text" class="table_grid" value="{$embedded_payment_title|escape:'htmlall':'UTF-8'}" />
                             </div>
                         </div>
                     </div>
