@@ -155,7 +155,7 @@
                     </div>
                     {foreach $statuses_options as $status_options}
                         <div class="left half">
-                            <h2>{$status_options['label']|escape:'htmlall':'UTF-8'}</h2>
+                            <h3>{$status_options['label']|escape:'htmlall':'UTF-8'}</h3>
                             <p>Choose the status for an order once the payment has been successfully processed by
                                 Simplify.</p>
                             <div>
@@ -172,7 +172,7 @@
                         </div>
                     {/foreach}
                     <div class="left half">
-                        <h2>{l s='Transaction Mode' mod='simplifycommerce'}</h2>
+                        <h3>{l s='Transaction Mode' mod='simplifycommerce'}</h3>
                         <p>	{l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>
                         <div>
                             <select name="simplify_txn_mode">
@@ -190,7 +190,7 @@
                 <div class="clearfix">
                     <h2>{l s='Hosted Payment' mod='simplifycommerce'}</h2>
                     <div class="left half">
-                        <h2>{l s='Enbale Modal Payment Window' mod='simplifycommerce'}</h2>
+                        <h3>{l s='Enbale Modal Payment Window' mod='simplifycommerce'}</h3>
 
                         <div class="account-mode container">
                             <div class="saveCustomerDetailsContainer">
@@ -207,7 +207,7 @@
                             </div>
                         </div>
                         <div>
-                            <h2>{l s='Save Customer Details' mod='simplifycommerce'}</h2>
+                            <h3>{l s='Save Customer Details' mod='simplifycommerce'}</h3>
 
                             <div class="account-mode container">
                                 <p>Enable customers to save their card details securely on Simplify's servers for future
@@ -231,7 +231,7 @@
 
                     <div class="left half">
                         <div>
-                            <h2>{l s='Payment Method Title' mod='simplifycommerce'}</h2>
+                            <h3>{l s='Payment Method Title' mod='simplifycommerce'}</h3>
                             <div class="container">
                                 <p>{l s='Change the payment method title displayed in the frontend.' mod='simplifycommerce'}</p>
                                 <input name="simplify_payment_title" type="text" class="table_grid" value="{$payment_title|escape:'htmlall':'UTF-8'}" />
@@ -246,7 +246,7 @@
                     <h2>{l s='Embedded Payment' mod='simplifycommerce'}</h2>
                     <div class="left half">
                         <div>
-                            <h2>{l s='Enbale Embedded Payment' mod='simplifycommerce'}</h2>
+                            <h3>{l s='Enbale Embedded Payment' mod='simplifycommerce'}</h3>
 
                             <div class="account-mode container">
                                 <div class="saveCustomerDetailsContainer">
@@ -266,7 +266,7 @@
                     </div>
                     <div class="half container left">
                         <div>
-                            <h2>{l s='Payment Method Title' mod='simplifycommerce'}</h2>
+                            <h3>{l s='Payment Method Title' mod='simplifycommerce'}</h3>
                             <div class="container">
                                 <p>{l s='Change the payment method title displayed in the frontend.' mod='simplifycommerce'}</p>
                                 <input name="simplify_embedded_payment_title" type="text" class="table_grid" value="{$embedded_payment_title|escape:'htmlall':'UTF-8'}" />
