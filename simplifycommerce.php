@@ -152,6 +152,7 @@ class SimplifyCommerce extends PaymentModule
 
         $this->context->controller->addJS($this->_path.'views/js/simplify.js');
         $this->context->controller->addJS($this->_path.'views/js/simplify.form.js');
+        $this->context->controller->addJS($this->_path.'views/js/simplify.embedded.js');
 
         $this->context->controller->registerJavascript(
             'remote-simplifypayments-hp',
@@ -302,7 +303,7 @@ class SimplifyCommerce extends PaymentModule
     /**
      * Display the Simplify Commerce's payment form
      *
-     * @return string Simplify Commerce's payment form
+     * @return string[]|bool Simplify Commerce's payment form
      */
     public function hookPaymentOptions($params)
     {
@@ -383,9 +384,19 @@ class SimplifyCommerce extends PaymentModule
 
         $this->smarty->assign('currency_iso', $currency->iso_code);
 
-        $option = $this->getPaymentOption();
+        $this->smarty->assign('enabled_payment_window', Configuration::get('SIMPLIFY_ENABLED_PAYMENT_WINDOW'));
+        $this->smarty->assign('enabled_embedded', Configuration::get('SIMPLIFY_ENABLED_EMBEDDED'));
 
-        return [$option];
+        $options = [];
+        if (Configuration::get('SIMPLIFY_ENABLED_PAYMENT_WINDOW')) {
+            $options[] = $this->getPaymentOption();
+        }
+
+        if (Configuration::get('SIMPLIFY_ENABLED_EMBEDDED')) {
+            $options[] = $this->getEmbeddedPaymentOption();
+        }
+
+        return $options;
     }
 
     protected function safe($field)
@@ -417,7 +428,19 @@ class SimplifyCommerce extends PaymentModule
         $option = new PaymentOption();
         $option->setCallToActionText(Configuration::get('SIMPLIFY_PAYMENT_TITLE') ? : $this->defaultTitle)
             ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
+            ->setModuleName('simplifycommerce')
             ->setForm($this->fetch('module:simplifycommerce/views/templates/front/payment.tpl'));
+
+        return $option;
+    }
+
+    public function getEmbeddedPaymentOption()
+    {
+        $option = new PaymentOption();
+        $option->setCallToActionText(Configuration::get('SIMPLIFY_EMBEDDED_PAYMENT_TITLE') ? : $this->defaultTitle)
+            ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
+            ->setModuleName('simplifycommerce_embedded')
+            ->setForm($this->fetch('module:simplifycommerce/views/templates/front/embedded-payment.tpl'));
 
         return $option;
     }
@@ -827,10 +850,13 @@ class SimplifyCommerce extends PaymentModule
                 'SIMPLIFY_PUBLIC_KEY_LIVE' => Tools::getValue('simplify_public_key_live'),
                 'SIMPLIFY_PRIVATE_KEY_TEST' => Tools::getValue('simplify_private_key_test'),
                 'SIMPLIFY_PRIVATE_KEY_LIVE' => Tools::getValue('simplify_private_key_live'),
+                'SIMPLIFY_ENABLED_PAYMENT_WINDOW' => Tools::getValue('simplify_enabled_payment_window'),
                 'SIMPLIFY_PAYMENT_ORDER_STATUS' => (int)Tools::getValue('simplify_payment_status'),
                 'SIMPLIFY_OVERLAY_COLOR' => Tools::getValue('simplify_overlay_color'),
                 'SIMPLIFY_PAYMENT_TITLE' => Tools::getValue('simplify_payment_title'),
                 'SIMPLIFY_TXN_MODE' => Tools::getValue('simplify_txn_mode'),
+                'SIMPLIFY_ENABLED_EMBEDDED' => Tools::getValue('simplify_enabled_embedded'),
+                'SIMPLIFY_EMBEDDED_PAYMENT_TITLE' => Tools::getValue('simplify_embedded_payment_title'),
             );
 
 
@@ -859,11 +885,14 @@ class SimplifyCommerce extends PaymentModule
         $this->smarty->assign('public_key_test', Configuration::get('SIMPLIFY_PUBLIC_KEY_TEST'));
         $this->smarty->assign('private_key_live', Configuration::get('SIMPLIFY_PRIVATE_KEY_LIVE'));
         $this->smarty->assign('public_key_live', Configuration::get('SIMPLIFY_PUBLIC_KEY_LIVE'));
+        $this->smarty->assign('enabled_payment_window', Configuration::get('SIMPLIFY_ENABLED_PAYMENT_WINDOW'));
+        $this->smarty->assign('enabled_embedded', Configuration::get('SIMPLIFY_ENABLED_EMBEDDED'));
         $this->smarty->assign('save_customer_details', Configuration::get('SIMPLIFY_SAVE_CUSTOMER_DETAILS'));
         $this->smarty->assign('statuses', OrderState::getOrderStates((int)$this->context->cookie->id_lang));
         $this->smarty->assign('request_uri', Tools::safeOutput($_SERVER['REQUEST_URI']));
         $this->smarty->assign('overlay_color', Configuration::get('SIMPLIFY_OVERLAY_COLOR') != null ? Configuration::get('SIMPLIFY_OVERLAY_COLOR') : $this->defaultModalOverlayColor);
         $this->smarty->assign('payment_title', Configuration::get('SIMPLIFY_PAYMENT_TITLE') ? : $this->defaultTitle);
+        $this->smarty->assign('embedded_payment_title', Configuration::get('SIMPLIFY_EMBEDDED_PAYMENT_TITLE') ? : $this->defaultTitle);
         $this->smarty->assign('txn_mode', Configuration::get('SIMPLIFY_TXN_MODE') ? : self::TXN_MODE_PURCHASE);
         $this->smarty->assign('txn_mode_options', array(
             array(

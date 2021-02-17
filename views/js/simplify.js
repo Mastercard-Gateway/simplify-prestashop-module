@@ -31,6 +31,10 @@ $(document).ready(function () {
         $simplifyPaymentErrors.show();
     }
 
+    if ($simplifyPaymentForm.length === 0) {
+        return;
+    }
+
     // Check that the Simplify API Keys are set
     if (window.simplifyPublicKey == undefined || window.simplifyPublicKey.length == 0) {
         $('#simplify-no-keys-msg').show();
@@ -140,7 +144,7 @@ $(document).ready(function () {
      *  generate a new card token for new cards or
      *  charge an existing user's card.
      */
-    $simplifyPaymentForm[0].onsubmit = function () {
+    $simplifyPaymentForm.submit(function () {
 
         if(preventDoubleSubmit()){
             return false;
@@ -193,7 +197,7 @@ $(document).ready(function () {
         } else {
             return true;
         }
-    };
+    });
 
     /**
      * Function to handle the response from Simplify Commerce's tokenization call.
