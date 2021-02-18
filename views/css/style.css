@@ -714,3 +714,7 @@ i.simplifyFormContainer mg.enable {
 .simplify-content-text > div {
     padding: 25px 35px 0 35px;
 }
+
+.page-subtitle {
+    top: 10px;
+}
