@@ -33,16 +33,9 @@
             {if $can_void}
 				<a id="desc-order-void_payment" class="btn btn-default" href="{$link->getAdminLink('AdminSimplify')|escape:'html':'UTF-8'}&amp;action=void&amp;id_order={$order->id|intval}">
 					<i class="icon-remove"></i>
-                    {l s='Void Authorization' mod='simplifycommerce'}
+                    {l s='Reverse Authorization' mod='simplifycommerce'}
 				</a>
             {/if}
-
-{*            {if $can_refund}*}
-{*				<a id="desc-order-refund_payment" class="btn btn-default" href="{$link->getAdminLink('AdminSimplify')|escape:'html':'UTF-8'}&amp;action=refund&amp;id_order={$order->id|intval}">*}
-{*					<i class="icon-exchange"></i>*}
-{*                    {l s='Full Refund' mod='simplifycommerce'}*}
-{*				</a>*}
-{*            {/if}*}
 		</div>
     {/if}
 </div>

@@ -16,8 +16,7 @@
 <div>
     <script>
         var simplifyPublicKey = "{$simplify_public_key|escape:'htmlall':'UTF-8'}",
-            simplifyFirstname = "{$firstname|escape:'htmlall':'UTF-8'}",
-            simplifyLastname = "{$lastname|escape:'htmlall':'UTF-8'}",
+            simplifyCustomerName = "{$customer_name|escape:'htmlall':'UTF-8'}",
             simplifyCity = "{$city|escape:'htmlall':'UTF-8'}",
             simplifyAddress1 = "{$address1|escape:'htmlall':'UTF-8'}",
             simplifyAddress2 = "{$address2|escape:'htmlall':'UTF-8'}",
@@ -47,7 +46,7 @@
                             data-description="{$hosted_payment_description|escape:'htmlall':'UTF-8'}"
                             data-reference="{$hosted_payment_reference|escape:'htmlall':'UTF-8'}"
                             data-amount="{$hosted_payment_amount}"
-                            data-customer-name="{$firstname|escape:'htmlall':'UTF-8'} {$lastname|escape:'htmlall':'UTF-8'}"
+                            {if isset($customer_name)}data-customer-name="{$customer_name|escape:'htmlall':'UTF-8'}"{/if}
                             data-color="{$overlay_color|escape:'htmlall':'UTF-8'}"
                             data-currency="{$currency_iso}"
                             data-operation="create.token"
