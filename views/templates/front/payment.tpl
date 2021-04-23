@@ -22,6 +22,7 @@
             simplifyAddress2 = "{$address2|escape:'htmlall':'UTF-8'}",
             simplifyState = "{$state|escape:'htmlall':'UTF-8'}",
             simplifyPostcode = "{$postcode|escape:'htmlall':'UTF-8'}";
+            enabledPaymentWindow = "{$enabled_payment_window|escape:'htmlall':'UTF-8'}";
     </script>
     <div class="simplifyFormContainer box {if !isset($show_saved_card_details)} no-saved {/if}">
         <div class="clearfix">

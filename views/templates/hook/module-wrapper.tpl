@@ -20,18 +20,13 @@
 
 <div class="simplify-module-wrapper">
     <div class="simplify-module-header formContainer">
-        <div class="simplify-header-logo">
-            <a href="https://www.simplify.com/" target="_blank" class="center">
-                <img class="logo" src="//static.simplify.com/cdn/img/partner/simplify/logos/logo.png" alt="Simplify Commerce Logo" width="150" height="64">
-            </a>
-        </div>
         <div class="simplify-header-text">
             <div class="simplify-content-img">
                 <img src="{$module_dir|escape}views/img/simplify_phones.png" alt="" />
             </div>
             <div class="simplify-content-text">
                 <div>
-                    <p>{l s='Simplify Commerce, built by Mastercard, a global leader in the payment indrustry, makes it easy for small businesses to accept online payments. From our hosted "Pay Now" solution that allows merchants to share links socially to our mobile point of sale to recurring payment solutions, we include must-have features key to businesses.' mod='simplifycommerce'}</p>
+                    <p>{l s='Mastercard Payment Gateway Services - Simplify, a global leader in the payment indrustry, makes it easy for small businesses to accept online payments. From our hosted "Pay Now" solution that allows merchants to share links socially to our mobile point of sale to recurring payment solutions, we include must-have features key to businesses.' mod='simplifycommerce'}</p>
                     <ul>
                         <li>{l s='Omni-channel payment solution for web, mobile and social platforms' mod='simplifycommerce'}</li>
                         <li>{l s='Accept major card brands' mod='simplifycommerce'}</li>
@@ -158,18 +153,61 @@
                             </div>
                         </div>
                     </div>
+                    {foreach $statuses_options as $status_options}
+                        <div class="left half">
+                            <h3>{$status_options['label']|escape:'htmlall':'UTF-8'}</h3>
+                            <p>Choose the status for an order once the payment has been successfully processed by
+                                Simplify.</p>
+                            <div>
+                                <select name="{$status_options['name']|escape:'htmlall':'UTF-8'}">
+                                    {foreach $statuses as $status}
+                                        <option value="{$status['id_order_state']|escape:'htmlall':'UTF-8'}"
+                                                {if $status['id_order_state'] == $status_options['current_value']}
+                                                    selected="selected"
+                                                {/if}
+                                        >{$status['name']|escape:'htmlall':'UTF-8'}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    {/foreach}
+                    <div class="left half">
+                        <h3>{l s='Transaction Mode' mod='simplifycommerce'}</h3>
+                        <p>	{l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>
+                        <div>
+                            <select name="simplify_txn_mode">
+                                {foreach $txn_mode_options as $_txn_mode}
+                                    <option value="{$_txn_mode['value']|escape:'htmlall':'UTF-8'}"
+                                            {if $txn_mode === $_txn_mode['value']}
+                                                selected="selected"
+                                            {/if}
+                                    >{$_txn_mode['label']|escape:'htmlall':'UTF-8'}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="clearfix">
+                    <h2>{l s='Hosted Payment' mod='simplifycommerce'}</h2>
                     <div class="left half">
-                        <div>
-                            <h2>{l s='Payment Method Title' mod='simplifycommerce'}</h2>
-                            <div class="container">
-                                <p>{l s='Change the payment method title displayed in the frontend.' mod='simplifycommerce'}</p>
-                                <input name="simplify_payment_title" type="text" class="table_grid" value="{$payment_title|escape:'htmlall':'UTF-8'}" />
+                        <h3>{l s='Enbale Modal Payment Window' mod='simplifycommerce'}</h3>
+
+                        <div class="account-mode container">
+                            <div class="saveCustomerDetailsContainer">
+                                <input class="radioInput" type="radio" name="simplify_enabled_payment_window" value="1"
+                                        {if $enabled_payment_window == 1}
+                                            checked="checked"
+                                        {/if}
+                                /><span>Yes</span>
+                                <input class="radioInput" type="radio" name="simplify_enabled_payment_window" value="0"
+                                        {if $enabled_payment_window == 0}
+                                            checked="checked"
+                                        {/if}
+                                /><span>No</span>
                             </div>
                         </div>
                         <div>
-                            <h2>{l s='Save Customer Details' mod='simplifycommerce'}</h2>
+                            <h3>{l s='Save Customer Details' mod='simplifycommerce'}</h3>
 
                             <div class="account-mode container">
                                 <p>Enable customers to save their card details securely on Simplify's servers for future
@@ -180,55 +218,65 @@
                                             {if $save_customer_details == 1}
                                                 checked="checked"
                                             {/if}
-                                            /><span>Yes</span>
+                                    /><span>Yes</span>
                                     <input class="radioInput" type="radio" name="simplify_save_customer_details" value="0"
                                             {if $save_customer_details == 0}
                                                 checked="checked"
                                             {/if}
-                                            /><span>No</span>
+                                    /><span>No</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="left half">
+                        <div>
+                            <h3>{l s='Payment Method Title' mod='simplifycommerce'}</h3>
+                            <div class="container">
+                                <p>{l s='Change the payment method title displayed in the frontend.' mod='simplifycommerce'}</p>
+                                <input name="simplify_payment_title" type="text" class="table_grid" value="{$payment_title|escape:'htmlall':'UTF-8'}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="half container left">
+
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <h2>{l s='Embedded Payment' mod='simplifycommerce'}</h2>
+                    <div class="left half">
+                        <div>
+                            <h3>{l s='Enbale Embedded Payment' mod='simplifycommerce'}</h3>
+
+                            <div class="account-mode container">
+                                <div class="saveCustomerDetailsContainer">
+                                    <input class="radioInput" type="radio" name="simplify_enabled_embedded" value="1"
+                                            {if $enabled_embedded == 1}
+                                                checked="checked"
+                                            {/if}
+                                    /><span>Yes</span>
+                                    <input class="radioInput" type="radio" name="simplify_enabled_embedded" value="0"
+                                            {if $enabled_embedded == 0}
+                                                checked="checked"
+                                            {/if}
+                                    /><span>No</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="half container left">
-                        {foreach $statuses_options as $status_options}
                         <div>
-                            <h2>{$status_options['label']|escape:'htmlall':'UTF-8'}</h2>
-                            <p>Choose the status for an order once the payment has been successfully processed by
-                                Simplify.</p>
-                            <div>
-                                <select name="{$status_options['name']|escape:'htmlall':'UTF-8'}">
-                                    {foreach $statuses as $status}
-                                        <option value="{$status['id_order_state']|escape:'htmlall':'UTF-8'}"
-                                                {if $status['id_order_state'] == $status_options['current_value']}
-                                                    selected="selected"
-                                                {/if}
-                                                >{$status['name']|escape:'htmlall':'UTF-8'}</option>
-                                    {/foreach}
-                                </select>
-                            </div>
-                        </div>
-                        {/foreach}
-                        <div>
-                            <h2>{l s='Transaction Mode' mod='simplifycommerce'}</h2>
-                            <p>	{l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>
-                            <div>
-                                <select name="simplify_txn_mode">
-                                    {foreach $txn_mode_options as $_txn_mode}
-                                        <option value="{$_txn_mode['value']|escape:'htmlall':'UTF-8'}"
-                                                {if $txn_mode === $_txn_mode['value']}
-                                                    selected="selected"
-                                                {/if}
-                                        >{$_txn_mode['label']|escape:'htmlall':'UTF-8'}</option>
-                                    {/foreach}
-                                </select>
+                            <h3>{l s='Payment Method Title' mod='simplifycommerce'}</h3>
+                            <div class="container">
+                                <p>{l s='Change the payment method title displayed in the frontend.' mod='simplifycommerce'}</p>
+                                <input name="simplify_embedded_payment_title" type="text" class="table_grid" value="{$embedded_payment_title|escape:'htmlall':'UTF-8'}" />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="clearfix">
                     <div class="left">
-                        <h2>{l s='Hosted Payments Configuration' mod='simplifycommerce'}</h2>
+                        <h2>{l s='Payments Configuration' mod='simplifycommerce'}</h2>
 
                         <div class="container">
                             <div>
