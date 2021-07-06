@@ -27,8 +27,8 @@
     </script>
     <div class="simplifyFormContainer box {if !isset($show_saved_card_details)} no-saved {/if}">
         <div class="clearfix">
-            <div class="error-msg">
-                <span id="simplify-no-keys-msg" class="msg-container hidden">Payment Form not configured correctly. Please contact support.</span>
+            <div class="error-msg hidden" id="simplify-no-keys-msg" >
+                <span class="msg-container">Payment Form not configured correctly. Please contact support.</span>
             </div>
         </div>
 
@@ -98,12 +98,11 @@
                         </div>
                     </div>
                 {/if}
-                <div
-                        id="simplify-cc-details"
-                        {if isset($show_saved_card_details)}
-                            style="display: {if isset($smarty.get.simplify_error)}block;{else}none;{/if}"
-                        {/if}
-                >
+
+                <div id="simplify-cc-details"
+                    {if isset($show_saved_card_details)}
+                        style="display: {if isset($smarty.get.simplify_error)}block;{else}none;{/if}"
+                    {/if}>
                     <a name="simplify_error" class="hidden"></a>
 
                     <div style="display:none">{* the order button clicks this hidden button *}
@@ -116,8 +115,7 @@
                                 data-operation="create.token"
                                 data-customer-name="{$firstname|escape:'htmlall':'UTF-8'} {$lastname|escape:'htmlall':'UTF-8'}"
                                 data-color="{$overlay_color|escape:'htmlall':'UTF-8'}"
-                                data-currency="{$currency_iso}"
-                        >
+                                data-currency="{$currency_iso}">
                             Pay Now
                         </button>
                     </div>
@@ -131,7 +129,6 @@
                                 details?</label>
                         </div>
                     {/if}
-
                 </div>
             </div>
             <div id="simplify-test-mode-msg" class="test-msg">( TEST PAYMENT )</div>

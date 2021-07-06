@@ -39,7 +39,7 @@ $(function() {
         })
 
         hostedPayments.closeOnCompletion();
-        hostedPayments.enablePayBtn()
+        hostedPayments.enablePayBtn();
 
         var $simplifyEmbeddedPaymentForm = $('#simplify-embedded-payment-form');
 

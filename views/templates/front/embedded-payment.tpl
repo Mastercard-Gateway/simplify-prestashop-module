@@ -27,17 +27,17 @@
     </script>
     <div class="simplifyFormContainer box {if !isset($show_saved_card_details)} no-saved {/if}">
         <div class="clearfix">
-            <div class="error-msg">
-                <span id="simplify-embedded-no-keys-msg" class="msg-container hidden">Payment Form not configured correctly. Please contact support.</span>
+            <div class="error-msg hidden" id="simplify-embedded-no-keys-msg">
+                <span class="msg-container">Payment Form not configured correctly. Please contact support.</span>
             </div>
         </div>
 
         <div class="simplify-payment-errors">{if isset($smarty.get.simplify_error)}{$smarty.get.simplify_error|escape:'htmlall':'UTF-8'}{/if}</div>
+
         <form action="{$module_dir|escape}payment.php" method="POST" id="simplify-embedded-payment-form">
             <div id="new-embedded-card-container"
                  class='card-type-container clearfix {if !isset($show_saved_card_details)} no-saved {/if}'>
                 <div id="simplify-embedded-cc-details">
-
                     <iframe width="100%"
                             height="450px"
                             name="{$hosted_payment_name|escape:'htmlall':'UTF-8'}"
@@ -50,8 +50,7 @@
                             data-customer-name="{$firstname|escape:'htmlall':'UTF-8'} {$lastname|escape:'htmlall':'UTF-8'}"
                             data-color="{$overlay_color|escape:'htmlall':'UTF-8'}"
                             data-currency="{$currency_iso}"
-                            data-operation="create.token"
-                    >
+                            data-operation="create.token">
                     </iframe>
                     <script>
                         function getEmbeddedConfig() {
