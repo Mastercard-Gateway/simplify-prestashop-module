@@ -32,6 +32,9 @@ class SimplifyCommerce extends PaymentModule
     const TXN_MODE_PURCHASE = 'purchase';
     const TXN_MODE_AUTHORIZE = 'authorize';
 
+    const PAYMENT_OPTION_MODAL = 'modal';
+    const PAYMENT_OPTION_EMBEDDED = 'embedded';
+
     /**
      * @var string
      */
@@ -146,9 +149,14 @@ class SimplifyCommerce extends PaymentModule
 
         $this->context->controller->addCSS($this->_path . 'views/css/style.css', 'all');
 
-        $this->context->controller->addJS($this->_path . 'views/js/simplify.js');
-        $this->context->controller->addJS($this->_path . 'views/js/simplify.form.js');
-        $this->context->controller->addJS($this->_path . 'views/js/simplify.embedded.js');
+        if (Configuration::get('SIMPLIFY_ENABLED_PAYMENT_WINDOW')) {
+            if (Configuration::get('SIMPLIFY_PAYMENT_OPTION') === self::PAYMENT_OPTION_EMBEDDED) {
+                $this->context->controller->addJS($this->_path . 'views/js/simplify.embedded.js');
+            } else {
+                $this->context->controller->addJS($this->_path . 'views/js/simplify.js');
+                $this->context->controller->addJS($this->_path . 'views/js/simplify.form.js');
+            }
+        }
 
         $this->context->controller->registerJavascript(
             'remote-simplifypayments-hp',
@@ -277,6 +285,7 @@ class SimplifyCommerce extends PaymentModule
             && Configuration::deleteByName('SIMPLIFY_OVERLAY_COLOR')
             && Configuration::deleteByName('SIMPLIFY_PAYMENT_TITLE')
             && Configuration::deleteByName('SIMPLIFY_TXN_MODE')
+            && Configuration::deleteByName('SIMPLIFY_PAYMENT_OPTION')
             && Db::getInstance()->Execute('DROP TABLE IF EXISTS`' . _DB_PREFIX_ . 'simplify_customer`')
             && $this->unregisterHook('paymentOptions')
             && $this->unregisterHook('orderConfirmation')
@@ -381,19 +390,22 @@ class SimplifyCommerce extends PaymentModule
             Configuration::get('SIMPLIFY_OVERLAY_COLOR') != null ? Configuration::get('SIMPLIFY_OVERLAY_COLOR') : $this->defaultModalOverlayColor);
 
         $this->smarty->assign('module_dir', $this->_path);
-
         $this->smarty->assign('currency_iso', $currency->iso_code);
 
-        $this->smarty->assign('enabled_payment_window', Configuration::get('SIMPLIFY_ENABLED_PAYMENT_WINDOW'));
-        $this->smarty->assign('enabled_embedded', Configuration::get('SIMPLIFY_ENABLED_EMBEDDED'));
-
         $options = [];
-        if (Configuration::get('SIMPLIFY_ENABLED_PAYMENT_WINDOW')) {
-            $options[] = $this->getPaymentOption();
+        if (!Configuration::get('SIMPLIFY_ENABLED_PAYMENT_WINDOW')) {
+            return $options;
         }
 
-        if (Configuration::get('SIMPLIFY_ENABLED_EMBEDDED')) {
+        if (Configuration::get('SIMPLIFY_PAYMENT_OPTION') === self::PAYMENT_OPTION_EMBEDDED) {
+            $this->smarty->assign('enabled_payment_window', 0);
+            $this->smarty->assign('enabled_embedded', 1);
             $options[] = $this->getEmbeddedPaymentOption();
+
+        } else {
+            $this->smarty->assign('enabled_payment_window', 1);
+            $this->smarty->assign('enabled_embedded', 0);
+            $options[] = $this->getPaymentOption();
         }
 
         return $options;
@@ -428,7 +440,8 @@ class SimplifyCommerce extends PaymentModule
     public function getPaymentOption()
     {
         $option = new PaymentOption();
-        $option->setCallToActionText(Configuration::get('SIMPLIFY_PAYMENT_TITLE') ?: $this->defaultTitle)
+        $option
+            ->setCallToActionText(Configuration::get('SIMPLIFY_PAYMENT_TITLE') ?: $this->defaultTitle)
             ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
             ->setModuleName('simplifycommerce')
             ->setForm($this->fetch('module:simplifycommerce/views/templates/front/payment.tpl'));
@@ -439,7 +452,8 @@ class SimplifyCommerce extends PaymentModule
     public function getEmbeddedPaymentOption()
     {
         $option = new PaymentOption();
-        $option->setCallToActionText(Configuration::get('SIMPLIFY_EMBEDDED_PAYMENT_TITLE') ?: $this->defaultTitle)
+        $option
+            ->setCallToActionText(Configuration::get('SIMPLIFY_PAYMENT_TITLE') ?: $this->defaultTitle)
             ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
             ->setModuleName('simplifycommerce_embedded')
             ->setForm($this->fetch('module:simplifycommerce/views/templates/front/embedded-payment.tpl'));
@@ -486,7 +500,7 @@ class SimplifyCommerce extends PaymentModule
 
         $currency_order = new Currency((int)($this->context->cart->id_currency));
 
-        // Extract POST paramaters from the request
+        // Extract POST parameters from the request
         $simplify_token_post = Tools::getValue('simplifyToken');
         $delete_customer_card_post = Tools::getValue('deleteCustomerCard');
         $save_customer_post = Tools::getValue('saveCustomer');
@@ -513,7 +527,6 @@ class SimplifyCommerce extends PaymentModule
 
         $simplify_customer_id = $this->getSimplifyCustomerID($simplify_customer['simplify_customer_id']);
 
-
         // The user has chosen to delete the card, so we need to delete the customer
         if (isset($simplify_customer_id) && $should_delete_customer) {
             try {
@@ -532,7 +545,6 @@ class SimplifyCommerce extends PaymentModule
             $simplify_customer_id = null;
         }
 
-
         // The user has chosen to save the card details
         if ($should_save_customer == 'on') {
             Logger::addLog($this->l('Simplify Commerce - $should_save_customer = ' . $should_save_customer), 1, null,
@@ -541,14 +553,9 @@ class SimplifyCommerce extends PaymentModule
             if (isset($simplify_customer_id)) {
                 try {
                     $customer = Simplify_Customer::findCustomer($simplify_customer_id);
-                    $updates = array(
-                        'email' => (string)$this->context->cookie->email,
-                        'name' => (string)$this->context->cookie->customer_firstname . ' ' . $this->context->cookie->customer_lastname,
-                        'token' => $token
-                    );
-
-                    $customer->setAll($updates);
-                    $customer->updateCustomer();
+                    $customer->deleteCustomer();
+                    $this->deleteCustomerFromDB();
+                    $simplify_customer_id = $this->createNewSimplifyCustomer($token);
                 } catch (Simplify_ApiException $e) {
                     if (class_exists('Logger')) {
                         Logger::addLog($this->l('Simplify Commerce - Error updating customer card details'), 1, null,
@@ -561,7 +568,6 @@ class SimplifyCommerce extends PaymentModule
         }
 
         $charge = (float)$this->context->cart->getOrderTotal();
-
 
         $payment_status = null;
         try {
@@ -881,10 +887,8 @@ class SimplifyCommerce extends PaymentModule
                 'SIMPLIFY_OVERLAY_COLOR' => Tools::getValue('simplify_overlay_color'),
                 'SIMPLIFY_PAYMENT_TITLE' => Tools::getValue('simplify_payment_title'),
                 'SIMPLIFY_TXN_MODE' => Tools::getValue('simplify_txn_mode'),
-                'SIMPLIFY_ENABLED_EMBEDDED' => Tools::getValue('simplify_enabled_embedded'),
-                'SIMPLIFY_EMBEDDED_PAYMENT_TITLE' => Tools::getValue('simplify_embedded_payment_title'),
+                'SIMPLIFY_PAYMENT_OPTION' => Tools::getValue('simplify_payment_option'),
             );
-
 
             $ok = true;
 
@@ -929,6 +933,18 @@ class SimplifyCommerce extends PaymentModule
             array(
                 'label' => $this->l('Authorize'),
                 'value' => self::TXN_MODE_AUTHORIZE,
+            ),
+        ));
+        $this->smarty->assign('payment_option',
+            Configuration::get('SIMPLIFY_PAYMENT_OPTION') ?: self::PAYMENT_OPTION_EMBEDDED);
+        $this->smarty->assign('payment_options', array(
+            array(
+                'label' => $this->l('Embedded Payment Form'),
+                'value' => self::PAYMENT_OPTION_EMBEDDED,
+            ),
+            array(
+                'label' => $this->l('Modal Payment Window'),
+                'value' => self::PAYMENT_OPTION_MODAL,
             ),
         ));
         $this->smarty->assign('statuses_options', array(

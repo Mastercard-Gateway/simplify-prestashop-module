@@ -1,5 +1,5 @@
 {**
-* Copyright (c) 2017-2019 Mastercard
+* Copyright (c) 2017-2021 Mastercard
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -121,12 +121,14 @@
                     </div>
 
                     {if isset($show_save_customer_details_checkbox)}
-                        <div class="clear">
+                        <div class="clear save-card-container">
                             <input type="checkbox" id="saveCustomer" name="saveCustomer">
-                            <label class="save" for="saveCustomer" id="saveCustomerLabel">Save your card details
-                                for next time?</label>
-                            <label class="save" for="saveCustomer" id="updateCustomerLabel">Update your saved card
-                                details?</label>
+                            <label class="save save-label" for="saveCustomer" id="saveCustomerLabel">
+                                {l s='Save your card details for next time?' mod='simplifycommerce'}
+                            </label>
+                            <label class="save save-label" for="saveCustomer" id="updateCustomerLabel">
+                                {l s='Update your saved card details?' mod='simplifycommerce'}
+                            </label>
                         </div>
                     {/if}
                 </div>
