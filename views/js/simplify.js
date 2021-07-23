@@ -141,6 +141,10 @@
             return val;
         }
 
+        function releasePaymentForm() {
+            $simplifyPaymentForm.data('disabled', false);
+        }
+
         /**
          *  Function to handle the form submission and either
          *  generate a new card token for new cards or
@@ -148,12 +152,14 @@
          */
         $simplifyPaymentForm.submit(function () {
             if (preventDoubleSubmit()) {
+                releasePaymentForm();
                 return false;
             }
 
             if (isHostedPaymentsEnabled() && !haveToken() && isTakingNewCard()) {
                 $("#simplify-hosted-payment-button").click();
                 setPrestaSubmitButtonEnabled(false);
+                releasePaymentForm();
                 return false;
             }
 
@@ -164,6 +170,7 @@
 
             if (simplifyPublicKey.length == 0) {
                 console.error("Simplify API key is not setup properly!");
+                releasePaymentForm();
                 return false;
             }
 
@@ -192,6 +199,8 @@
                         simplifyResponseHandler
                     );
                 }
+
+                releasePaymentForm();
                 return false;
                 /* Prevent the form from submitting with the default action */
             } else if (hasExistingCard()) {
