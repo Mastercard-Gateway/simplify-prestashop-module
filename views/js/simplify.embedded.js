@@ -114,7 +114,7 @@ $(function () {
         })
     });
 
-    elements.deleteSavedCardAction.on('click', function(e) {
+    elements.deleteSavedCardAction.on('click', function (e) {
         e.stopPropagation();
         setState({
             isCardDeletionInProgress: true,
@@ -122,7 +122,7 @@ $(function () {
         })
     });
 
-    elements.savedCardDeletionUndoAction.on('click', function(e) {
+    elements.savedCardDeletionUndoAction.on('click', function (e) {
         e.stopPropagation();
         setState({
             isCardDeletionInProgress: false,
@@ -130,7 +130,7 @@ $(function () {
         })
     });
 
-    elements.savedCardCancelDeletionAction.on('click', function(e) {
+    elements.savedCardCancelDeletionAction.on('click', function (e) {
         e.stopPropagation();
         setState({
             isCardDeletionInProgress: false,
@@ -138,7 +138,7 @@ $(function () {
         })
     });
 
-    elements.savedCardConfirmDeletionAction.on('click', function(e) {
+    elements.savedCardConfirmDeletionAction.on('click', function (e) {
         e.stopPropagation();
         setState({
             isCardDeletionInProgress: true,
@@ -147,7 +147,7 @@ $(function () {
         })
     });
 
-    elements.paymentSubmitAction.on('click', function(e) {
+    elements.paymentSubmitAction.on('click', function (e) {
         e.stopPropagation();
         setState({
             isRequestSubmitted: true,
@@ -191,9 +191,14 @@ $(function () {
                 }
 
                 elements.errorsContainer.html(errorList)
+            } else if (state.paymentError.code === "gateway") {
+                elements.errorsContainer.html(state.paymentError.message);
             } else {
-                elements.errorsContainer.html("Error occurred while processing payment, please contact support.");
+                elements.errorsContainer.html(
+                    "An error occurred while processing payment. Please get in touch with support."
+                );
             }
+
             elements.errorsContainer.removeClass('hidden');
         } else {
             elements.errorsContainer.addClass('hidden');
@@ -321,6 +326,50 @@ $(function () {
 
             elements.paymentForm.submit();
         }
+    }
+
+    /**
+     * Function to get url get parameter from window's location
+     * @returns {*}
+     * @param name
+     * @param url
+     */
+    function getUrlParam(name, url) {
+        var results, res;
+
+        if (!url) {
+            url = window.location.href;
+        }
+        results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(url);
+        res = (results && results[1]) || undefined;
+        return res;
+    }
+
+    /**
+     * This function should be used in the case of error happened with Payment on Backend
+     */
+    function showSimplifyPaymentForm() {
+
+        var id = elements.paymentForm.parents(".js-payment-option-form").attr("id");
+        var match = id && id.match("pay-with-payment-option-([0-9]+)-form");
+        var number = match && match[1];
+        $("#payment-option-" + number).click();
+
+        elements.conditionApproveElement.prop('checked', true);
+        setState({
+            conditionsApproved: elements.conditionApproveElement.is(":checked")
+        })
+    }
+
+    var simplifyError = getUrlParam('simplify_error');
+    if (simplifyError) {
+        showSimplifyPaymentForm();
+        setState({
+            paymentError: {
+                code: "gateway",
+                message: decodeURI(simplifyError)
+            }
+        });
     }
 
     /**

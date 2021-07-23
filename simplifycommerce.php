@@ -606,7 +606,12 @@ class SimplifyCommerce extends PaymentModule
         }
 
         if ($payment_status != 'APPROVED') {
-            $this->failPayment('The transaction was ' . $payment_status);
+            $this->failPayment(
+                sprintf(
+                    "The payment was %s",
+                    $payment_status
+                )
+            );
         }
 
         // Log the transaction
@@ -780,8 +785,12 @@ class SimplifyCommerce extends PaymentModule
 
         $controller = Configuration::get('PS_ORDER_PROCESS_TYPE') ? 'order-opc.php' : 'order.php';
         error_log($message);
-        $location = $this->context->link->getPageLink($controller) . (strpos($controller, '?') !== false ? '&' : '?') .
-            'step=3&simplify_error=There was a problem with your payment: ' . $message . '#simplify_error';
+        $location = sprintf(
+            "%s%sstep=3&simplify_error=There was a problem with your payment: %s.#simplify_error",
+            $this->context->link->getPageLink($controller),
+            strpos($controller, '?') !== false ? '&' : '?',
+            $message
+        );
         Tools::redirect($location);
         exit;
     }
