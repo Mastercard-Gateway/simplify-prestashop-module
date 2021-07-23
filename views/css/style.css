@@ -755,6 +755,7 @@ i.simplifyFormContainer mg.enable {
     font-size: 0.875rem;
     background: #ffcccc;
     margin-top: 1rem;
+    display: block;
 }
 
 .simplify-form-container .simplify-payment-errors.hidden {

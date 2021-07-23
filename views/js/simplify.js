@@ -294,7 +294,6 @@
      * @param url
      * @returns {*}
      */
-
     function urlParam(name, url) {
         if (!url) {
             url = window.location.href;
