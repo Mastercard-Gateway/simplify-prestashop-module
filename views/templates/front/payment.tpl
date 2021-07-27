@@ -1,5 +1,5 @@
 {**
-* Copyright (c) 2017-2019 Mastercard
+* Copyright (c) 2017-2021 Mastercard
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -22,11 +22,12 @@
             simplifyAddress2 = "{$address2|escape:'htmlall':'UTF-8'}",
             simplifyState = "{$state|escape:'htmlall':'UTF-8'}",
             simplifyPostcode = "{$postcode|escape:'htmlall':'UTF-8'}";
+            enabledPaymentWindow = "{$enabled_payment_window|escape:'htmlall':'UTF-8'}";
     </script>
     <div class="simplifyFormContainer box {if !isset($show_saved_card_details)} no-saved {/if}">
         <div class="clearfix">
-            <div class="error-msg">
-                <span id="simplify-no-keys-msg" class="msg-container hidden">Payment Form not configured correctly. Please contact support.</span>
+            <div class="error-msg hidden" id="simplify-no-keys-msg" >
+                <span class="msg-container">Payment Form not configured correctly. Please contact support.</span>
             </div>
         </div>
 
@@ -96,12 +97,11 @@
                         </div>
                     </div>
                 {/if}
-                <div
-                        id="simplify-cc-details"
-                        {if isset($show_saved_card_details)}
-                            style="display: {if isset($smarty.get.simplify_error)}block;{else}none;{/if}"
-                        {/if}
-                >
+
+                <div id="simplify-cc-details"
+                    {if isset($show_saved_card_details)}
+                        style="display: {if isset($smarty.get.simplify_error)}block;{else}none;{/if}"
+                    {/if}>
                     <a name="simplify_error" class="hidden"></a>
 
                     <div style="display:none">{* the order button clicks this hidden button *}
@@ -114,22 +114,22 @@
                                 data-operation="create.token"
                                 {if isset($customer_name)}data-customer-name="{$customer_name|escape:'htmlall':'UTF-8'}"{/if}
                                 data-color="{$overlay_color|escape:'htmlall':'UTF-8'}"
-                                data-currency="{$currency_iso}"
-                        >
+                                data-currency="{$currency_iso}">
                             Pay Now
                         </button>
                     </div>
 
                     {if isset($show_save_customer_details_checkbox)}
-                        <div class="clear">
+                        <div class="clear save-card-container">
                             <input type="checkbox" id="saveCustomer" name="saveCustomer">
-                            <label class="save" for="saveCustomer" id="saveCustomerLabel">Save your card details
-                                for next time?</label>
-                            <label class="save" for="saveCustomer" id="updateCustomerLabel">Update your saved card
-                                details?</label>
+                            <label class="save save-label" for="saveCustomer" id="saveCustomerLabel">
+                                {l s='Save your card details for next time?' mod='simplifycommerce'}
+                            </label>
+                            <label class="save save-label" for="saveCustomer" id="updateCustomerLabel">
+                                {l s='Update your saved card details?' mod='simplifycommerce'}
+                            </label>
                         </div>
                     {/if}
-
                 </div>
             </div>
             <div id="simplify-test-mode-msg" class="test-msg">( TEST PAYMENT )</div>

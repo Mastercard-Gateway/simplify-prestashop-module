@@ -1,5 +1,5 @@
 {**
-* Copyright (c) 2017-2019 Mastercard
+* Copyright (c) 2017-2021 Mastercard
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -20,18 +20,13 @@
 
 <div class="simplify-module-wrapper">
     <div class="simplify-module-header formContainer">
-        <div class="simplify-header-logo">
-            <a href="https://www.simplify.com/" target="_blank" class="center">
-                <img class="logo" src="//static.simplify.com/cdn/img/partner/simplify/logos/logo.png" alt="Simplify Commerce Logo" width="150" height="64">
-            </a>
-        </div>
         <div class="simplify-header-text">
             <div class="simplify-content-img">
-                <img src="{$module_dir|escape}views/img/simplify_phones.png" alt="" />
+                <img src="{$module_dir|escape}views/img/simplify_phones.png" alt=""/>
             </div>
             <div class="simplify-content-text">
                 <div>
-                    <p>{l s='Simplify Commerce, built by Mastercard, a global leader in the payment indrustry, makes it easy for small businesses to accept online payments. From our hosted "Pay Now" solution that allows merchants to share links socially to our mobile point of sale to recurring payment solutions, we include must-have features key to businesses.' mod='simplifycommerce'}</p>
+                    <p>{l s='Mastercard Payment Gateway Services - Simplify, a global leader in the payment indrustry, makes it easy for small businesses to accept online payments. From our hosted "Pay Now" solution that allows merchants to share links socially to our mobile point of sale to recurring payment solutions, we include must-have features key to businesses.' mod='simplifycommerce'}</p>
                     <ul>
                         <li>{l s='Omni-channel payment solution for web, mobile and social platforms' mod='simplifycommerce'}</li>
                         <li>{l s='Accept major card brands' mod='simplifycommerce'}</li>
@@ -45,14 +40,12 @@
     <div class="formContainer">
         <section class="technical-checks">
             {if $requirements['result']}
-            <div class="conf">
-                <h3>{l s='Good news! Everything looks to be in order, start accepting card payments now.' mod='simplifycommerce'}</h3>
-            </div>
+                <div class="conf">
+                    <h3>{l s='Good news! Everything looks to be in order, start accepting card payments now.' mod='simplifycommerce'}</h3>
+                </div>
             {else}
                 <h3>{l s='Unfortunately, at least one issue is preventing you from using Simplify Commerce. Please fix the issue and reload this page.' mod='simplifycommerce'}</h3>
-
                 <h2>{l s='Technical Checks' mod='simplifycommerce'}</h2>
-
                 <table cellspacing="0" cellpadding="0" class="simplify-technical">
                     {foreach from=$requirements key=k item=requirement}
                         {if $k != 'result'}
@@ -88,12 +81,12 @@
                                 {if !$simplify_mode}
                                     checked="checked"
                                 {/if}
-                                /><span>Test Mode</span>
+                        /><span>Test Mode</span>
                         <input class="radioInput" type="radio" name="simplify_mode" value="1"
                                 {if $simplify_mode}
                                     checked="checked"
                                 {/if}
-                                /><span>Live Mode</span>
+                        /><span>Live Mode</span>
                     </div>
                     <p>
 
@@ -126,13 +119,15 @@
                             <div class="left api-key-key">{l s='Public Key' mod='simplifycommerce'}</div>
                         </div>
                         <div class="api-key-box clearfix">
-                            <div class="left api-key-key api-key ng-binding"><input type="password"
-                                                                                    name="simplify_private_key_test"
-                                                                                    value="{$private_key_test|escape:'htmlall':'UTF-8'}"/>
+                            <div class="left api-key-key api-key ng-binding">
+                                <input type="password"
+                                       name="simplify_private_key_test"
+                                       value="{$private_key_test|escape:'htmlall':'UTF-8'}"/>
                             </div>
-                            <div class="left api-key-key api-key ng-binding"><input type="text"
-                                                                                    name="simplify_public_key_test"
-                                                                                    value="{$public_key_test|escape:'htmlall':'UTF-8'}"/>
+                            <div class="left api-key-key api-key ng-binding">
+                                <input type="text"
+                                       name="simplify_public_key_test"
+                                       value="{$public_key_test|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
                     </div>
@@ -148,52 +143,74 @@
                             <div class="left api-key-key">{l s='Public Key' mod='simplifycommerce'}</div>
                         </div>
                         <div class="api-key-box clearfix">
-                            <div class="left api-key-key api-key ng-binding"><input type="password"
-                                                                                    name="simplify_private_key_live"
-                                                                                    value="{$private_key_live|escape:'htmlall':'UTF-8'}"/>
+                            <div class="left api-key-key api-key ng-binding">
+                                <input type="password"
+                                       name="simplify_private_key_live"
+                                       value="{$private_key_live|escape:'htmlall':'UTF-8'}"/>
                             </div>
-                            <div class="left api-key-key api-key ng-binding"><input type="text"
-                                                                                    name="simplify_public_key_live"
-                                                                                    value="{$public_key_live|escape:'htmlall':'UTF-8'}"/>
+                            <div class="left api-key-key api-key ng-binding">
+                                <input type="text"
+                                       name="simplify_public_key_live"
+                                       value="{$public_key_live|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
                     </div>
+
                 </div>
-                <div class="clearfix">
-                    <div class="left half">
-                        <div>
-                            <h2>{l s='Payment Method Title' mod='simplifycommerce'}</h2>
-                            <div class="container">
-                                <p>{l s='Change the payment method title displayed in the frontend.' mod='simplifycommerce'}</p>
-                                <input name="simplify_payment_title" type="text" class="table_grid" value="{$payment_title|escape:'htmlall':'UTF-8'}" />
-                            </div>
-                        </div>
-                        <div>
-                            <h2>{l s='Save Customer Details' mod='simplifycommerce'}</h2>
+                <div class="payment-configuration clearfix">
+                    <div class="left">
+                        <h2>{l s='Payments Configuration' mod='simplifycommerce'}</h2>
+                    </div>
 
-                            <div class="account-mode container">
-                                <p>Enable customers to save their card details securely on Simplify's servers for future
-                                    transactions.</p>
+                    <div class="clearfix"></div>
 
-                                <div class="saveCustomerDetailsContainer">
-                                    <input class="radioInput" type="radio" name="simplify_save_customer_details" value="1"
-                                            {if $save_customer_details == 1}
-                                                checked="checked"
-                                            {/if}
-                                            /><span>Yes</span>
-                                    <input class="radioInput" type="radio" name="simplify_save_customer_details" value="0"
-                                            {if $save_customer_details == 0}
-                                                checked="checked"
-                                            {/if}
-                                            /><span>No</span>
-                                </div>
+                    <div class="left half option">
+                        <h3>{l s='Enbale Payment Method' mod='simplifycommerce'}</h3>
+
+                        <p>
+                            {l s='Choose Yes to activate the Payment Method on checkout. ' mod='simplifycommerce'}
+                        </p>
+
+                        <div class="account-mode container">
+                            <div class="yes-no-container">
+                                <input class="radioInput" type="radio" name="simplify_enabled_payment_window" value="1"
+                                        {if $enabled_payment_window == 1}
+                                            checked="checked"
+                                        {/if}
+                                /><span>Yes</span>
+                                <input class="radioInput" type="radio" name="simplify_enabled_payment_window" value="0"
+                                        {if $enabled_payment_window == 0}
+                                            checked="checked"
+                                        {/if}
+                                /><span>No</span>
                             </div>
                         </div>
                     </div>
-                    <div class="half container left">
-                        {foreach $statuses_options as $status_options}
-                        <div>
-                            <h2>{$status_options['label']|escape:'htmlall':'UTF-8'}</h2>
+
+                    <div class="left half option">
+                        <h3>{l s='Save Customer Details' mod='simplifycommerce'}</h3>
+
+                        <p>
+                            {l s='Enable customers to save their card details securely on Simplify servers for future transactions.' mod='simplifycommerce'}
+                        </p>
+
+                        <div class="yes-no-container">
+                            <input class="radioInput" type="radio" name="simplify_save_customer_details" value="1"
+                                    {if $save_customer_details == 1}
+                                        checked="checked"
+                                    {/if}
+                            /><span>Yes</span>
+                            <input class="radioInput" type="radio" name="simplify_save_customer_details" value="0"
+                                    {if $save_customer_details == 0}
+                                        checked="checked"
+                                    {/if}
+                            /><span>No</span>
+                        </div>
+                    </div>
+
+                    {foreach $statuses_options as $status_options}
+                        <div class="left half option">
+                            <h3>{$status_options['label']|escape:'htmlall':'UTF-8'}</h3>
                             <p>Choose the status for an order once the payment has been successfully processed by
                                 Simplify.</p>
                             <div>
@@ -203,52 +220,76 @@
                                                 {if $status['id_order_state'] == $status_options['current_value']}
                                                     selected="selected"
                                                 {/if}
-                                                >{$status['name']|escape:'htmlall':'UTF-8'}</option>
+                                        >{$status['name']|escape:'htmlall':'UTF-8'}</option>
                                     {/foreach}
                                 </select>
                             </div>
                         </div>
-                        {/foreach}
+                    {/foreach}
+
+                    <div class="left half option">
+                        <h3>{l s='Transaction Mode' mod='simplifycommerce'}</h3>
+                        <p>    {l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>
                         <div>
-                            <h2>{l s='Transaction Mode' mod='simplifycommerce'}</h2>
-                            <p>	{l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>
-                            <div>
-                                <select name="simplify_txn_mode">
-                                    {foreach $txn_mode_options as $_txn_mode}
-                                        <option value="{$_txn_mode['value']|escape:'htmlall':'UTF-8'}"
-                                                {if $txn_mode === $_txn_mode['value']}
-                                                    selected="selected"
-                                                {/if}
-                                        >{$_txn_mode['label']|escape:'htmlall':'UTF-8'}</option>
-                                    {/foreach}
-                                </select>
+                            <select name="simplify_txn_mode">
+                                {foreach $txn_mode_options as $_txn_mode}
+                                    <option value="{$_txn_mode['value']|escape:'htmlall':'UTF-8'}"
+                                            {if $txn_mode === $_txn_mode['value']}
+                                                selected="selected"
+                                            {/if}
+                                    >{$_txn_mode['label']|escape:'htmlall':'UTF-8'}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="left half option">
+                        <div>
+                            <h3>{l s='Payment Method Title' mod='simplifycommerce'}</h3>
+                            <div class="container">
+                                <p>{l s='Change the payment method title displayed in the frontend.' mod='simplifycommerce'}</p>
+                                <input name="simplify_payment_title" type="text" class="table_grid"
+                                       value="{$payment_title|escape:'htmlall':'UTF-8'}"/>
                             </div>
                         </div>
                     </div>
+                    <div class="left half option">
+                        <h3>{l s='Simplify Payment Option' mod='simplifycommerce'}</h3>
+
+                        <p>
+                            {l s='This option defines how the Customer will enter new credit card details.' mod='simplifycommerce'}
+                        </p>
+
+                        <select name="simplify_payment_option">
+                            {foreach $payment_options as $_payment_option}
+                                <option value="{$_payment_option['value']|escape:'htmlall':'UTF-8'}"
+                                        {if $payment_option === $_payment_option['value']}
+                                            selected="selected"
+                                        {/if}
+                                >{$_payment_option['label']|escape:'htmlall':'UTF-8'}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+
+                    <div class="left half option">
+                        <h3 for="modal-overlay-color" class="modal-overlay">
+                            {l s='Button color' mod='simplifycommerce'}:</h3>
+                        <input name="simplify_overlay_color"
+                               type="text"
+                               id="modal-overlay-color"
+                               size="8"
+                               value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
+                        <input id="colorSelector" type="text"
+                               value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
+                    </div>
+
                 </div>
                 <div class="clearfix">
-                    <div class="left">
-                        <h2>{l s='Hosted Payments Configuration' mod='simplifycommerce'}</h2>
-
-                        <div class="container">
-                            <div>
-                                <label for="modal-overlay-color" class="modal-overlay">
-                                    {l s='Button color' mod='simplifycommerce'}:</label>
-                                    <input
-                                            name="simplify_overlay_color"
-                                            type="text"
-                                            id="modal-overlay-color"
-                                            size="8"
-                                            value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
-                                    <input
-                                            id="colorSelector" type="text"
-                                            value="{$overlay_color|escape:'htmlall':'UTF-8'}"/>
-                            </div>
-                        </div>
-                    </div>
+                    <input type="submit"
+                           class="settings-btn btn right"
+                           name="SubmitSimplify"
+                           value="{l s='Save Settings' mod='simplifycommerce'}"/>
                 </div>
-                <div class="clearfix"><input type="submit" class="settings-btn btn right" name="SubmitSimplify"
-                                             value="Save Settings"/></div>
             </section>
         </form>
     </div>
