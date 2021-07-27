@@ -3,12 +3,9 @@
 
 This plugin uses Simplify Commerce to connect your merchant account to PrestaShop and to set up a payment option on your PrestaShop checkout page.
 
-This module has been tested with following versions of PrestaShop:
-
-- 1.7.5.0
-- 1.7.5.2
-- 1.7.6.0
-- 1.7.6.4
+This module has been tested with the following versions of PrestaShop:
+- 1.7.6.9
+- 1.7.7.5
 
 The Standard payment form in some of the previous releases is now deprecated and out of support.
 
@@ -16,12 +13,14 @@ The Standard payment form in some of the previous releases is now deprecated and
 
 The Simplify Commerce module is not bundled in the PrestaShop download.
 
-The addon for Simplify Commerce can be downloaded here: https://github.com/simplifycom/simplify-prestashop-module/releases
-Please use the lastest release that corresponds to the version of prestashop you are using. Download the zip file for the particular version of prestashop.
+The addon for Simplify Commerce can be downloaded here: https://github.com/simplifycom/simplify-prestashop-module/releases.
+Please use the lastest release that corresponds to the version of prestashop you are using. 
+Download the zip file for the particular version of Prestashop.
 
-Extract the ZIP file which is downloaded from the Github and rename the directory to simplifycommerce. ZIP the directory once you have renamed that change
+Extract the ZIP file, which is downloaded from Github, and rename the directory to simplifycommerce. 
+Then ZIP the directory once you have renamed that change.
 
-You will then upload the zip file, setup the API keys and you are good to go! 
+You will then upload the zip file, set up the API keys, and you are good to go!
 
 ![Upload Module](docs/upload_module.png "Upload Simplify Commerce module")
 
@@ -29,7 +28,7 @@ You will then upload the zip file, setup the API keys and you are good to go!
 
 ![Setup API Keys](docs/plugin_configuration.png "Plugin Configuration")
 
-You can manage your merchant account (view orders, perform refunds, create invoices etc.) using your merchant portal.
+You can manage your merchant account (view orders, perform refunds, create invoices, etc.) using your merchant portal.
 
 ## License
 This software is Open Source, released under the Apache License 2.0. See [LICENSE.txt](LICENSE.txt) for more info.
