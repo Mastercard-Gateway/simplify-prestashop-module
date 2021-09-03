@@ -444,23 +444,7 @@ class SimplifyCommerce extends PaymentModule
             }
         }
 
-        // Create empty object by default
-        $cardholder_details = new stdClass;
-
-        // Send the cardholder's details with the payment
-        if (isset($this->context->cart->id_address_invoice)) {
-            $invoice_address = new Address((int)$this->context->cart->id_address_invoice);
-
-            if ($invoice_address->id_state) {
-                $state = new State((int)$invoice_address->id_state);
-
-                if (Validate::isLoadedObject($state)) {
-                    $invoice_address->state = $state->iso_code;
-                }
-            }
-
-            $cardholder_details = $invoice_address;
-        }
+        $cardholder_details = $this->getCardholderDetails();
 
         $currency = new Currency((int)($this->context->cart->id_currency));
 
@@ -723,6 +707,17 @@ class SimplifyCommerce extends PaymentModule
                 );
             }
 
+            $cardholder_details = $this->getCardholderDetails();
+            $country_iso = Country::getIsoById($cardholder_details->id_country);
+            $requestData['card'] = array(
+                'addressCity' => $this->safe($cardholder_details->city),
+                'addressCountry' => $country_iso,
+                'addressLine1' => $this->safe($cardholder_details->address1),
+                'addressLine2' => $this->safe($cardholder_details->address2),
+                'addressState' => isset($cardholder_details->state) ? $this->safe($cardholder_details->state) : '',
+                'addressZip' => $this->safe($cardholder_details->postcode),
+            );
+
             $txn_mode = Configuration::get('SIMPLIFY_TXN_MODE');
 
             if ($txn_mode === self::TXN_MODE_PURCHASE) {
@@ -830,6 +825,35 @@ class SimplifyCommerce extends PaymentModule
             );
         }
         exit;
+    }
+
+    /**
+     * @return Address|stdClass
+     *
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    private function getCardholderDetails()
+    {
+        // Create empty object by default
+        $cardholder_details = new stdClass;
+
+        // Send the cardholder's details with the payment
+        if (isset($this->context->cart->id_address_invoice)) {
+            $invoice_address = new Address((int)$this->context->cart->id_address_invoice);
+
+            if ($invoice_address->id_state) {
+                $state = new State((int)$invoice_address->id_state);
+
+                if (Validate::isLoadedObject($state)) {
+                    $invoice_address->state = $state->iso_code;
+                }
+            }
+
+            $cardholder_details = $invoice_address;
+        }
+
+        return $cardholder_details;
     }
 
     /**
