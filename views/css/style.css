@@ -938,3 +938,7 @@ i.simplifyFormContainer mg.enable {
 .simplify-form-container .ps-shown-by-js.hidden {
     display: none;
 }
+
+.simplify-form-container .simplify-new-card-container iframe {
+    -webkit-appearance: none;
+}
