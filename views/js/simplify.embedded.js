@@ -98,7 +98,8 @@ $(function () {
 
     elements.newCardSelector.on('click', function () {
         setState({
-            chosenPaymentOption: PAYMENT_OPTION_NEW
+            chosenPaymentOption: PAYMENT_OPTION_NEW,
+            isCardDeletionInProgress: false
         });
     });
 
@@ -119,7 +120,8 @@ $(function () {
         setState({
             isCardDeletionInProgress: true,
             isCardDeleted: false,
-        })
+        });
+        return false;
     });
 
     elements.savedCardDeletionUndoAction.on('click', function (e) {
@@ -127,7 +129,8 @@ $(function () {
         setState({
             isCardDeletionInProgress: false,
             isCardDeleted: false,
-        })
+        });
+        return false;
     });
 
     elements.savedCardCancelDeletionAction.on('click', function (e) {
@@ -135,7 +138,8 @@ $(function () {
         setState({
             isCardDeletionInProgress: false,
             isCardDeleted: false,
-        })
+        });
+        return false;
     });
 
     elements.savedCardConfirmDeletionAction.on('click', function (e) {
@@ -144,7 +148,8 @@ $(function () {
             isCardDeletionInProgress: true,
             isCardDeleted: true,
             chosenPaymentOption: PAYMENT_OPTION_NEW,
-        })
+        });
+        return false;
     });
 
     elements.paymentSubmitAction.on('click', function (e) {

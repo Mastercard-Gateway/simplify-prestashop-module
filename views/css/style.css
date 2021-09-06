@@ -343,16 +343,16 @@ body#checkout section.checkout-step .payment-options .simplify-cc-details label.
     margin-bottom: 15px;
 }
 
-#simplify-payment-form  #simplify-cc-details .save-card-container input[type="checkbox"] {
+#simplify-payment-form #simplify-cc-details .save-card-container input[type="checkbox"] {
     margin-right: 0.5rem;
     margin-bottom: 3px;
 }
 
-#simplify-payment-form  #simplify-cc-details .save-card-container {
+#simplify-payment-form #simplify-cc-details .save-card-container {
     margin-top: 1rem;
 }
 
-#simplify-payment-form  #simplify-cc-details .save-card-container .save-label {
+#simplify-payment-form #simplify-cc-details .save-card-container .save-label {
     text-transform: none;
 }
 
@@ -941,4 +941,45 @@ i.simplifyFormContainer mg.enable {
 
 .simplify-form-container .simplify-new-card-container iframe {
     -webkit-appearance: none;
+}
+
+@media (max-width: 480px) {
+    body#checkout .simplifyFormContainer.box.additional-information {
+        margin-left: 0;
+    }
+
+    .simplify-form-container .simplify-card-selector {
+        padding: 1rem;
+    }
+
+    .card-detail {
+        max-width: 60px;
+    }
+
+    .simplify-form-container .simplify-card-selector .card-deletion-confirmation {
+        height: 6rem;
+        flex-wrap: wrap;
+    }
+
+    .simplify-form-container .simplify-card-selector .card-deletion-confirmation small {
+        width: 100%;
+    }
+
+    .simplify-form-container .simplify-card-selector .card-deletion-confirmation .card-deletion-actions {
+        display: flex;
+        width: 100%;
+    }
+
+    .simplify-form-container .simplify-card-selector .card-deletion-confirmation .card-deletion-actions .card-deletion-action {
+        width: 50%;
+        display: block;
+        text-align: center;
+        border: 1px solid #cccccc;
+        height: 2rem;
+        line-height: 1.9rem;
+    }
+
+    .simplify-form-container .simplify-saved-card-deletion-confirmation {
+        white-space: nowrap;
+    }
 }
