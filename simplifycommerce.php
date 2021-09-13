@@ -45,11 +45,6 @@ class SimplifyCommerce extends PaymentModule
     /**
      * @var string
      */
-    protected $confirmUninstall;
-
-    /**
-     * @var string
-     */
     protected $controllerAdmin;
 
     /**
