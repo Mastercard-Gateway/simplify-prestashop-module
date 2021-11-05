@@ -20,8 +20,8 @@ $(function () {
         return;
     }
 
-    var PAYMENT_OPTION_OLD = 'old';
-    var PAYMENT_OPTION_NEW = 'new';
+    var CARD_TYPE_OLD = 'old';
+    var CART_TYPE_NEW = 'new';
     var PAYMENT_CODE = 'simplifycommerce_embedded';
 
     /**
@@ -63,7 +63,7 @@ $(function () {
     var state = {
         hasSavedCard: window.simplifyHasSavedCard,
         paymentError: false,
-        chosenPaymentOption: PAYMENT_OPTION_OLD,
+        chosenCardType: CARD_TYPE_OLD,
         isCardDeletionInProgress: false,
         isCardDeleted: false,
         conditionsApproved: elements.conditionApproveElement.prop('checked'),
@@ -92,26 +92,26 @@ $(function () {
 
     elements.savedCardSelector.on('click', function () {
         setState({
-            chosenPaymentOption: PAYMENT_OPTION_OLD
+            chosenCardType: CARD_TYPE_OLD
         });
     });
 
     elements.newCardSelector.on('click', function () {
         setState({
-            chosenPaymentOption: PAYMENT_OPTION_NEW,
+            chosenCardType: CART_TYPE_NEW,
             isCardDeletionInProgress: false
         });
     });
 
     elements.savedCardRadio.on('change', function () {
         setState({
-            chosenPaymentOption: $(this).is(":checked") ? PAYMENT_OPTION_OLD : PAYMENT_OPTION_NEW
+            chosenCardType: $(this).is(":checked") ? CARD_TYPE_OLD : CART_TYPE_NEW
         })
     });
 
     elements.newCardRadio.on('change', function () {
         setState({
-            chosenPaymentOption: $(this).is(":checked") ? PAYMENT_OPTION_NEW : PAYMENT_OPTION_OLD
+            chosenCardType: $(this).is(":checked") ? CART_TYPE_NEW : CARD_TYPE_OLD
         })
     });
 
@@ -147,7 +147,7 @@ $(function () {
         setState({
             isCardDeletionInProgress: true,
             isCardDeleted: true,
-            chosenPaymentOption: PAYMENT_OPTION_NEW,
+            chosenCardType: CART_TYPE_NEW,
         });
         return false;
     });
@@ -235,14 +235,14 @@ $(function () {
         }
 
         /** Handle Payment Option */
-        if (state.hasSavedCard && state.chosenPaymentOption === PAYMENT_OPTION_OLD) {
+        if (state.hasSavedCard && state.chosenCardType === CARD_TYPE_OLD) {
             elements.newCardForm.addClass('hidden');
             elements.savedCardSelector.addClass('selected');
             elements.newCardSelector.removeClass('selected');
             elements.savedCardRadio.prop("checked", true);
             elements.newCardRadio.prop("checked", false);
             elements.paymentButtonContainer.show();
-        } else if (state.hasSavedCard && state.chosenPaymentOption === PAYMENT_OPTION_NEW) {
+        } else if (state.hasSavedCard && state.chosenCardType === CART_TYPE_NEW) {
             elements.newCardForm.removeClass('hidden');
             elements.newCardSelector.addClass('selected');
             elements.savedCardSelector.removeClass('selected');
