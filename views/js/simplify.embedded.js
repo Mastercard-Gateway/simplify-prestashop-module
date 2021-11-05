@@ -302,22 +302,13 @@ $(function () {
     /**
      * Payment initialization
      */
-    var hostedPaymentsOnject = SimplifyCommerce.hostedPayments(
+    var hostedPaymentsObject = SimplifyCommerce.hostedPayments(
         paymentCallback,
         window.getEmbeddedConfig()
     );
-    hostedPaymentsOnject.closeOnCompletion();
+    hostedPaymentsObject.closeOnCompletion();
 
     function paymentCallback(response) {
-        if (response && response.length > 0 && response[0].error) {
-            setState({
-                paymentError: response[0].error,
-            });
-
-            hostedPaymentsOnject.enablePayBtn();
-            return;
-        }
-
         if (response && response.cardToken) {
             elements
                 .paymentForm
