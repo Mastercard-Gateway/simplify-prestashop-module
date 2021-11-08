@@ -180,23 +180,7 @@ $(function () {
 
         /** Handle Payment Errors */
         if (state.paymentError) {
-            if (state.paymentError.code === "validation") {
-                var errorMessages = {
-                    'card.number': 'The card number you entered is invalid.',
-                    'card.expYear': 'The expiry year on the card is invalid.'
-                };
-
-                var fieldErrors = state.paymentError.fieldErrors,
-                    fieldErrorsLength = fieldErrors.length,
-                    errorList = "";
-
-                for (var i = 0; i < fieldErrorsLength; i++) {
-                    errorList += '<span class="msg-container">' + errorMessages[fieldErrors[i].field] +
-                        ' ' + fieldErrors[i].message + '.</span>';
-                }
-
-                elements.errorsContainer.html(errorList)
-            } else if (state.paymentError.code === "gateway") {
+            if (state.paymentError.code === "gateway") {
                 elements.errorsContainer.html(state.paymentError.message);
             } else {
                 elements.errorsContainer.html(
