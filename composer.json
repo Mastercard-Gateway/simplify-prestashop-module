@@ -3,6 +3,7 @@
   "description": "Payments made easy - Start securely accepting card payments instantly.",
   "homepage": "https://github.com/PrestaShop/simplifycommerce",
   "license": "BSD 3-Clause license",
+  "version": "2.2.0",
   "authors": [
     {
       "name": "Mastercard",
