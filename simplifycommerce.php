@@ -708,7 +708,6 @@ class SimplifyCommerce extends PaymentModule
                     'token'       => $token, // Token returned by Simplify Card Tokenization
                     'description' => $description,
                     'currency'    => $currency_order->iso_code,
-                    'card'        => $this->getCardBillingInformation(),
                 );
             }
 
@@ -1184,26 +1183,5 @@ class SimplifyCommerce extends PaymentModule
         $html .= $this->display(__FILE__, 'views/templates/hook/module-wrapper.tpl');
 
         return $html;
-    }
-
-    /**
-     * @return array
-     *
-     * @throws PrestaShopDatabaseException
-     * @throws PrestaShopException
-     */
-    private function getCardBillingInformation()
-    {
-        $cardholder_details = $this->getCardholderDetails();
-        $country_iso = Country::getIsoById($cardholder_details->id_country);
-
-        return array(
-            'addressCity'    => $this->safe($cardholder_details->city),
-            'addressCountry' => $country_iso,
-            'addressLine1'   => $this->safe($cardholder_details->address1),
-            'addressLine2'   => $this->safe($cardholder_details->address2),
-            'addressState'   => isset($cardholder_details->state) ? $this->safe($cardholder_details->state) : '',
-            'addressZip'     => $this->safe($cardholder_details->postcode),
-        );
     }
 }
