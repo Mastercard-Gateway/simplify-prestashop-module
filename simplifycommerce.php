@@ -311,6 +311,12 @@ class SimplifyCommerce extends PaymentModule
         return $this->display(__FILE__, 'views/templates/hook/order_actions.tpl');
     }
 
+    /**
+     * @return bool
+     *
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function installOrderState()
     {
         if (!Configuration::get('SIMPLIFY_OS_AUTHORIZED')
@@ -332,9 +338,9 @@ class SimplifyCommerce extends PaymentModule
                 $destination = _PS_ROOT_DIR_.'/img/os/'.(int)$order_state->id.'.gif';
                 copy($source, $destination);
             }
-
-            Configuration::updateValue('SIMPLIFY_OS_AUTHORIZED', (int)$order_state->id);
+            return Configuration::updateValue('SIMPLIFY_OS_AUTHORIZED', (int)$order_state->id);
         }
+        return true;
     }
 
     /**

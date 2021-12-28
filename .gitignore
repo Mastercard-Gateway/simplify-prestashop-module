@@ -5,6 +5,6 @@
 node_modules/
 errorShots/
 config.xml
-/prestashop-simplifycommerce.zip
+/simplifycommerce.zip
 *.less
 *.css.map
