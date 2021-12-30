@@ -338,8 +338,10 @@ class SimplifyCommerce extends PaymentModule
                 $destination = _PS_ROOT_DIR_.'/img/os/'.(int)$order_state->id.'.gif';
                 copy($source, $destination);
             }
+
             return Configuration::updateValue('SIMPLIFY_OS_AUTHORIZED', (int)$order_state->id);
         }
+
         return true;
     }
 
@@ -417,7 +419,9 @@ class SimplifyCommerce extends PaymentModule
         $this->initSimplify();
 
         // If flag checked in the settings, look up customer details in the DB
-        if (Configuration::get('SIMPLIFY_SAVE_CUSTOMER_DETAILS')) {
+        $isTokenizationEnabled = (bool)Configuration::get('SIMPLIFY_SAVE_CUSTOMER_DETAILS');
+        $isLogged = $this->context->customer->isLogged();
+        if ($isTokenizationEnabled && $isLogged) {
             $this->smarty->assign('show_save_customer_details_checkbox', true);
             $simplify_customer_id = Db::getInstance()->getValue(
                 'SELECT simplify_customer_id FROM '.
@@ -456,6 +460,13 @@ class SimplifyCommerce extends PaymentModule
         // Set js variables to send in card tokenization
         $this->smarty->assign('simplify_public_key', Simplify::$publicKey);
 
+        $this->smarty->assign('customer_name',
+            sprintf(
+                '%s %s',
+                $this->safe($cardholder_details->firstname),
+                $this->safe($cardholder_details->lastname)
+            )
+        );
         $this->smarty->assign('firstname', $this->safe($cardholder_details->firstname));
         $this->smarty->assign('lastname', $this->safe($cardholder_details->lastname));
         $this->smarty->assign('city', $this->safe($cardholder_details->city));
