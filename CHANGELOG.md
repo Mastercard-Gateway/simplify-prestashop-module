@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 
+## [2.2.1] - 2022-01-04
+### Fixed
+- The installation process is always indicated failure the first time while the module is installed
+- Tokenization option is visible for Guest on Storefront
+- Payments fail if the 3DSecure authorization is required
+
+
 ## [2.2.0] - 2021-10-19
 ### Changed
 - Branding Update
