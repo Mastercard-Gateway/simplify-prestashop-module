@@ -59,7 +59,7 @@ class SimplifyCommerce extends PaymentModule
     {
         $this->name = 'simplifycommerce';
         $this->tab = 'payments_gateways';
-        $this->version = '2.2.0';
+        $this->version = '2.2.1';
         $this->author = 'Mastercard';
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
 
@@ -311,6 +311,12 @@ class SimplifyCommerce extends PaymentModule
         return $this->display(__FILE__, 'views/templates/hook/order_actions.tpl');
     }
 
+    /**
+     * @return bool
+     *
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function installOrderState()
     {
         if (!Configuration::get('SIMPLIFY_OS_AUTHORIZED')
@@ -333,8 +339,10 @@ class SimplifyCommerce extends PaymentModule
                 copy($source, $destination);
             }
 
-            Configuration::updateValue('SIMPLIFY_OS_AUTHORIZED', (int)$order_state->id);
+            return Configuration::updateValue('SIMPLIFY_OS_AUTHORIZED', (int)$order_state->id);
         }
+
+        return true;
     }
 
     /**
@@ -411,7 +419,9 @@ class SimplifyCommerce extends PaymentModule
         $this->initSimplify();
 
         // If flag checked in the settings, look up customer details in the DB
-        if (Configuration::get('SIMPLIFY_SAVE_CUSTOMER_DETAILS')) {
+        $isTokenizationEnabled = (bool)Configuration::get('SIMPLIFY_SAVE_CUSTOMER_DETAILS');
+        $isLogged = $this->context->customer->isLogged();
+        if ($isTokenizationEnabled && $isLogged) {
             $this->smarty->assign('show_save_customer_details_checkbox', true);
             $simplify_customer_id = Db::getInstance()->getValue(
                 'SELECT simplify_customer_id FROM '.
@@ -450,6 +460,13 @@ class SimplifyCommerce extends PaymentModule
         // Set js variables to send in card tokenization
         $this->smarty->assign('simplify_public_key', Simplify::$publicKey);
 
+        $this->smarty->assign('customer_name',
+            sprintf(
+                '%s %s',
+                $this->safe($cardholder_details->firstname),
+                $this->safe($cardholder_details->lastname)
+            )
+        );
         $this->smarty->assign('firstname', $this->safe($cardholder_details->firstname));
         $this->smarty->assign('lastname', $this->safe($cardholder_details->lastname));
         $this->smarty->assign('city', $this->safe($cardholder_details->city));
@@ -702,7 +719,6 @@ class SimplifyCommerce extends PaymentModule
                     'token'       => $token, // Token returned by Simplify Card Tokenization
                     'description' => $description,
                     'currency'    => $currency_order->iso_code,
-                    'card'        => $this->getCardBillingInformation(),
                 );
             }
 
@@ -1178,26 +1194,5 @@ class SimplifyCommerce extends PaymentModule
         $html .= $this->display(__FILE__, 'views/templates/hook/module-wrapper.tpl');
 
         return $html;
-    }
-
-    /**
-     * @return array
-     *
-     * @throws PrestaShopDatabaseException
-     * @throws PrestaShopException
-     */
-    private function getCardBillingInformation()
-    {
-        $cardholder_details = $this->getCardholderDetails();
-        $country_iso = Country::getIsoById($cardholder_details->id_country);
-
-        return array(
-            'addressCity'    => $this->safe($cardholder_details->city),
-            'addressCountry' => $country_iso,
-            'addressLine1'   => $this->safe($cardholder_details->address1),
-            'addressLine2'   => $this->safe($cardholder_details->address2),
-            'addressState'   => isset($cardholder_details->state) ? $this->safe($cardholder_details->state) : '',
-            'addressZip'     => $this->safe($cardholder_details->postcode),
-        );
     }
 }
