@@ -59,7 +59,7 @@ class SimplifyCommerce extends PaymentModule
     {
         $this->name = 'simplifycommerce';
         $this->tab = 'payments_gateways';
-        $this->version = '2.2.1';
+        $this->version = '2.3.0';
         $this->author = 'Mastercard';
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
 
