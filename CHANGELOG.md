@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.3.0] - 2022-03-11
+### Changed
+- Text update and information section removal on the plugin Configuration page 
+
 
 ## [2.2.1] - 2022-01-04
 ### Fixed
