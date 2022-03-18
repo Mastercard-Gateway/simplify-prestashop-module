@@ -1,9 +1,9 @@
 {
   "name": "simplifycommerce",
-  "description": "Payments made easy - Start securely accepting card payments instantly.",
-  "homepage": "https://github.com/PrestaShop/simplifycommerce",
-  "license": "BSD 3-Clause license",
-  "version": "2.2.1",
+  "description": "Mastercard Payment Gateway Services - Simplify",
+  "homepage": "https://github.com/Mastercard-Gateway/simplify-prestashop-module",
+  "license": "Apache-2.0",
+  "version": "2.3.0",
   "authors": [
     {
       "name": "Mastercard",

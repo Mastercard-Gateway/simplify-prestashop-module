@@ -1,5 +1,5 @@
 {**
-* Copyright (c) 2017-2021 Mastercard
+* Copyright (c) 2017-2022 Mastercard
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -19,24 +19,6 @@
 <script type="text/javascript" src="{$module_dir|escape}views/js/spectrum.js"></script>
 
 <div class="simplify-module-wrapper">
-    <div class="simplify-module-header formContainer">
-        <div class="simplify-header-text">
-            <div class="simplify-content-img">
-                <img src="{$module_dir|escape}views/img/simplify_phones.png" alt=""/>
-            </div>
-            <div class="simplify-content-text">
-                <div>
-                    <p>{l s='Mastercard Payment Gateway Services - Simplify, a global leader in the payment indrustry, makes it easy for small businesses to accept online payments. From our hosted "Pay Now" solution that allows merchants to share links socially to our mobile point of sale to recurring payment solutions, we include must-have features key to businesses.' mod='simplifycommerce'}</p>
-                    <ul>
-                        <li>{l s='Omni-channel payment solution for web, mobile and social platforms' mod='simplifycommerce'}</li>
-                        <li>{l s='Accept major card brands' mod='simplifycommerce'}</li>
-                        <li>{l s='Highest Level 1 PCI certification' mod='simplifycommerce'}</li>
-                        <li>{l s='Innovative, well-designed tools for merchants' mod='simplifycommerce'}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="formContainer">
         <section class="technical-checks">
             {if $requirements['result']}
@@ -229,7 +211,7 @@
 
                     <div class="left half option">
                         <h3>{l s='Transaction Mode' mod='simplifycommerce'}</h3>
-                        <p>    {l s='In “Payment” mode, the customer is charged immediately. In Authorize mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>
+                        <p>{l s='In “Payment” mode, the customer is charged immediately. In “Authorize” mode, the transaction is only authorized and the capturing of funds is a manual process that you do using the Prestashop admin panel.' mod='simplifycommerce'}</p>
                         <div>
                             <select name="simplify_txn_mode">
                                 {foreach $txn_mode_options as $_txn_mode}
@@ -254,12 +236,10 @@
                         </div>
                     </div>
                     <div class="left half option">
-                        <h3>{l s='Simplify Payment Option' mod='simplifycommerce'}</h3>
-
+                        <h3>{l s='Hosted Payment Method' mod='simplifycommerce'}</h3>
                         <p>
                             {l s='This option defines how the Customer will enter new credit card details.' mod='simplifycommerce'}
                         </p>
-
                         <select name="simplify_payment_option">
                             {foreach $payment_options as $_payment_option}
                                 <option value="{$_payment_option['value']|escape:'htmlall':'UTF-8'}"
