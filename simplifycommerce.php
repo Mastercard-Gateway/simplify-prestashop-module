@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2017-2022 Mastercard
+ * Copyright (c) 2017-2023 Mastercard
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,11 @@
  *
  */
 
+
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 use PrestaShopBundle\Controller\Admin\Sell\Order\ActionsBarButton;
 use PrestaShopBundle\Controller\Admin\Sell\Order\ActionsBarButtonsCollection;
+
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -52,6 +54,7 @@ class SimplifyCommerce extends PaymentModule
      */
     protected $controllerAdmin;
 
+
     /**
      * Simplify Commerce's module constructor
      */
@@ -59,13 +62,11 @@ class SimplifyCommerce extends PaymentModule
     {
         $this->name = 'simplifycommerce';
         $this->tab = 'payments_gateways';
-        $this->version = '2.3.0';
+        $this->version = '2.4.0';
         $this->author = 'Mastercard';
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
-
         $this->currencies = true;
         $this->currencies_mode = 'checkbox';
-
         $this->module_key = '8b7703c5901ec736bd931bbbb8cfd13c';
 
         parent::__construct();
@@ -155,6 +156,7 @@ class SimplifyCommerce extends PaymentModule
         }
 
         $this->context->controller->addCSS($this->_path.'views/css/style.css', 'all');
+        
 
         if (Configuration::get('SIMPLIFY_ENABLED_PAYMENT_WINDOW')) {
             if (Configuration::get('SIMPLIFY_PAYMENT_OPTION') === self::PAYMENT_OPTION_EMBEDDED) {
@@ -173,6 +175,106 @@ class SimplifyCommerce extends PaymentModule
     }
 
     /**
+     * Simplify Commerce module adding ajax
+     *
+     * @return bool Install result
+     */
+    public function hookBackOfficeHeader()
+    {
+        if (!$this->active) {
+            return;
+        }
+
+        // Add JavaScript file for handling partial refunds
+        $this->context->controller->addJS($this->_path . 'views/js/refund.js', 'all');
+        $this->context->controller->addCSS($this->_path . 'views/css/refund.css', 'all');
+
+        // Get the admin AJAX link for handling requests
+        $adminAjaxLink = $this->context->link->getAdminLink('AdminSimplify');
+        // Define JavaScript values to use in AJAX URL
+        Media::addJsDef(array(
+            "adminajax_link" => $adminAjaxLink
+        ));
+
+        $orderId = Tools::getValue('id_order');
+
+        if (Validate::isUnsignedId($orderId)) {
+            $refundData = array(); // Initialize an array to store refund data
+
+            // Query the database to fetch refund data for the given order ID
+            $results = Db::getInstance()->executeS('SELECT refund_description, refund_id, amount,comment, date_created FROM ' . _DB_PREFIX_ . 'refund_table WHERE order_id = ' . (int)$orderId);
+
+            if (!empty($results)) {
+                // Loop through the results and store refund data in the array
+                foreach ($results as $result) {
+                    $refundData[] = array(
+                        'refund_description' => $result['refund_description'],
+                        'refund_id' => $result['refund_id'],
+                        'amount' => $result['amount'],
+                        'comment' => $result['comment'],
+                        'date_created' => $result['date_created']
+                    );
+                }
+
+                // Convert the refund data array to a JavaScript array
+                $refundDataJS = json_encode($refundData);
+                // Add the JavaScript array to the page
+                Media::addJsDef(array(
+                    'refundData' => $refundDataJS
+                ));
+            }
+        }
+
+         if (Validate::isUnsignedId($orderId)) {
+            $captureData = array(); // Initialize an array to store refund data
+
+            // Query the database to fetch refund data for the given order ID
+            $results = Db::getInstance()->executeS('SELECT payment_transcation_id, amount, comment, transcation_date FROM ' . _DB_PREFIX_ . 'capture_table WHERE order_id = ' . (int)$orderId);
+
+            if (!empty($results)) {
+                // Loop through the results and store refund data in the array
+                foreach ($results as $result) {
+                    $captureData[] = array(
+                        'payment_transcation_id' => $result['payment_transcation_id'],
+                        'amount' => $result['amount'],
+                        'comment' => $result['comment'],
+                        'transcation_date' => $result['transcation_date']
+                    );
+                }
+
+                // Convert the refund data array to a JavaScript array
+                $captureDataJS = json_encode($captureData);
+                // Add the JavaScript array to the page
+                Media::addJsDef(array(
+                    'captureData' => $captureDataJS
+                ));
+            }
+        }
+
+        if (Validate::isUnsignedId($orderId)) {
+            $total_amount = 0;
+            // Define the variables used in the query
+            $tableName = 'refund_table'; // Replace with your actual table name
+            $order_id = 'order_id'; // Replace with the appropriate column name for order ID
+
+            // Build the SQL query using pSQL
+            $sql = 'SELECT ' . pSQL($order_id) . ', SUM(amount) AS total_amount FROM ' . pSQL(_DB_PREFIX_ . $tableName) . ' WHERE ' . pSQL($order_id) . ' = \'' . pSQL($orderId) . '\' AND comment = "Transaction Successful" GROUP BY ' . pSQL($order_id);
+
+            // Get the total_amount using Db::getInstance()->getValue()
+            $result = Db::getInstance()->executeS($sql);
+            if (!empty($result)) {
+                $total_amount = $result[0]['total_amount'];
+
+                // Add the JavaScript array to the page
+                Media::addJsDef(array(
+                    'refundmaxamount' => $total_amount
+                ));
+            }
+        }
+    }
+
+
+    /**
      * Simplify Commerce's module installation
      *
      * @return boolean Install result
@@ -185,19 +287,22 @@ class SimplifyCommerce extends PaymentModule
         }
 
         return parent::install()
-               && $this->registerHook('paymentOptions')
-               && $this->registerHook('orderConfirmation')
-               && $this->registerHook('displayHeader')
-               && $this->registerHook('displayAdminOrderLeft')
-               && $this->registerHook('actionGetAdminOrderButtons')
-               && Configuration::updateValue('SIMPLIFY_MODE', 0)
-               && Configuration::updateValue('SIMPLIFY_SAVE_CUSTOMER_DETAILS', 1)
-               && Configuration::updateValue('SIMPLIFY_OVERLAY_COLOR', $this->defaultModalOverlayColor)
-               && Configuration::updateValue('SIMPLIFY_PAYMENT_ORDER_STATUS', (int)Configuration::get('PS_OS_PAYMENT'))
-               && Configuration::updateValue('SIMPLIFY_PAYMENT_TITLE', $this->defaultTitle)
-               && Configuration::updateValue('SIMPLIFY_TXN_MODE', self::TXN_MODE_PURCHASE)
-               && $this->createCustomerTable()
-               && $this->installOrderState();
+            && $this->registerHook('paymentOptions')
+            && $this->registerHook('orderConfirmation')
+            && $this->registerHook('displayHeader')
+            && $this->registerHook('displayBackOfficeHeader')
+            && $this->registerHook('displayAdminOrderLeft')
+            && $this->registerHook('actionGetAdminOrderButtons')
+            && Configuration::updateValue('SIMPLIFY_MODE', 0)
+            && Configuration::updateValue('SIMPLIFY_SAVE_CUSTOMER_DETAILS', 1)
+            && Configuration::updateValue('SIMPLIFY_OVERLAY_COLOR', $this->defaultModalOverlayColor)
+            && Configuration::updateValue('SIMPLIFY_PAYMENT_ORDER_STATUS', (int)Configuration::get('PS_OS_PAYMENT'))
+            && Configuration::updateValue('SIMPLIFY_PAYMENT_TITLE', $this->defaultTitle)
+            && Configuration::updateValue('SIMPLIFY_TXN_MODE', self::TXN_MODE_PURCHASE)
+            && $this->createCustomerTable()
+            && $this->createCaptureTable()
+            && $this->createRefundTable()
+            && $this->installOrderState();
     }
 
     /**
@@ -219,7 +324,9 @@ class SimplifyCommerce extends PaymentModule
         $isAuthorized = $order->current_state == Configuration::get('SIMPLIFY_OS_AUTHORIZED');
         $canVoid = $isAuthorized;
         $canCapture = $isAuthorized;
-        $canAction = $isAuthorized || $canVoid || $canCapture;
+        $canRefund = $order->current_state == Configuration::get('PS_OS_PAYMENT');
+        $canPatialRefund = $order->current_state == Configuration::get('PS_OS_PAYMENT') || $order->current_state == Configuration::get('SIMPLIFY_OS_PARTIAL_REFUND');;
+        $canAction = $isAuthorized || $canVoid || $canCapture || $canPatialRefund ;
 
         if (!$canAction) {
             return;
@@ -247,6 +354,48 @@ class SimplifyCommerce extends PaymentModule
                     $this->l('Capture Payment')
                 )
             );
+        }
+
+        if ($canRefund) {
+            $refundUrl = $link->getAdminLink(
+                'AdminSimplify',
+                true,
+                [],
+                [
+                    'action'   => 'refund',
+                    'id_order' => $order->id,
+                ]
+            );
+            $bar->add(
+                new ActionsBarButton(
+                    'btn-action',
+                    ['id' => 'fullrefund'],
+                    $this->l('Full Refund')
+                )
+            );
+        }
+
+        if ($canPatialRefund) {
+            $partialrefundUrl = $link->getAdminLink(
+                'AdminSimplify',
+                true,
+                [],
+                [
+                    'action'   => 'partialrefund',
+                    'id_order' => $order->id,
+                ]
+            );
+            $bar->add(
+                new ActionsBarButton(
+                    'btn-action',
+                    [
+                    'class' => 'partialrefund',
+                    'id'    => 'refundpartial',
+                    ],
+                    $this->l('Partial Refund')
+                )
+            );
+
         }
 
         if ($canVoid) {
@@ -341,6 +490,28 @@ class SimplifyCommerce extends PaymentModule
 
             return Configuration::updateValue('SIMPLIFY_OS_AUTHORIZED', (int)$order_state->id);
         }
+        if (!Configuration::get('SIMPLIFY_OS_PARTIAL_REFUND')
+            || !Validate::isLoadedObject(new OrderState(Configuration::get('SIMPLIFY_OS_PARTIAL_REFUND')))) {
+            $order_state = new OrderState();
+            foreach (Language::getLanguages() as $language) {
+                $order_state->name[$language['id_lang']] = 'Partial Refund';
+                $order_state->template[$language['id_lang']] = 'refund';
+            }
+            $order_state->send_email = true;
+            $order_state->color = '#01B887';
+            $order_state->hidden = false;
+            $order_state->delivery = false;
+            $order_state->logable = true;
+            $order_state->paid = true;
+            $order_state->invoice = false;
+            if ($order_state->add()) {
+                $source = _PS_ROOT_DIR_.'/img/os/15.gif';
+                $destination = _PS_ROOT_DIR_.'/img/os/'.(int)$order_state->id.'.gif';
+                copy($source, $destination);
+            }
+
+            return Configuration::updateValue('SIMPLIFY_OS_PARTIAL_REFUND', (int)$order_state->id);
+        }
 
         return true;
     }
@@ -362,6 +533,36 @@ class SimplifyCommerce extends PaymentModule
     }
 
     /**
+     * Simplify capture details creation
+     *
+     * @return boolean Database tables installation result
+     */
+    public function createCaptureTable()
+    {
+        return Db::getInstance()->Execute(
+            '
+            CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'capture_table` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`order_id` int(10) unsigned NOT NULL,
+              `capture_transcation_id` varchar(32) NOT NULL, `payment_transcation_id` varchar(32) NOT NULL, `amount` decimal(10,2) NOT NULL, `comment` varchar(100) NOT NULL, `transcation_date` datetime NOT NULL,  PRIMARY KEY (`id`)) ENGINE='.
+            _MYSQL_ENGINE_.' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1'
+        );
+    }
+
+    /**
+     * Simplify refund details creation
+     *
+     * @return boolean Database tables installation result
+     */
+    public function createRefundTable()
+    {
+        return Db::getInstance()->Execute(
+            '
+            CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'refund_table` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`order_id` int(10) unsigned NOT NULL,
+              `refund_id` varchar(32) NOT NULL, `transcation_id` varchar(32) NOT NULL, `refund_description` varchar(100) NOT NULL, `amount` decimal(10,2) NOT NULL, `comment` varchar(100) NOT NULL,`date_created` datetime NOT NULL, PRIMARY KEY (`id`)) ENGINE='.
+            _MYSQL_ENGINE_.' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1'
+        );
+    }
+
+    /**
      * Simplify Commerce's module uninstalling. Remove the config values and delete the tables.
      *
      * @return boolean Uninstall result
@@ -371,22 +572,22 @@ class SimplifyCommerce extends PaymentModule
         $this->uninstallTab();
 
         return parent::uninstall()
-               && Configuration::deleteByName('SIMPLIFY_MODE')
-               && Configuration::deleteByName('SIMPLIFY_SAVE_CUSTOMER_DETAILS')
-               && Configuration::deleteByName('SIMPLIFY_PUBLIC_KEY_TEST')
-               && Configuration::deleteByName('SIMPLIFY_PUBLIC_KEY_LIVE')
-               && Configuration::deleteByName('SIMPLIFY_PRIVATE_KEY_TEST')
-               && Configuration::deleteByName('SIMPLIFY_PRIVATE_KEY_LIVE')
-               && Configuration::deleteByName('SIMPLIFY_PAYMENT_ORDER_STATUS')
-               && Configuration::deleteByName('SIMPLIFY_OVERLAY_COLOR')
-               && Configuration::deleteByName('SIMPLIFY_PAYMENT_TITLE')
-               && Configuration::deleteByName('SIMPLIFY_TXN_MODE')
-               && Configuration::deleteByName('SIMPLIFY_PAYMENT_OPTION')
-               && Db::getInstance()->Execute('DROP TABLE IF EXISTS`'._DB_PREFIX_.'simplify_customer`')
-               && $this->unregisterHook('paymentOptions')
-               && $this->unregisterHook('orderConfirmation')
-               && $this->unregisterHook('displayHeader')
-               && $this->unregisterHook('displayAdminOrderLeft');
+            && Configuration::deleteByName('SIMPLIFY_MODE')
+            && Configuration::deleteByName('SIMPLIFY_SAVE_CUSTOMER_DETAILS')
+            && Configuration::deleteByName('SIMPLIFY_PUBLIC_KEY_TEST')
+            && Configuration::deleteByName('SIMPLIFY_PUBLIC_KEY_LIVE')
+            && Configuration::deleteByName('SIMPLIFY_PRIVATE_KEY_TEST')
+            && Configuration::deleteByName('SIMPLIFY_PRIVATE_KEY_LIVE')
+            && Configuration::deleteByName('SIMPLIFY_PAYMENT_ORDER_STATUS')
+            && Configuration::deleteByName('SIMPLIFY_OVERLAY_COLOR')
+            && Configuration::deleteByName('SIMPLIFY_PAYMENT_TITLE')
+            && Configuration::deleteByName('SIMPLIFY_TXN_MODE')
+            && Configuration::deleteByName('SIMPLIFY_PAYMENT_OPTION')
+            && Db::getInstance()->Execute('DROP TABLE IF EXISTS`'._DB_PREFIX_.'simplify_customer`')
+            && $this->unregisterHook('paymentOptions')
+            && $this->unregisterHook('orderConfirmation')
+            && $this->unregisterHook('displayHeader')
+            && $this->unregisterHook('displayAdminOrderLeft');
     }
 
     /**
@@ -704,6 +905,7 @@ class SimplifyCommerce extends PaymentModule
         $payment_status = null;
         try {
             $amount = $charge * 100; // Cart total amount
+            $amount = number_format($amount);
             $description = $this->context->shop->name.$this->l(' Order Number: ').(int)$this->context->cart->id;
 
             if (isset($simplify_customer_id) && ($should_charge_customer_card == 'true' || $should_save_customer == 'on')) {
@@ -1086,6 +1288,7 @@ class SimplifyCommerce extends PaymentModule
      */
     public function getContent()
     {
+
         $html = '';
         // Update Simplify settings
         if (Tools::isSubmit('SubmitSimplify')) {

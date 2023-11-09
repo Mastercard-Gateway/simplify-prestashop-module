@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2017-2019 Mastercard
+ * Copyright (c) 2017-2023 Mastercard
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,3 +26,5 @@ if (!defined('_PS_VERSION_')) {
 
 $simplify = new SimplifyCommerce();
 $simplify->processPayment();
+
+
