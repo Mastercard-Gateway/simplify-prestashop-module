@@ -1,0 +1,20 @@
+{# override/admin-templates/Sell/Order/Order/Blocks/View/product_list.html.twig #}
+
+{% extends '@PrestaShop/Admin/Sell/Order/Order/Blocks/View/product_list.html.twig' %}
+
+{% block product_list_table_header %}
+    {{ parent() }}
+    <th class="text-center">Customer Note</th>
+{% endblock %}
+
+{% block product_list_table_body %}
+    {{ parent() }}
+
+    {% for product in order.products %}
+        <tr>
+            {{ parent() }}
+
+            <td class="text-center">{{ product.customer_note }}</td>
+        </tr>
+    {% endfor %}
+{% endblock %}

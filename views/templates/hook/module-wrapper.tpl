@@ -1,5 +1,5 @@
 {**
-* Copyright (c) 2017-2022 Mastercard
+* Copyright (c) 2017-2023 Mastercard
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -86,9 +86,7 @@
                 <h2>{l s='Set Your API Keys' mod='simplifycommerce'}</h2>
 
                 <div class="account-mode container">
-                    <p>If you have not already done so, you can create an account by clicking the 'Sign up for free'
-                        button in the top right corner.<br/>
-                        Obtain both your private and public API Keys from: Account Settings -> API Keys and supply them
+                    <p>Obtain both your private and public API Keys from: Account Settings -> API Keys and supply them
                         below.</p>
                 </div>
                 <div class="clearfix api-key-container">
@@ -147,7 +145,7 @@
                     <div class="clearfix"></div>
 
                     <div class="left half option">
-                        <h3>{l s='Enbale Payment Method' mod='simplifycommerce'}</h3>
+                        <h3>{l s='Enable Payment Method' mod='simplifycommerce'}</h3>
 
                         <p>
                             {l s='Choose Yes to activate the Payment Method on checkout. ' mod='simplifycommerce'}

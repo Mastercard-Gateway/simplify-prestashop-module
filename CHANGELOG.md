@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.4.0] - 2023-11-07
+### Changed
+- Enhanced Compatibility: Compatible with PHP 8.1 & PrestaShop 8.0.x (tested with v8.0.4).
+- Updated Simplify SDK Version to 1.7.0
+- Full Refund and Partial Refund Operation in Admin Panel 
+
+
 ## [2.3.0] - 2022-03-11
 ### Changed
 - Text update and information section removal on the plugin Configuration page 
@@ -46,12 +53,12 @@ All notable changes to this project will be documented in this file.
 
 ## [1.1.0]
 ### Changed
-- Upgrading plugin for Prestashop versions 1.7+
+- Upgrading plugin for PrestaShop versions 1.7+
 
 
 ## [1.0.12]
 ### Changed
--This is the simplify commerce payment plugin for Prestashop versions 1.4-1.6 inclusive.
--This will not work on prestashop 1.7+
+-This is the simplify commerce payment plugin for PrestaShop versions 1.4-1.6 inclusive.
+-This will not work on prestaShop 1.7+
 -Please use the other plugin for that version
 

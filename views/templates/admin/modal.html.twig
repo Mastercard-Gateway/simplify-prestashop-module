@@ -1,0 +1,26 @@
+<div class="modal fade" id="refundModal" tabindex="-1" role="dialog" aria-labelledby="refundModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="refundModalLabel">Refund Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <label for="refundAmount">Refund Amount:</label>
+                    <input type="text" id="refundAmount" name="refundAmount" required>
+                </div>
+                <div>
+                    <label for="refundReason">Refund Reason:</label>
+                    <textarea id="refundReason" name="refundReason" rows="4" required></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitRefundBtn">Refund</button>
+            </div>
+        </div>
+    </div>
+</div>
